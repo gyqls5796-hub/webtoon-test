@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>심야의 골동품점: 시간의 태엽 | ARGON Interactive Webtoon</title>
+  <title>2주간의 미스터리 신호: 결핵 예방 인터랙티브 웹툰</title>
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
     :root {
-      --bg-dark: #07080d;
-      --viewer-bg: #0d101a;
-      --gold: #f5c542;
-      --gold-glow: rgba(245, 197, 66, 0.45);
-      --cyan: #00f0ff;
-      --cyan-glow: rgba(0, 240, 255, 0.45);
-      --crimson: #ff2a5f;
-      --text-main: #f0f4f8;
+      --bg-dark: #070b12;
+      --viewer-bg: #0f1724;
+      --med-teal: #00e5bc;
+      --med-teal-glow: rgba(0, 229, 188, 0.4);
+      --med-blue: #38bdf8;
+      --warn-red: #ff3b5c;
+      --warn-amber: #fbbf24;
+      --text-main: #f8fafc;
       --text-sub: #94a3b8;
     }
 
@@ -30,8 +30,8 @@
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.06) 0%, transparent 50%),
-        radial-gradient(circle at 50% 90%, rgba(245, 197, 66, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 50% 0%, rgba(0, 229, 188, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.06) 0%, transparent 50%);
       color: var(--text-main);
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
       display: flex;
@@ -44,106 +44,106 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--cyan), var(--gold), var(--crimson));
+      height: 4px;
+      background: linear-gradient(90deg, var(--med-teal), var(--med-blue), var(--warn-red));
       width: 0%;
       z-index: 1000;
-      box-shadow: 0 0 10px var(--cyan);
+      box-shadow: 0 0 12px var(--med-teal);
       transition: width 0.1s ease-out;
     }
 
-    /* 모바일 웹툰 뷰어 프레임 */
+    /* 웹툰 뷰어 메인 프레임 */
     .webtoon-container {
       width: 100%;
       max-width: 520px;
       min-height: 100vh;
       background-color: var(--viewer-bg);
-      box-shadow: 0 0 60px rgba(0, 0, 0, 0.95);
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
       position: relative;
-      padding-bottom: 120px;
-      border-left: 1px solid rgba(255, 255, 255, 0.06);
-      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 90px;
+      border-left: 1px solid rgba(255, 255, 255, 0.07);
+      border-right: 1px solid rgba(255, 255, 255, 0.07);
     }
 
-    /* 상단 고정 HUD (상태창 & 오디오 컨트롤) */
+    /* 상단 고정 메디컬 HUD */
     .hud-header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(13, 16, 26, 0.88);
+      background: rgba(15, 23, 36, 0.9);
       backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 12px 18px;
+      border-bottom: 1px solid rgba(0, 229, 188, 0.2);
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .ep-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: -0.3px;
+      font-size: 0.9rem;
+      font-weight: 800;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: #fff;
     }
 
-    .badge-argon {
-      background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-      font-size: 0.65rem;
-      padding: 2px 7px;
+    .badge-campaign {
+      background: linear-gradient(135deg, #00e5bc, #0284c7);
+      color: #04131a;
+      font-size: 0.68rem;
+      padding: 3px 8px;
       border-radius: 99px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      font-weight: 900;
     }
 
     .hud-stats {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 0.78rem;
+      gap: 8px;
     }
 
-    .stat-pill {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+    .immunity-pill {
+      background: rgba(0, 229, 188, 0.1);
+      border: 1px solid rgba(0, 229, 188, 0.35);
       padding: 4px 10px;
       border-radius: 99px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--med-teal);
       display: flex;
       align-items: center;
       gap: 5px;
-      color: var(--gold);
-      font-weight: 600;
     }
 
     .audio-btn {
-      background: rgba(0, 240, 255, 0.12);
-      border: 1px solid rgba(0, 240, 255, 0.35);
-      color: var(--cyan);
-      padding: 5px 11px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e2e8f0;
+      padding: 5px 10px;
       border-radius: 99px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .audio-btn.active {
-      background: var(--cyan);
-      color: #000;
-      box-shadow: 0 0 14px var(--cyan-glow);
+      background: var(--med-teal);
+      border-color: var(--med-teal);
+      color: #04131a;
+      box-shadow: 0 0 14px var(--med-teal-glow);
     }
 
-    /* 각 웹툰 컷 공통 스타일 */
+    /* 각 컷 공통 레이아웃 */
     .cut-wrapper {
       position: relative;
       width: 100%;
-      margin: 0;
       overflow: hidden;
       opacity: 0;
-      transform: translateY(45px);
-      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translateY(40px);
+      transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+      border-bottom: 2px solid #070b12;
     }
 
     .cut-wrapper.in-view {
@@ -157,24 +157,28 @@
       height: auto;
     }
 
-    /* 말풍선 & 내레이션 박스 */
+    /* 웹툰 내레이션 & 말풍선 */
     .narration-box {
       position: absolute;
-      left: 6%;
-      right: 6%;
-      background: rgba(10, 12, 20, 0.85);
-      border-left: 3px solid var(--gold);
-      backdrop-filter: blur(6px);
-      padding: 14px 18px;
-      color: #e2e8f0;
-      font-size: 0.92rem;
-      line-height: 1.6;
-      letter-spacing: -0.2px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      left: 5%;
+      right: 5%;
+      background: rgba(9, 14, 24, 0.88);
+      border-left: 4px solid var(--med-teal);
+      backdrop-filter: blur(8px);
+      padding: 13px 16px;
+      color: #f1f5f9;
+      font-size: 0.9rem;
+      line-height: 1.55;
       border-radius: 4px 12px 12px 4px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.65);
       opacity: 0;
-      transform: translateY(15px);
-      transition: all 0.7s ease 0.35s;
+      transform: translateY(12px);
+      transition: all 0.65s ease 0.3s;
+      z-index: 10;
+    }
+
+    .narration-box.warn {
+      border-left-color: var(--warn-red);
     }
 
     .cut-wrapper.in-view .narration-box {
@@ -186,43 +190,43 @@
       position: absolute;
       background: #ffffff;
       color: #0f172a;
-      padding: 14px 20px;
-      border-radius: 24px;
+      padding: 13px 18px;
+      border-radius: 22px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       line-height: 1.45;
-      max-width: 78%;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65);
+      max-width: 76%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
       opacity: 0;
       transform: scale(0.85);
-      transition: all 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s;
-      z-index: 10;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s;
+      z-index: 12;
     }
 
     .speech-bubble::after {
       content: '';
       position: absolute;
       bottom: -10px;
-      left: 28px;
-      border-width: 12px 10px 0;
+      left: 26px;
+      border-width: 11px 9px 0;
       border-style: solid;
       border-color: #ffffff transparent;
     }
 
     .speech-bubble.right::after {
       left: auto;
-      right: 28px;
+      right: 26px;
     }
 
-    .speech-bubble.dark-magic {
-      background: linear-gradient(135deg, #13182b, #090c15);
-      color: var(--cyan);
-      border: 1.5px solid var(--cyan);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+    .speech-bubble.doctor {
+      background: linear-gradient(135deg, #0b2239, #091526);
+      color: #e0f2fe;
+      border: 1.5px solid var(--med-teal);
+      box-shadow: 0 0 20px rgba(0, 229, 188, 0.25);
     }
 
-    .speech-bubble.dark-magic::after {
-      border-color: var(--cyan) transparent;
+    .speech-bubble.doctor::after {
+      border-color: var(--med-teal) transparent;
     }
 
     .cut-wrapper.in-view .speech-bubble {
@@ -238,76 +242,150 @@
       pointer-events: none;
       z-index: 15;
       opacity: 0;
-      transform: scale(1.4) rotate(-8deg);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.55s;
+      transform: scale(1.35) rotate(-7deg);
+      transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s;
     }
 
     .cut-wrapper.in-view .sfx-text {
       opacity: 1;
-      transform: scale(1) rotate(-8deg);
+      transform: scale(1) rotate(-7deg);
     }
 
-    /* 화면 흔들림 & 글리치 연출 */
-    @keyframes intenseShake {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      15% { transform: translate(-10px, -6px) rotate(-1deg); }
-      30% { transform: translate(10px, 4px) rotate(1deg); }
-      45% { transform: translate(-8px, 6px) rotate(-0.5deg); }
-      60% { transform: translate(8px, -4px) rotate(0.5deg); }
-      75% { transform: translate(-4px, 2px) rotate(0deg); }
+    /* 애니메이션 키프레임 */
+    @keyframes coughShake {
+      0%, 100% { transform: translate(0, 0); }
+      15% { transform: translate(-9px, 5px) rotate(-1deg); }
+      30% { transform: translate(9px, -5px) rotate(1deg); }
+      45% { transform: translate(-7px, -3px); }
+      60% { transform: translate(7px, 4px); }
+      75% { transform: translate(-4px, 2px); }
     }
 
-    .shake-active {
-      animation: intenseShake 0.65s ease-in-out;
+    .shake-cough {
+      animation: coughShake 0.6s ease-in-out;
     }
 
-    /* 기어 회전 애니메이션 */
-    @keyframes spinSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes spinReverse {
-      from { transform: rotate(360deg); }
-      to { transform: rotate(0deg); }
-    }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.55; filter: drop-shadow(0 0 8px var(--cyan)); }
-      50% { opacity: 1; filter: drop-shadow(0 0 20px var(--cyan)); }
-    }
-    @keyframes rainDrop {
-      0% { transform: translateY(-100px); opacity: 0; }
-      50% { opacity: 0.6; }
-      100% { transform: translateY(700px); opacity: 0; }
+    @keyframes germFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(8px, -12px) scale(1.08); }
     }
 
-    .gear-cw { transform-origin: center; animation: spinSlow 24s linear infinite; }
-    .gear-ccw { transform-origin: center; animation: spinReverse 18s linear infinite; }
-    .pulse-magic { animation: pulseGlow 3s ease-in-out infinite; }
+    @keyframes pulseWarn {
+      0%, 100% { opacity: 0.45; transform: scale(0.95); }
+      50% { opacity: 0.95; transform: scale(1.08); }
+    }
 
-    /* 인터랙티브 선택지 구역 */
+    @keyframes xrayBeam {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(230px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .germ-anim { animation: germFloat 3.2s ease-in-out infinite; }
+    .warn-pulse { transform-origin: center; animation: pulseWarn 2s ease-in-out infinite; }
+    .scanning-beam { animation: xrayBeam 2.6s ease-in-out infinite; }
+
+    /* 인터랙티브 X-Ray & 증상 체크 패널 */
+    .xray-control-panel {
+      background: linear-gradient(180deg, #0b1320, #111c2d);
+      padding: 22px 18px;
+      border-top: 1px solid rgba(0, 229, 188, 0.3);
+      border-bottom: 1px solid rgba(0, 229, 188, 0.3);
+      text-align: center;
+    }
+
+    .scan-btn {
+      background: linear-gradient(135deg, var(--med-teal), #0284c7);
+      color: #04131a;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 99px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 0 20px var(--med-teal-glow);
+      transition: transform 0.15s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
+
+    .scan-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* 결핵 5대 의심 증상 체크리스트 */
+    .symptom-checklist {
+      margin: 22px 16px;
+      padding: 20px 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+    }
+
+    .symptom-checklist h4 {
+      color: var(--med-teal);
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .symptom-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      margin-top: 8px;
+      background: rgba(15, 23, 36, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.88rem;
+    }
+
+    .symptom-item.checked {
+      border-color: var(--warn-amber);
+      background: rgba(251, 191, 36, 0.12);
+      color: #fef3c7;
+    }
+
+    .symptom-result {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(0, 229, 188, 0.1);
+      border: 1px solid rgba(0, 229, 188, 0.3);
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: #ccfbf1;
+      text-align: center;
+    }
+
+    /* 선택지 카드 구역 */
     .choice-section {
-      margin: 30px 18px;
-      padding: 26px 20px;
-      background: linear-gradient(180deg, rgba(20, 26, 46, 0.95), rgba(11, 14, 24, 0.98));
-      border: 1px solid rgba(245, 197, 66, 0.35);
+      margin: 26px 16px;
+      padding: 24px 18px;
+      background: linear-gradient(180deg, rgba(16, 26, 44, 0.95), rgba(9, 14, 24, 0.98));
+      border: 1px solid rgba(56, 189, 248, 0.35);
       border-radius: 18px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(245, 197, 66, 0.05);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.75);
       text-align: center;
     }
 
     .choice-title {
-      color: var(--gold);
-      font-size: 0.8rem;
+      color: var(--med-teal);
+      font-size: 0.76rem;
       font-weight: 800;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .choice-question {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 20px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 18px;
       line-height: 1.4;
     }
 
@@ -321,155 +399,122 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 14px;
-      padding: 16px 18px;
+      padding: 15px 16px;
       text-align: left;
       cursor: pointer;
       transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
       color: var(--text-main);
     }
 
     .choice-card:hover {
-      background: rgba(0, 240, 255, 0.08);
-      border-color: var(--cyan);
+      background: rgba(0, 229, 188, 0.09);
+      border-color: var(--med-teal);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 240, 255, 0.2);
     }
 
     .choice-card.selected {
-      background: linear-gradient(135deg, rgba(0, 240, 255, 0.18), rgba(245, 197, 66, 0.15));
-      border-color: var(--gold);
-      box-shadow: 0 0 25px var(--gold-glow);
+      background: linear-gradient(135deg, rgba(0, 229, 188, 0.2), rgba(56, 189, 248, 0.15));
+      border-color: var(--med-teal);
+      box-shadow: 0 0 22px var(--med-teal-glow);
     }
 
     .choice-card h4 {
-      font-size: 0.98rem;
-      margin-bottom: 4px;
-      color: #fff;
+      font-size: 0.95rem;
+      margin-bottom: 5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .choice-card p {
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       color: var(--text-sub);
       line-height: 1.4;
     }
 
-    /* 멀티 엔딩 컷 컨테이너 */
     .ending-container {
       display: none;
       margin-top: 20px;
-      animation: fadeIn 0.8s ease forwards;
+      animation: fadeIn 0.7s ease forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
+      from { opacity: 0; transform: translateY(25px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 직접 조작 가능한 인터랙티브 태엽 퍼즐 */
-    .interactive-dial-box {
-      text-align: center;
-      padding: 24px 16px;
-      background: radial-gradient(circle, rgba(28, 36, 66, 0.6) 0%, rgba(13, 16, 26, 0.95) 80%);
-      border-top: 1px solid rgba(0, 240, 255, 0.2);
-      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-    }
-
-    .wind-btn {
-      margin-top: 14px;
-      padding: 12px 28px;
-      border-radius: 99px;
-      border: 1.5px solid var(--gold);
-      background: linear-gradient(135deg, rgba(245, 197, 66, 0.25), rgba(245, 197, 66, 0.05));
-      color: var(--gold);
-      font-weight: 800;
-      font-size: 0.95rem;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
-      transition: transform 0.15s, box-shadow 0.2s;
-    }
-
-    .wind-btn:active {
-      transform: scale(0.94);
-    }
-
-    /* 하단 작가의 말 & 에피소드 푸터 */
-    .webtoon-footer {
-      margin: 50px 20px 0;
-      padding: 24px;
-      background: rgba(255, 255, 255, 0.03);
+    /* 하단 결핵 예방 핵심 요약 인포그래픽 카드 */
+    .info-summary-card {
+      margin: 30px 16px 0;
+      padding: 22px 18px;
+      background: linear-gradient(135deg, #0d2137, #091322);
+      border: 1px solid rgba(0, 229, 188, 0.35);
       border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      text-align: center;
     }
 
-    .like-btn {
-      background: rgba(255, 42, 95, 0.15);
-      border: 1px solid var(--crimson);
-      color: #ff6b8b;
-      padding: 10px 24px;
-      border-radius: 99px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      margin-top: 12px;
-      transition: all 0.2s;
+    .info-summary-card h3 {
+      font-size: 1rem;
+      color: var(--med-teal);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .like-btn.liked {
-      background: var(--crimson);
-      color: #fff;
-      box-shadow: 0 0 20px rgba(255, 42, 95, 0.5);
+    .rule-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .rule-list li {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 10px 12px;
+      border-radius: 10px;
+      border-left: 3px solid var(--med-blue);
     }
   </style>
 </head>
 <body>
 
-  <!-- 상단 진행 표시줄 -->
   <div class="progress-bar" id="progressBar"></div>
 
-  <main class="webtoon-container" id="viewer">
-    <!-- 상단 HUD 헤더 -->
+  <main class="webtoon-container">
+    <!-- 상단 고정 HUD -->
     <header class="hud-header">
       <div class="ep-title">
-        <span class="badge-argon">4 Argon</span>
-        <span>EP.01 시간의 태엽</span>
+        <span class="badge-campaign">결핵예방 웹툰</span>
+        <span>2주간의 미스터리 신호</span>
       </div>
       <div class="hud-stats">
-        <div class="stat-pill" title="시간 동기화율">
-          <span>⏳</span>
-          <span id="syncRate">50%</span>
+        <div class="immunity-pill" title="나의 결핵 예방 지수">
+          <span>🛡️ 예방지수</span>
+          <span id="preventionScore">60점</span>
         </div>
-        <button class="audio-btn" id="audioBtn" onclick="toggleAudio()">🔇 BGM 켜기</button>
+        <button class="audio-btn" id="audioBtn" onclick="toggleAudio()">🔇 사운드 켜기</button>
       </div>
     </header>
 
     <!-- =========================================================
-         CUT 1 : 비 내리는 네온 골목과 심야 골동품점 외관
+         CUT 1 : 2주 넘게 이어진 기침, 단순 감기일까?
     ========================================================== -->
     <section class="cut-wrapper" data-cut="1">
-      <svg class="svg-stage" viewBox="0 0 500 720" xmlns="http://www.w3.org/2000/svg">
+      <svg class="svg-stage" viewBox="0 0 500 660" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="nightSky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#050711"/>
-            <stop offset="55%" stop-color="#0f172e"/>
-            <stop offset="100%" stop-color="#1b1930"/>
+          <linearGradient id="officeNight" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0b111e"/>
+            <stop offset="100%" stop-color="#17233a"/>
           </linearGradient>
-          <radialGradient id="moonGlow" cx="0.78" cy="0.18" r="0.35">
-            <stop offset="0%" stop-color="#ffefc2" stop-opacity="0.9"/>
-            <stop offset="30%" stop-color="#f5c542" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#0f172e" stop-opacity="0"/>
+          <radialGradient id="monitorGlow" cx="0.3" cy="0.55" r="0.45">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#0b111e" stop-opacity="0"/>
           </radialGradient>
-          <linearGradient id="shopWindow" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#ffcf54" stop-opacity="0.85"/>
-            <stop offset="100%" stop-color="#ff6b2b" stop-opacity="0.35"/>
-          </linearGradient>
-          <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="6" result="blur"/>
+          <filter id="glowEffect" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
             <feMerge>
               <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
@@ -477,299 +522,300 @@
           </filter>
         </defs>
 
-        <!-- 밤하늘 배경 -->
-        <rect width="500" height="720" fill="url(#nightSky)"/>
-        <circle cx="390" cy="130" r="170" fill="url(#moonGlow)"/>
-        <circle cx="390" cy="130" r="36" fill="#fffbeb" filter="url(#neonGlow)"/>
+        <!-- 배경: 밤늦은 사무실/방 -->
+        <rect width="500" height="660" fill="url(#officeNight)"/>
+        <circle cx="160" cy="360" r="240" fill="url(#monitorGlow)"/>
 
-        <!-- 원경 빌딩 실루엣 (패럴랙스 레이어) -->
-        <g class="parallax-layer" data-speed="0.08" fill="#080b16">
-          <rect x="20" y="180" width="95" height="420"/>
-          <rect x="105" y="240" width="75" height="360"/>
-          <rect x="330" y="210" width="110" height="390"/>
-          <polygon points="20,180 67,130 115,180"/>
-        </g>
-
-        <!-- 안개 효과 -->
-        <ellipse cx="250" cy="520" rx="340" ry="90" fill="#1e293b" opacity="0.45"/>
-
-        <!-- 골동품점 고딕 건물 -->
-        <g transform="translate(85, 230)">
-          <!-- 본체 -->
-          <rect x="20" y="70" width="290" height="310" fill="#121626" stroke="#2d3748" stroke-width="2"/>
-          <!-- 지붕 -->
-          <polygon points="0,75 165,-30 330,75" fill="#0b0e1a" stroke="#f5c542" stroke-width="1.5"/>
-          <!-- 지붕 위 시계탑 장식 -->
-          <circle cx="165" cy="30" r="26" fill="#090d16" stroke="#f5c542" stroke-width="2.5"/>
-          <line x1="165" y1="30" x2="165" y2="12" stroke="#00f0ff" stroke-width="2"/>
-          <line x1="165" y1="30" x2="180" y2="30" stroke="#f5c542" stroke-width="2"/>
-
-          <!-- 네온 간판 -->
-          <rect x="55" y="95" width="220" height="44" rx="8" fill="#090b14" stroke="#00f0ff" stroke-width="2.5" filter="url(#neonGlow)"/>
-          <text x="165" y="124" text-anchor="middle" fill="#00f0ff" font-size="20" font-weight="900" letter-spacing="4" filter="url(#neonGlow)">CHRONOS 00:00</text>
-
-          <!-- 쇼윈도 (따뜻한 황금빛) -->
-          <rect x="45" y="165" width="130" height="145" rx="6" fill="url(#shopWindow)" stroke="#f5c542" stroke-width="2"/>
-          <!-- 쇼윈도 내부 기어 실루엣 -->
-          <circle cx="110" cy="240" r="38" fill="none" stroke="#422006" stroke-width="6" stroke-dasharray="12 8" class="gear-cw"/>
+        <!-- 벽면 달력 (핵심 단서: 14일째 기침 체크!) -->
+        <g transform="translate(295, 115)">
+          <rect x="0" y="0" width="165" height="175" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+          <rect x="0" y="0" width="165" height="38" rx="8" fill="#ef4444"/>
+          <text x="82" y="25" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="900">OCTOBER (기침 기록)</text>
           
-          <!-- 출입문 -->
-          <rect x="195" y="165" width="85" height="195" rx="4" fill="#1e1b2e" stroke="#f5c542" stroke-width="2"/>
-          <rect x="210" y="180" width="55" height="90" fill="url(#shopWindow)" opacity="0.7"/>
-          <circle cx="268" cy="275" r="5" fill="#f5c542" filter="url(#neonGlow)"/>
+          <!-- 달력 그리드 및 붉은 X 표시 (2주 연속!) -->
+          <g transform="translate(18, 52)" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round">
+            <!-- 1주차 -->
+            <circle cx="15" cy="15" r="10" fill="none"/>
+            <circle cx="45" cy="15" r="10" fill="none"/>
+            <circle cx="75" cy="15" r="10" fill="none"/>
+            <circle cx="105" cy="15" r="10" fill="none"/>
+            <!-- 2주차 -->
+            <circle cx="15" cy="48" r="10" fill="none"/>
+            <circle cx="45" cy="48" r="10" fill="none"/>
+            <circle cx="75" cy="48" r="10" fill="none"/>
+            <circle cx="105" cy="48" r="10" fill="#fee2e2"/>
+          </g>
+          <!-- 강조 링 -->
+          <rect x="10" y="122" width="145" height="36" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+          <text x="82" y="145" text-anchor="middle" fill="#dc2626" font-size="14" font-weight="900" class="warn-pulse">⚠️ 기침 14일(2주) 경과!</text>
         </g>
 
-        <!-- 젖은 아스팔트 바닥 & 네온 반사광 -->
-        <rect x="0" y="590" width="500" height="130" fill="#060810"/>
-        <ellipse cx="250" cy="635" rx="160" ry="22" fill="#00f0ff" opacity="0.22" filter="url(#neonGlow)"/>
-        <ellipse cx="210" cy="660" rx="110" ry="15" fill="#f5c542" opacity="0.28" filter="url(#neonGlow)"/>
-
-        <!-- 우산 쓴 주인공 뒷모습 실루엣 -->
-        <g transform="translate(215, 445)">
-          <!-- 우산 -->
-          <path d="M-55,35 Q15,-35 85,35 Z" fill="#05070e" stroke="#00f0ff" stroke-width="1.5"/>
-          <!-- 코트 입은 인물 -->
-          <path d="M-5,35 L-20,175 L45,175 L30,35 Z" fill="#080b14"/>
-          <!-- 붉은 머플러 포인트 -->
-          <path d="M5,42 Q35,55 48,85" stroke="#ff2a5f" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#neonGlow)"/>
+        <!-- 주인공 '민준' 일러스트 (식은땀을 흘리며 기침하는 모습) -->
+        <g transform="translate(210, 420)">
+          <!-- 어깨/후드티 -->
+          <path d="M-130,210 C-120,80 -65,50 0,50 C65,50 120,80 130,210 Z" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+          <!-- 목 -->
+          <rect x="-20" y="5" width="40" height="55" fill="#e2c8b5"/>
+          <!-- 얼굴 윤곽 -->
+          <path d="M-52,-65 C-52,-115 52,-115 52,-65 C52,-5 34,35 0,42 C-34,35 -52,-5 -52,-65 Z" fill="#f5dcc8"/>
+          <!-- 다크서클과 피곤한 눈매 -->
+          <path d="M-32,-42 Q-20,-35 -10,-42" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M-30,-36 Q-20,-31 -12,-36" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <path d="M10,-42 Q22,-35 32,-42" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- 붉어진 볼 (미열 표현) -->
+          <ellipse cx="-26" cy="-18" rx="14" ry="7" fill="#fb7185" opacity="0.55"/>
+          <ellipse cx="26" cy="-18" rx="14" ry="7" fill="#fb7185" opacity="0.55"/>
+          <!-- 식은땀 물방울 (야간 발한) -->
+          <path d="M-40,-60 Q-45,-48 -38,-45 Q-32,-48 -40,-60 Z" fill="#38bdf8"/>
+          <path d="M42,-30 Q37,-18 44,-15 Q50,-18 42,-30 Z" fill="#38bdf8"/>
+          <!-- 머리카락 -->
+          <path d="M-56,-55 C-65,-115 -20,-135 5,-130 C35,-135 68,-110 56,-50 C45,-80 20,-90 -10,-85 C-35,-85 -48,-75 -56,-55 Z" fill="#0f172a"/>
+          <!-- 입을 가리는 손과 붉은 기침 파동 -->
+          <circle cx="15" cy="12" r="24" fill="#f5dcc8" stroke="#cbd5e1" stroke-width="1.5"/>
+          <circle cx="48" cy="2" r="28" fill="none" stroke="#ff3b5c" stroke-width="2.5" stroke-dasharray="6 4" class="warn-pulse"/>
+          <circle cx="55" cy="0" r="45" fill="none" stroke="#ff3b5c" stroke-width="1.5" stroke-dasharray="10 6" class="warn-pulse"/>
         </g>
 
-        <!-- 빗줄기 레이어 -->
-        <g stroke="#94a3b8" stroke-width="1.2" opacity="0.45">
-          <line x1="60" y1="40" x2="40" y2="130"/>
-          <line x1="150" y1="120" x2="130" y2="210"/>
-          <line x1="320" y1="70" x2="300" y2="160"/>
-          <line x1="440" y1="180" x2="420" y2="270"/>
-          <line x1="90" y1="360" x2="70" y2="450"/>
-          <line x1="410" y1="390" x2="390" y2="480"/>
-        </g>
+        <!-- 책상과 감기약 봉투들 -->
+        <rect x="0" y="565" width="500" height="95" fill="#090d16" stroke="#334155" stroke-width="2"/>
+        <!-- 감기약 상자 -->
+        <rect x="45" y="520" width="90" height="45" rx="4" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+        <rect x="45" y="520" width="90" height="14" fill="#3b82f6"/>
+        <text x="90" y="550" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="800">종합감기약</text>
       </svg>
 
-      <div class="narration-box" style="top: 34px;">
-        비 내리는 자정, 지도에도 존재하지 않는 막다른 골목 끝.<br>
-        멈춰버린 내 시간을 되돌려줄 유일한 가게의 불이 켜졌다.
+      <div class="narration-box" style="top: 24px;">
+        "이상하다... 감기약을 계속 먹는데도 벌써 <strong>2주 넘게 기침</strong>이 멈추질 않네. 밤마다 식은땀도 나고..."
       </div>
-      <div class="sfx-text" style="bottom: 155px; right: 38px; color: #00f0ff; font-size: 1.7rem; text-shadow: 0 0 12px #00f0ff;">
-        치직.. 치지직-
+
+      <div class="sfx-text" style="bottom: 180px; right: 35px; color: #ff3b5c; font-size: 2.1rem; text-shadow: 0 0 15px rgba(255,59,92,0.8);">
+        콜록! 콜록!!
+      </div>
+
+      <div class="speech-bubble" style="bottom: 105px; left: 24px;">
+        단순 몸살감기인 줄 알았는데...<br>왜 이렇게 살까지 빠지는 거지?
       </div>
     </section>
 
     <!-- =========================================================
-         CUT 2 : 가게 내부 진입 & 신비로운 마스터 '크로노스' 등장
+         CUT 2 : 공기 중으로 퍼지는 결핵균과 기침 예절의 중요성
     ========================================================== -->
     <section class="cut-wrapper" data-cut="2">
-      <svg class="svg-stage" viewBox="0 0 500 680" xmlns="http://www.w3.org/2000/svg">
+      <svg class="svg-stage" viewBox="0 0 500 620" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <radialGradient id="magicAura" cx="0.5" cy="0.45" r="0.5">
-            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.35"/>
-            <stop offset="55%" stop-color="#6366f1" stop-opacity="0.12"/>
-            <stop offset="100%" stop-color="#090c15" stop-opacity="0"/>
+          <radialGradient id="bioHazard" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#ff3b5c" stop-opacity="0.4"/>
+            <stop offset="60%" stop-color="#9f1239" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#090d16" stop-opacity="0"/>
           </radialGradient>
-          <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#fff3b0"/>
-            <stop offset="50%" stop-color="#f5c542"/>
-            <stop offset="100%" stop-color="#9a6b13"/>
-          </linearGradient>
         </defs>
 
-        <rect width="500" height="680" fill="#090c15"/>
-        <circle cx="250" cy="310" r="240" fill="url(#magicAura)"/>
+        <rect width="500" height="620" fill="#090d16"/>
+        <circle cx="250" cy="300" r="240" fill="url(#bioHazard)"/>
 
-        <!-- 거대한 배경 황금 태엽 장치들 -->
-        <g opacity="0.35">
-          <circle cx="110" cy="180" r="95" fill="none" stroke="url(#goldGrad)" stroke-width="14" stroke-dasharray="24 14" class="gear-cw"/>
-          <circle cx="110" cy="180" r="65" fill="none" stroke="url(#goldGrad)" stroke-width="4"/>
-          <circle cx="395" cy="220" r="115" fill="none" stroke="#00f0ff" stroke-width="10" stroke-dasharray="18 12" class="gear-ccw"/>
-          <circle cx="250" cy="110" r="60" fill="none" stroke="url(#goldGrad)" stroke-width="8" stroke-dasharray="12 8" class="gear-cw"/>
+        <!-- 호흡기 비말(에어로졸) 확산 궤적 -->
+        <path d="M90,320 Q240,180 430,140" fill="none" stroke="#ff3b5c" stroke-width="2" stroke-dasharray="8 6" opacity="0.7"/>
+        <path d="M90,320 Q250,300 450,310" fill="none" stroke="#ff3b5c" stroke-width="2.5" stroke-dasharray="8 6" opacity="0.85"/>
+        <path d="M90,320 Q240,420 420,460" fill="none" stroke="#ff3b5c" stroke-width="2" stroke-dasharray="8 6" opacity="0.7"/>
+
+        <!-- 확대된 결핵균(Mycobacterium tuberculosis: 막대 모양 간균) 시각화 -->
+        <g class="germ-anim" transform="translate(265, 250)">
+          <circle cx="0" cy="0" r="68" fill="#1f1224" fill-opacity="0.85" stroke="#ff3b5c" stroke-width="3" filter="url(#glowEffect)"/>
+          <!-- 막대형 결핵균들 -->
+          <rect x="-28" y="-18" width="42" height="12" rx="6" transform="rotate(-20)" fill="#ff3b5c" stroke="#fda4af" stroke-width="1.5"/>
+          <rect x="-10" y="8" width="45" height="12" rx="6" transform="rotate(15)" fill="#fb7185" stroke="#ffe4e6" stroke-width="1.5"/>
+          <rect x="-25" y="-2" width="36" height="10" rx="5" transform="rotate(40)" fill="#f43f5e"/>
+          <text x="0" y="92" text-anchor="middle" fill="#fda4af" font-size="13" font-weight="800">[결핵균 비말 전파]</text>
         </g>
 
-        <!-- 공중에 떠 있는 기하학 마법진 -->
-        <g class="pulse-magic" transform="translate(250, 320)">
-          <circle r="155" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="8 6"/>
-          <polygon points="0,-145 125,72 -125,72" fill="none" stroke="#00f0ff" stroke-width="1.2" opacity="0.6"/>
-          <polygon points="0,145 125,-72 -125,-72" fill="none" stroke="#f5c542" stroke-width="1.2" opacity="0.6"/>
+        <g class="germ-anim" transform="translate(390, 175) scale(0.65)">
+          <circle cx="0" cy="0" r="55" fill="#1f1224" stroke="#ff3b5c" stroke-width="3"/>
+          <rect x="-22" y="-8" width="44" height="14" rx="7" transform="rotate(-15)" fill="#ff3b5c"/>
         </g>
 
-        <!-- 골동품점 마스터 '크로노스' (정교한 캐릭터 일러스트) -->
-        <g transform="translate(250, 355)">
-          <!-- 망토/정장 어깨 실루엣 -->
-          <path d="M-145,250 C-135,95 -75,55 0,55 C75,55 135,95 145,250 Z" fill="#111629" stroke="#f5c542" stroke-width="2"/>
-          <!-- 조끼 & 금장 장식 -->
-          <path d="M-45,60 L0,165 L45,60 Z" fill="#1e1b38" stroke="#f5c542" stroke-width="1.5"/>
-          <!-- 붉은 크라바트(넥타이)와 보석 -->
-          <polygon points="0,68 -18,110 0,145 18,110" fill="#b91c1c"/>
-          <circle cx="0" cy="95" r="7" fill="#00f0ff" filter="url(#neonGlow)"/>
-
-          <!-- 목과 얼굴 -->
-          <rect x="-18" y="15" width="36" height="50" fill="#e2d5c5"/>
-          <path d="M-48,-55 C-48,-95 48,-95 48,-55 C48,5 32,38 0,45 C-32,38 -48,5 -48,-55 Z" fill="#f3e8ee"/>
-
-          <!-- 은발 머리카락 -->
-          <path d="M-54,-45 C-65,-95 -20,-115 0,-110 C25,-115 65,-95 54,-45 C50,-15 62,15 48,30 C44,0 38,-35 28,-50 C10,-30 -15,-35 -32,-50 C-40,-30 -44,0 -48,30 C-60,15 -50,-15 -54,-45 Z" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
-
-          <!-- 표정: 신비로운 미소와 기계식 모노클(외알 안경) -->
-          <!-- 왼쪽 눈 (청록색 발광) -->
-          <ellipse cx="-20" cy="-22" rx="9" ry="5" fill="#090d16"/>
-          <circle cx="-20" cy="-22" r="4" fill="#00f0ff" filter="url(#neonGlow)"/>
-          <!-- 오른쪽 눈: 황금 태엽 모노클 -->
-          <circle cx="22" cy="-22" r="18" fill="#090d16" fill-opacity="0.85" stroke="url(#goldGrad)" stroke-width="3.5"/>
-          <circle cx="22" cy="-22" r="11" fill="none" stroke="#00f0ff" stroke-width="1.2" stroke-dasharray="4 3"/>
-          <circle cx="22" cy="-22" r="4" fill="#f5c542" filter="url(#neonGlow)"/>
-          <!-- 모노클 체인 -->
-          <path d="M38,-15 Q55,35 35,85" fill="none" stroke="#f5c542" stroke-width="1.8" stroke-dasharray="3 2"/>
-
-          <!-- 입매 -->
-          <path d="M-10,16 Q0,23 12,15" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
-
-          <!-- 클래식 실크해트 (모자) -->
-          <ellipse cx="0" cy="-82" rx="78" ry="16" fill="#0b0f1d" stroke="#f5c542" stroke-width="2"/>
-          <path d="M-48,-82 L-40,-175 L40,-175 L48,-82 Z" fill="#11172b" stroke="#f5c542" stroke-width="1.5"/>
-          <rect x="-46" y="-102" width="92" height="16" fill="#b91c1c"/>
+        <!-- 올바른 기침 예절 배지 (옷소매로 가리기) -->
+        <g transform="translate(40, 390)">
+          <rect x="0" y="0" width="420" height="115" rx="16" fill="#0f292e" stroke="#00e5bc" stroke-width="2"/>
+          <!-- 아이콘 원 -->
+          <circle cx="65" cy="57" r="38" fill="#06151a" stroke="#00e5bc" stroke-width="2"/>
+          <!-- 팔꿈치/옷소매로 입을 가리는 심볼 -->
+          <path d="M42,72 L68,42 L90,62" fill="none" stroke="#00e5bc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="62" cy="40" r="10" fill="#38bdf8"/>
+          
+          <text x="122" y="42" fill="#00e5bc" font-size="15" font-weight="900">💡 호흡기 감염병 예방의 첫걸음!</text>
+          <text x="122" y="68" fill="#f8fafc" font-size="13.5" font-weight="700">기침할 땐 손이 아닌 <tspan fill="#fde047">'옷소매 위쪽'</tspan>으로</text>
+          <text x="122" y="90" fill="#cbd5e1" font-size="12.5">입과 코를 가리고, 기침 후엔 비누로 손을 씻으세요.</text>
         </g>
-
-        <!-- 전면 카운터 테이블 -->
-        <rect x="0" y="595" width="500" height="85" fill="#05070d" stroke="#f5c542" stroke-width="2"/>
       </svg>
 
-      <div class="sfx-text" style="top: 40px; left: 32px; color: #f5c542; font-size: 1.5rem; text-shadow: 0 0 12px rgba(245,197,66,0.8);">
-        딸랑- 째깍..
+      <div class="narration-box warn" style="top: 22px;">
+        <strong>결핵은 호흡기 감염병!</strong><br>
+        환자가 기침이나 재채기를 할 때 공기 중으로 배출된 결핵균을 주위 사람들이 들이마시면서 감염됩니다.
       </div>
 
-      <div class="speech-bubble" style="top: 75px; right: 24px;">
-        "어서 오십시오. 당신이 잃어버린 <strong>'그날의 기억'</strong>을 되찾으러 오셨군요."
-      </div>
-
-      <div class="speech-bubble dark-magic right" style="bottom: 110px; left: 26px;">
-        "단, 시간의 태엽을 감는 대가는 결코 가볍지 않습니다."
+      <div class="sfx-text" style="top: 135px; left: 35px; color: #fbbf24; font-size: 1.65rem; text-shadow: 0 0 12px rgba(251,191,36,0.8);">
+        퍼억- 슈우욱!!
       </div>
     </section>
 
     <!-- =========================================================
-         CUT 3 : 직접 태엽을 감아보는 인터랙티브 클로즈업 컷
+         CUT 3 : 보건소/병원 흉부 X-Ray 인터랙티브 스캐너
     ========================================================== -->
-    <section class="cut-wrapper" data-cut="3" id="artifactCut">
-      <svg class="svg-stage" viewBox="0 0 500 580" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="coreBurst" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.9"/>
-            <stop offset="40%" stop-color="#3b82f6" stop-opacity="0.4"/>
-            <stop offset="75%" stop-color="#ff2a5f" stop-opacity="0.15"/>
-            <stop offset="100%" stop-color="#070912" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
+    <section class="cut-wrapper" data-cut="3" id="xrayCut">
+      <svg class="svg-stage" viewBox="0 0 500 560" xmlns="http://www.w3.org/2000/svg">
+        <rect width="500" height="560" fill="#060c17"/>
 
-        <rect width="500" height="580" fill="#070912"/>
-
-        <!-- 집중선 (스피드 라인) -->
-        <g stroke="#1e293b" stroke-width="1.5" opacity="0.7">
-          <line x1="250" y1="290" x2="0" y2="0"/>
-          <line x1="250" y1="290" x2="250" y2="0"/>
-          <line x1="250" y1="290" x2="500" y2="0"/>
-          <line x1="250" y1="290" x2="0" y2="290"/>
-          <line x1="250" y1="290" x2="500" y2="290"/>
-          <line x1="250" y1="290" x2="0" y2="580"/>
-          <line x1="250" y1="290" x2="250" y2="580"/>
-          <line x1="250" y1="290" x2="500" y2="580"/>
+        <!-- 메디컬 그리드 배경 -->
+        <g stroke="#0f2942" stroke-width="1">
+          <line x1="0" y1="100" x2="500" y2="100"/>
+          <line x1="0" y1="200" x2="500" y2="200"/>
+          <line x1="0" y1="300" x2="500" y2="300"/>
+          <line x1="0" y1="400" x2="500" y2="400"/>
+          <line x1="125" y1="0" x2="125" y2="560"/>
+          <line x1="250" y1="0" x2="250" y2="560"/>
+          <line x1="375" y1="0" x2="375" y2="560"/>
         </g>
 
-        <!-- 에너지 코어 발광 -->
-        <circle id="coreAura" cx="250" cy="290" r="210" fill="url(#coreBurst)"/>
+        <!-- 흉부 X-Ray 모니터 프레임 -->
+        <g transform="translate(75, 115)">
+          <rect x="0" y="0" width="350" height="330" rx="18" fill="#040811" stroke="#38bdf8" stroke-width="3"/>
+          
+          <!-- 기관지 & 갈비뼈/폐 그래픽 -->
+          <path d="M175,35 L175,115" stroke="#7dd3fc" stroke-width="10" stroke-linecap="round"/>
+          <path d="M175,110 L135,145 M175,110 L215,145" stroke="#7dd3fc" stroke-width="7" stroke-linecap="round"/>
 
-        <!-- 아티팩트 회중시계 본체 (회전 제어 대상) -->
-        <g id="interactiveClock" transform="translate(250, 290)">
-          <!-- 외곽 황금 링 -->
-          <circle r="135" fill="#0b0f1c" stroke="url(#goldGrad)" stroke-width="10"/>
-          <circle r="120" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="10 6"/>
+          <!-- 좌우 폐엽 실루엣 -->
+          <path d="M155,75 C95,75 65,135 65,220 C65,260 110,275 155,255 Z" fill="#0c253f" stroke="#38bdf8" stroke-width="2.5"/>
+          <path d="M195,75 C255,75 285,135 285,220 C285,260 240,275 195,255 Z" fill="#0c253f" stroke="#38bdf8" stroke-width="2.5"/>
 
-          <!-- 내부 정밀 기어들 -->
-          <g id="innerGearGroup">
-            <circle r="88" fill="none" stroke="#f5c542" stroke-width="12" stroke-dasharray="18 10"/>
-            <polygon points="0,-95 22,-25 95,0 22,25 0,95 -22,25 -95,0 -22,-25" fill="url(#goldGrad)" opacity="0.85"/>
-            <circle r="42" fill="#070a14" stroke="#00f0ff" stroke-width="3"/>
+          <!-- 갈비뼈 라인 디테일 -->
+          <g stroke="#bae6fd" stroke-width="3" opacity="0.35" fill="none" stroke-linecap="round">
+            <path d="M85,120 Q120,110 150,125"/>
+            <path d="M75,155 Q120,145 150,160"/>
+            <path d="M75,190 Q120,180 150,195"/>
+            <path d="M265,120 Q230,110 200,125"/>
+            <path d="M275,155 Q230,145 200,160"/>
+            <path d="M275,190 Q230,180 200,195"/>
           </g>
 
-          <!-- 시계 바늘 -->
-          <line id="clockHandHour" x1="0" y1="0" x2="0" y2="-65" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-          <line id="clockHandMin" x1="0" y1="0" x2="78" y2="0" stroke="#00f0ff" stroke-width="3.5" stroke-linecap="round"/>
-          <circle r="10" fill="#ff2a5f" filter="url(#neonGlow)"/>
+          <!-- 스캔 전에는 숨겨져 있다가 스캔 시 드러나는 상엽 결핵 의심 음영 -->
+          <g id="tbLesionSpot" opacity="0.15" style="transition: opacity 0.6s ease;">
+            <circle cx="115" cy="130" r="28" fill="#ff3b5c" opacity="0.45" filter="url(#glowEffect)"/>
+            <circle cx="115" cy="130" r="14" fill="#fde047" filter="url(#glowEffect)"/>
+            <circle cx="115" cy="130" r="34" fill="none" stroke="#ff3b5c" stroke-width="2" stroke-dasharray="5 3"/>
+            <text x="115" y="82" text-anchor="middle" fill="#ff3b5c" font-size="12" font-weight="900">결핵균 반응 감지!</text>
+          </g>
+
+          <!-- 상하 이동하는 X-Ray 레이저 스캔 바 -->
+          <g id="laserBeam" class="scanning-beam" transform="translate(10, 45)">
+            <line x1="0" y1="0" x2="330" y2="0" stroke="#00e5bc" stroke-width="3" filter="url(#glowEffect)"/>
+            <rect x="0" y="0" width="330" height="25" fill="url(#monitorGlow)" opacity="0.4"/>
+          </g>
+
+          <text x="18" y="308" fill="#00e5bc" font-size="12" font-family="monospace" font-weight="700" id="scanStatusText">STATUS: READY TO SCAN...</text>
         </g>
       </svg>
 
-      <div class="narration-box" style="top: 22px;">
-        카운터 위에 놓인 아티팩트 <strong>[크로노스 코어]</strong>.<br>
-        태엽을 감아 시간 동기화율을 높이면 닫혀 있던 차원의 틈이 열린다!
+      <div class="speech-bubble doctor" style="top: 22px; left: 24px;">
+        "2주 이상 기침이 계속된다면 지체 없이 <strong>흉부 X선 검사</strong>와 <strong>객담(가래) 검사</strong>를 받아야 합니다!"
       </div>
 
-      <div class="sfx-text" id="clockSfx" style="bottom: 35px; right: 28px; color: #ff2a5f; font-size: 2rem; text-shadow: 0 0 15px #ff2a5f;">
-        쿠구구궁-!!
+      <div class="speech-bubble right" style="bottom: 18px; right: 24px;">
+        "보건소에 가면 결핵 검진을 <strong>무료</strong>로 받을 수 있군요!"
       </div>
     </section>
 
-    <!-- 독자 직접 조작 패널 -->
-    <div class="interactive-dial-box">
+    <!-- 독자 직접 조작: X-Ray 정밀 스캔 버튼 -->
+    <div class="xray-control-panel">
       <p style="font-size: 0.9rem; color: #cbd5e1;">
-        아래 버튼을 눌러 직접 <strong>시간의 태엽</strong>을 감아보세요! (현재 <span id="windCountText" style="color: var(--cyan); font-weight: 800;">0</span> / 3회)
+        아래 버튼을 눌러 <strong>흉부 X-Ray 정밀 스캔</strong>을 실행하고 폐 상엽의 신호를 확인하세요!
       </p>
-      <button class="wind-btn" onclick="windClock()">⚙️ 태엽 감기 (+동기화율 상승)</button>
+      <button class="scan-btn" id="scanBtn" onclick="runXrayScan()">🔍 흉부 X-Ray 정밀 스캔 실행</button>
     </div>
 
+    <!-- 인터랙티브 자가진단: 결핵 5대 의심 증상 체크 -->
+    <section class="symptom-checklist">
+      <h4>📋 결핵 주요 의심 증상 체크리스트 (클릭해 보세요)</h4>
+      <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 10px;">
+        해당하는 항목을 눌러 확인해 보세요. 예방 지수가 함께 올라갑니다!
+      </p>
+
+      <div class="symptom-item" onclick="toggleSymptom(this)">
+        <span>1. 특별한 원인 없이 <strong>2주 이상 계속되는 기침·가래</strong></span>
+        <span>☑️</span>
+      </div>
+      <div class="symptom-item" onclick="toggleSymptom(this)">
+        <span>2. 오후에 나타나는 <strong>미열</strong>과 밤에 흐르는 <strong>식은땀(야간 발한)</strong></span>
+        <span>☑️</span>
+      </div>
+      <div class="symptom-item" onclick="toggleSymptom(this)">
+        <span>3. 식욕 부진과 갑작스러운 <strong>체중 감소 / 만성 피로감</strong></span>
+        <span>☑️</span>
+      </div>
+      <div class="symptom-item" onclick="toggleSymptom(this)">
+        <span>4. 흉통(가슴 통증)이나 호흡 곤란, 피 섞인 가래(객혈)</span>
+        <span>☑️</span>
+      </div>
+
+      <div class="symptom-result" id="symptomAdvice">
+        💡 위 증상 중 특히 <strong>'2주 이상 기침'</strong>이 지속된다면 감기로 넘기지 말고 꼭 가까운 보건소나 의료기관을 방문하세요!
+      </div>
+    </section>
+
     <!-- =========================================================
-         CUT 4 : 운명의 분기점 (선택지에 따라 엔딩 컷 변화)
+         CUT 4 : 스토리 분기 선택지 (나의 대처법 선택)
     ========================================================== -->
     <section class="choice-section">
-      <div class="choice-title">Destiny Branch</div>
-      <h3 class="choice-question">폭주하는 시간의 문 앞에서, 당신의 선택은?</h3>
+      <div class="choice-title">Health Action Choice</div>
+      <h3 class="choice-question">2주째 계속되는 기침, 주인공 민준의 현명한 선택은?</h3>
 
       <div class="choice-grid">
         <button class="choice-card" onclick="selectEnding('A', this)">
           <h4>
-            <span>A. 태엽을 끝까지 역회전시킨다</span>
-            <span style="color: var(--cyan); font-size: 0.8rem;">[과거 회귀 루트]</span>
+            <span>A. 마스크를 착용하고 즉시 관할 보건소 방문</span>
+            <span style="color: var(--med-teal); font-size: 0.78rem;">[조기 발견 루트]</span>
           </h4>
-          <p>모든 대가를 감수하고 사건이 벌어지기 전인 1년 전 그날 밤으로 도약합니다.</p>
+          <p>기침 예절을 지키며 보건소에서 무료 흉부 X선 및 가래 검사를 받습니다.</p>
         </button>
 
         <button class="choice-card" onclick="selectEnding('B', this)">
           <h4>
-            <span>B. 시계 코어를 깨뜨려 현재에 남는다</span>
-            <span style="color: var(--gold); font-size: 0.8rem;">[운명 개척 루트]</span>
+            <span>B. 2주 이상 꾸준히 결핵약 복용 완주하기</span>
+            <span style="color: var(--med-blue); font-size: 0.78rem;">[완치 달성 루트]</span>
           </h4>
-          <p>과거에 얽매이지 않고 아티팩트의 마력을 흡수해 새로운 시간선을 개척합니다.</p>
+          <p>증상이 좋아져도 임의로 약을 끊지 않고 6개월 이상 처방된 약을 끝까지 복용합니다.</p>
         </button>
 
         <button class="choice-card" onclick="selectEnding('C', this)">
           <h4>
-            <span>C. 마스터 크로노스에게 시계를 넘긴다</span>
-            <span style="color: var(--crimson); font-size: 0.8rem;">[시크릿 계약 루트]</span>
+            <span>C. 가족·동료를 위해 잠복결핵 검진까지 챙기기</span>
+            <span style="color: var(--warn-amber); font-size: 0.78rem;">[완벽 방어 루트]</span>
           </h4>
-          <p>기억을 거래하는 대신, 이 심야 골동품점의 새로운 후계자로 계약을 맺습니다.</p>
+          <p>증상이 없더라도 결핵균이 몸속에 잠들어 있는 '잠복결핵' 단계에서 미리 치료해 발병을 90%까지 예방합니다.</p>
         </button>
       </div>
     </section>
 
-    <!-- =========================================================
-         멀티 엔딩 렌더링 영역
-    ========================================================== -->
+    <!-- 선택지별 엔딩 웹툰 컷 출력 영역 -->
     <section id="endingDisplay" class="ending-container"></section>
 
-    <!-- 푸터 & 좋아요 -->
-    <footer class="webtoon-footer">
-      <p style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.5;">
-        <strong>[작가의 말]</strong><br>
-        4 Argon 모델로 제작된 인터랙티브 웹툰 데모입니다.<br>
-        단일 HTML 파일로 GitHub Pages에서 즉시 동작합니다.
-      </p>
-      <button class="like-btn" id="likeBtn" onclick="toggleLike()">❤️ 응원하기 <span id="likeCount">1,284</span></button>
+    <!-- 하단 결핵 예방 핵심 수칙 요약 -->
+    <footer class="info-summary-card">
+      <h3>🏥 꼭 기억해야 할 결핵 예방 3대 수칙</h3>
+      <ul class="rule-list">
+        <li><strong>1. 2주 이상 기침하면 결핵 검진!</strong><br>가까운 보건소에서 흉부 X선 검사와 객담 검사를 무료로 받을 수 있습니다 (65세 이상 어르신은 매년 1회 무료 검진 권장).</li>
+        <li><strong>2. 올바른 기침 예절 실천!</strong><br>기침이나 재채기를 할 때는 휴지나 옷소매 위쪽으로 입과 코를 가리고, 유증상 시 마스크를 착용합니다.</li>
+        <li><strong>3. 꾸준한 치료로 100% 완치 가능!</strong><br>결핵은 치료 시작 후 약 2주가 지나면 전염력이 급격히 사라지며, 6개월 이상 꾸준히 약을 복용하면 완치할 수 있습니다.</li>
+      </ul>
     </footer>
   </main>
 
   <script>
     // =========================================================
-    // 1. Web Audio API 자체 신디사이저 사운드 엔진
+    // 1. Web Audio API 메디컬 사운드 합성기
     // =========================================================
     let audioCtx = null;
     let isAudioOn = false;
-    let bgmInterval = null;
 
     function initAudio() {
       if (!audioCtx) {
@@ -787,17 +833,15 @@
       const btn = document.getElementById('audioBtn');
       if (isAudioOn) {
         btn.classList.add('active');
-        btn.textContent = '🔊 BGM 재생 중';
-        startAmbientBGM();
-        playChime(523.25, 0.3);
+        btn.textContent = '🔊 사운드 ON';
+        playTone(587.33, 0.25, 'sine');
       } else {
         btn.classList.remove('active');
-        btn.textContent = '🔇 BGM 켜기';
-        stopAmbientBGM();
+        btn.textContent = '🔇 사운드 켜기';
       }
     }
 
-    function playChime(freq = 440, duration = 0.4, type = 'sine') {
+    function playTone(freq = 440, duration = 0.3, type = 'sine') {
       if (!isAudioOn || !audioCtx) return;
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -811,23 +855,8 @@
       osc.stop(audioCtx.currentTime + duration);
     }
 
-    function startAmbientBGM() {
-      stopAmbientBGM();
-      const notes = [220, 261.63, 329.63, 392, 329.63, 293.66];
-      let idx = 0;
-      bgmInterval = setInterval(() => {
-        if (!isAudioOn) return;
-        playChime(notes[idx % notes.length], 1.4, 'triangle');
-        idx++;
-      }, 1500);
-    }
-
-    function stopAmbientBGM() {
-      if (bgmInterval) clearInterval(bgmInterval);
-    }
-
     // =========================================================
-    // 2. 스크롤 감지 (Intersection Observer) & 패럴랙스
+    // 2. 스크롤 등장 애니메이션 & 기침 진동 연출
     // =========================================================
     const cuts = document.querySelectorAll('.cut-wrapper');
     const observer = new IntersectionObserver((entries) => {
@@ -835,14 +864,16 @@
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
           const cutNo = entry.target.dataset.cut;
-          if (cutNo === '2') playChime(659.25, 0.5);
+          if (cutNo === '1' || cutNo === '2') {
+            entry.target.classList.add('shake-cough');
+            playTone(220, 0.35, 'triangle');
+          }
           if (cutNo === '3') {
-            entry.target.classList.add('shake-active');
-            playChime(110, 0.7, 'sawtooth');
+            playTone(880, 0.2, 'sine');
           }
         }
       });
-    }, { threshold: 0.28 });
+    }, { threshold: 0.25 });
 
     cuts.forEach(cut => observer.observe(cut));
 
@@ -854,108 +885,109 @@
     });
 
     // =========================================================
-    // 3. 태엽 감기 인터랙션 및 동기화율 상태 관리
+    // 3. X-Ray 스캐너 & 예방지수 상태 관리
     // =========================================================
-    let windCount = 0;
-    let syncRate = 50;
-    let rotationAngle = 0;
+    let score = 60;
+    let scanned = false;
 
-    function windClock() {
+    function updateScore(add) {
+      score = Math.min(100, score + add);
+      document.getElementById('preventionScore').textContent = score + '점';
+    }
+
+    function runXrayScan() {
       initAudio();
-      windCount++;
-      syncRate = Math.min(100, syncRate + 15);
-      rotationAngle -= 120;
+      const lesion = document.getElementById('tbLesionSpot');
+      const statusText = document.getElementById('scanStatusText');
+      const btn = document.getElementById('scanBtn');
 
-      document.getElementById('syncRate').textContent = syncRate + '%';
-      document.getElementById('windCountText').textContent = Math.min(windCount, 3);
+      lesion.style.opacity = '1';
+      statusText.textContent = 'ALERT: 좌측 상엽 결핵 의심 음영 발견! (조기 검진 성공)';
+      statusText.setAttribute('fill', '#fde047');
+      btn.textContent = '✅ 흉부 X-Ray 스캔 완료 (예방지수 상승!)';
 
-      const gear = document.getElementById('innerGearGroup');
-      const hourHand = document.getElementById('clockHandHour');
-      const minHand = document.getElementById('clockHandMin');
+      if (!scanned) {
+        scanned = true;
+        updateScore(15);
+      }
+      playTone(987.77, 0.4, 'sine');
+    }
 
-      gear.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
-      gear.style.transform = `rotate(${rotationAngle}deg)`;
-      hourHand.setAttribute('transform', `rotate(${rotationAngle * 0.5})`);
-      minHand.setAttribute('transform', `rotate(${rotationAngle * 2})`);
+    function toggleSymptom(itemEl) {
+      initAudio();
+      const isChecked = itemEl.classList.toggle('checked');
+      if (isChecked) {
+        updateScore(5);
+        playTone(659.25, 0.2, 'sine');
+      }
 
-      const cut3 = document.getElementById('artifactCut');
-      cut3.classList.remove('shake-active');
-      void cut3.offsetWidth;
-      cut3.classList.add('shake-active');
-
-      if (isAudioOn) {
-        playChime(300 + windCount * 120, 0.35, 'sawtooth');
+      const checkedCount = document.querySelectorAll('.symptom-item.checked').length;
+      const adviceEl = document.getElementById('symptomAdvice');
+      if (checkedCount >= 1) {
+        adviceEl.innerHTML = `🚨 <strong>${checkedCount}개의 의심 증상</strong>을 확인하셨습니다! 결핵은 조기에 발견하면 완치가 가능하니 미루지 말고 보건소 검진을 받으세요.`;
       }
     }
 
     // =========================================================
-    // 4. 멀티 엔딩 분기 시스템
+    // 4. 멀티 엔딩 분기 렌더링
     // =========================================================
     const endings = {
       A: {
-        badge: 'ENDING A : 시간 역행자',
-        color: '#00f0ff',
-        title: '1년 전, 모든 것이 시작되던 밤으로',
-        desc: '태엽이 한계치를 넘어 역회전하자 공간이 푸른 빛으로 부서져 내렸다. 눈을 떴을 때, 내 손에는 아직 깨지지 않은 시계와 바꾸고 싶었던 운명의 첫 페이지가 쥐어져 있었다.',
-        sfx: '파아아앙-!!'
+        badge: 'ENDING A : 빠른 조기 검진 성공!',
+        color: '#00e5bc',
+        title: '보건소 무료 검진으로 지킨 건강',
+        desc: '민준은 옷소매로 기침을 가리는 예절을 지키며 즉시 보건소를 찾았습니다. 흉부 X선 검사를 통해 초기에 결핵을 발견했고, 주위 사람들에게 전파되기 전에 안전하게 치료를 시작했습니다!',
+        sfx: '삐빅- 조기발견!!'
       },
       B: {
-        badge: 'ENDING B : 차원 개척자',
-        color: '#f5c542',
-        title: '과거의 사슬을 끊어낸 각성',
-        desc: '시계 코어를 산산조각 내자 봉인되어 있던 황금빛 마력이 전신으로 흘러들었다. 크로노스는 만족스러운 미소를 지으며 내게 고개를 숙였다. "과거가 아닌 미래를 택하셨군요."',
-        sfx: '콰직-! 번쩍!!'
+        badge: 'ENDING B : 6개월 복약 완주 & 완치!',
+        color: '#38bdf8',
+        title: '꾸준한 복약이 만드는 100% 완치',
+        desc: '결핵약을 복용한 지 2주가 지나자 전염력이 사라지고 기침도 멎었습니다. 민준은 임의로 약을 중단하지 않고 6개월간 성실히 복약을 마쳐 내성균 걱정 없이 완벽하게 건강을 되찾았습니다!',
+        sfx: '완치 성공-!!'
       },
       C: {
-        badge: 'SECRET ENDING : 영원의 마스터',
-        color: '#ff2a5f',
-        title: '심야 골동품점의 새로운 주인',
-        desc: '태엽 시계를 크로노스에게 건네자, 그가 쓰고 있던 실크해트와 황금 외알 안경이 내 손위로 옮겨졌다. 이제 자정이 되면, 내가 길 잃은 시간 여행자들을 맞이할 차례다.',
-        sfx: '째깍... 째깍...'
+        badge: 'ENDING C : 잠복결핵까지 완벽 차단!',
+        color: '#fbbf24',
+        title: '잠들어 있는 결핵균까지 사전 예방',
+        desc: '접촉자 검진을 통해 증상이 없던 가족의 잠복결핵감염까지 조기에 찾아냈습니다. 예방 치료를 통해 결핵 발병 위험을 90% 이상 차단하며 온 가족의 일상을 완벽하게 지켜냈습니다!',
+        sfx: '철벽 방어-!!'
       }
     };
 
     function selectEnding(type, btnEl) {
+      initAudio();
       document.querySelectorAll('.choice-card').forEach(el => el.classList.remove('selected'));
       btnEl.classList.add('selected');
+      updateScore(15);
 
       const data = endings[type];
       const container = document.getElementById('endingDisplay');
 
       container.innerHTML = `
-        <div class="cut-wrapper in-view" style="border-top: 2px solid ${data.color};">
-          <svg class="svg-stage" viewBox="0 0 500 520" xmlns="http://www.w3.org/2000/svg">
-            <rect width="500" height="520" fill="#060812"/>
-            <circle cx="250" cy="240" r="190" fill="${data.color}" opacity="0.18" filter="url(#neonGlow)"/>
-            <circle cx="250" cy="240" r="120" fill="none" stroke="${data.color}" stroke-width="3" stroke-dasharray="14 8" class="gear-cw"/>
-            <polygon points="250,90 380,310 120,310" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
-            <circle cx="250" cy="240" r="35" fill="${data.color}" filter="url(#neonGlow)"/>
-            <text x="250" y="45" text-anchor="middle" fill="${data.color}" font-size="15" font-weight="800" letter-spacing="3">${data.badge}</text>
-            <text x="250" y="80" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="900">${data.title}</text>
+        <div class="cut-wrapper in-view" style="border-top: 3px solid ${data.color};">
+          <svg class="svg-stage" viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg">
+            <rect width="500" height="460" fill="#07111e"/>
+            <circle cx="250" cy="215" r="160" fill="${data.color}" opacity="0.15" filter="url(#glowEffect)"/>
+            <!-- 건강한 폐와 보호 방패 그래픽 -->
+            <path d="M250,95 L340,135 C340,225 300,285 250,315 C200,285 160,225 160,135 Z" fill="#0c253f" stroke="${data.color}" stroke-width="4" filter="url(#glowEffect)"/>
+            <path d="M220,205 L242,228 L285,180" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="250" y="45" text-anchor="middle" fill="${data.color}" font-size="14" font-weight="900" letter-spacing="2">${data.badge}</text>
+            <text x="250" y="76" text-anchor="middle" fill="#ffffff" font-size="21" font-weight="900">${data.title}</text>
           </svg>
-          <div class="sfx-text" style="top: 195px; right: 45px; color: ${data.color}; font-size: 1.9rem; text-shadow: 0 0 15px ${data.color};">
+          <div class="sfx-text" style="top: 165px; right: 38px; color: ${data.color}; font-size: 1.75rem; text-shadow: 0 0 14px ${data.color};">
             ${data.sfx}
           </div>
-          <div class="narration-box" style="bottom: 24px; border-left-color: ${data.color};">
+          <div class="narration-box" style="bottom: 20px; border-left-color: ${data.color};">
             ${data.desc}<br>
-            <span style="color: ${data.color}; font-size: 0.82rem; font-weight: 700;">[최종 시간 동기화율: ${syncRate}% 달성]</span>
+            <span style="color: ${data.color}; font-size: 0.82rem; font-weight: 800;">[최종 달성 결핵 예방지수: ${score}점 / 100점]</span>
           </div>
         </div>
       `;
 
       container.style.display = 'block';
-      if (isAudioOn) playChime(type === 'A' ? 587.33 : type === 'B' ? 659.25 : 440, 0.8, 'triangle');
+      playTone(523.25, 0.5, 'triangle');
       container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    // 좋아요 버튼 토글
-    let liked = false;
-    function toggleLike() {
-      liked = !liked;
-      const btn = document.getElementById('likeBtn');
-      const countEl = document.getElementById('likeCount');
-      btn.classList.toggle('liked', liked);
-      countEl.textContent = liked ? '1,285' : '1,284';
     }
   </script>
 </body>
