@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>인터랙티브 웹툰 데모</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+    /* 스마트폰 화면 비율로 제한하는 웹툰 뷰어 컨테이너 */
+    .viewer {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background-color: #1e1e1e;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 80px;
+    }
+    .header {
+      width: 100%;
+      padding: 18px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-bottom: 1px solid #333;
+      background-color: #252525;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    /* 웹툰 각 컷 스타일 */
+    .cut {
+      width: 90%;
+      height: 360px;
+      margin: 30px 0;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    /* 스크롤 시 화면에 들어오면 발동되는 클래스 */
+    .cut.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .cut-1 { background: linear-gradient(135deg, #2c3e50, #3498db); }
+    .cut-2 { background: linear-gradient(135deg, #4b6cb7, #182848); }
+    .cut-3 { background: linear-gradient(135deg, #c0392b, #8e44ad); }
+
+    .cut h2 { font-size: 1.4rem; margin-bottom: 12px; }
+    .cut p { font-size: 0.95rem; line-height: 1.5; color: #e0e0e0; }
+
+    /* 액션 씬 흔들림 연출 */
+    .shake-target.shake {
+      animation: screenShake 0.4s ease-in-out;
+    }
+    @keyframes screenShake {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-8px, 6px); }
+      50% { transform: translate(8px, -6px); }
+      75% { transform: translate(-4px, 4px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* 선택지 UI */
+    .choice-box {
+      width: 90%;
+      margin-top: 20px;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .choice-box p {
+      margin-bottom: 15px;
+      font-size: 1.05rem;
+    }
+    .choice-btn {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      background-color: #00c73c;
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .choice-btn:active {
+      transform: scale(0.98);
+    }
+    .branch-cut {
+      display: none;
+      width: 90%;
+      height: 300px;
+      margin-top: 20px;
+      border-radius: 12px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+    #ending-a { background: #27ae60; }
+    #ending-b { background: #d35400; }
+  </style>
+</head>
+<body>
+
+  <div class="viewer">
+    <div class="header">제1화: 차원의 문 너머로</div>
+
+    <!-- 1컷: 평화로운 시작 -->
+    <div class="cut cut-1">
+      <h2>1컷: 일상의 끝</h2>
+      <p>평범했던 골목길 끝에서<br>기묘하게 빛나는 푸른빛 균열을 발견했다.</p>
+    </div>
+
+    <!-- 2컷: 스크롤 도달 시 흔들림 연출 -->
+    <div class="cut cut-2 shake-target" data-shake="true">
+      <h2>2컷: 균열의 붕괴</h2>
+      <p>(스크롤이 내려오면 화면이 쾅 흔들립니다)<br>귀를 찢는 굉음과 함께 공간이 일그러지기 시작했다!</p>
+    </div>
+
+    <!-- 3컷: 위기 상황 -->
+    <div class="cut cut-3">
+      <h2>3컷: 선택의 기로</h2>
+      <p>갈라진 틈 사이로 어두운 동굴과 밝은 숲의 입구가 동시에 보인다.</p>
+    </div>
+
+    <!-- 4컷: 독자 선택지 -->
+    <div class="choice-box">
+      <p>어느 쪽 문으로 뛰어들겠습니까?</p>
+      <button class="choice-btn" onclick="showBranch('ending-a')">A. 빛이 쏟아지는 숲으로 뛰어든다</button>
+      <button class="choice-btn" onclick="showBranch('ending-b')">B. 어둡고 깊은 동굴로 몸을 숨긴다</button>
+    </div>
+
+    <!-- 분기 컷 A -->
+    <div id="ending-a" class="branch-cut">
+      <h2>분기 A: 미지의 엘프 숲</h2>
+      <p>눈부신 햇살 아래, 거대한 세계수가 모습을 드러냅니다.</p>
+    </div>
+
+    <!-- 분기 컷 B -->
+    <div id="ending-b" class="branch-cut">
+      <h2>분기 B: 지하 던전</h2>
+      <p>서늘한 바람과 함께 어둠 속에서 붉은 눈빛들이 번뜩입니다.</p>
+    </div>
+  </div>
+
+  <script>
+    // 컷이 화면에 들어오면 나타나게 하는 스크롤 감지기 (Intersection Observer)
+    const cuts = document.querySelectorAll('.cut');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+
+          // 2컷 흔들림 연출 발동
+          if (entry.target.dataset.shake === 'true') {
+            entry.target.classList.add('shake');
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    cuts.forEach(cut => observer.observe(cut));
+
+    // 선택지 클릭 분기 처리
+    function showBranch(id) {
+      document.getElementById('ending-a').style.display = 'none';
+      document.getElementById('ending-b').style.display = 'none';
+
+      const target = document.getElementById(id);
+      target.style.display = 'flex';
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
