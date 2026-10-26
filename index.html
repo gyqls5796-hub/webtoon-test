@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>2주간의 미스터리 신호: 결핵 예방 인터랙티브 웹툰</title>
+  <title>2주간의 미스터리 신호 | ARGON Interactive Manhwa</title>
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
     :root {
-      --bg-dark: #070b12;
-      --viewer-bg: #0f1724;
+      --bg-dark: #07090e;
+      --viewer-bg: #0c111a;
       --med-teal: #00e5bc;
       --med-teal-glow: rgba(0, 229, 188, 0.4);
       --med-blue: #38bdf8;
@@ -70,7 +70,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(15, 23, 36, 0.9);
+      background: rgba(12, 17, 26, 0.9);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(0, 229, 188, 0.2);
       padding: 12px 16px;
@@ -151,10 +151,11 @@
       transform: translateY(0);
     }
 
-    .svg-stage {
+    /* 이미지 스타일 */
+    .webtoon-img {
       width: 100%;
-      display: block;
       height: auto;
+      display: block;
     }
 
     /* 웹툰 내레이션 & 말풍선 */
@@ -265,27 +266,56 @@
       animation: coughShake 0.6s ease-in-out;
     }
 
-    @keyframes germFloat {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(8px, -12px) scale(1.08); }
+    /* 흉부 X-Ray 의심 음영 오버레이 */
+    .xray-overlay {
+      position: absolute;
+      top: 15%;
+      left: 10%;
+      right: 10%;
+      bottom: 15%;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    @keyframes pulseWarn {
-      0%, 100% { opacity: 0.45; transform: scale(0.95); }
-      50% { opacity: 0.95; transform: scale(1.08); }
+    .tb-lesion-spot {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px dashed var(--warn-red);
+      background-color: rgba(255, 59, 92, 0.2);
+      box-shadow: 0 0 20px rgba(255, 59, 92, 0.8);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 900;
+      text-align: center;
     }
 
-    @keyframes xrayBeam {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(230px); }
-      100% { transform: translateY(0px); }
+    .scanning-beam {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--med-teal);
+      box-shadow: 0 0 15px var(--med-teal);
+      top: 0;
+      animation: scanEffect 2.5s ease-in-out infinite;
+      opacity: 0;
     }
 
-    .germ-anim { animation: germFloat 3.2s ease-in-out infinite; }
-    .warn-pulse { transform-origin: center; animation: pulseWarn 2s ease-in-out infinite; }
-    .scanning-beam { animation: xrayBeam 2.6s ease-in-out infinite; }
+    @keyframes scanEffect {
+      0% { top: 0%; }
+      50% { top: 100%; }
+      100% { top: 0%; }
+    }
 
-    /* 인터랙티브 X-Ray & 증상 체크 패널 */
+    /* 인터랙티브 진단 및 조작 패널 */
     .xray-control-panel {
       background: linear-gradient(180deg, #0b1320, #111c2d);
       padding: 22px 18px;
@@ -312,7 +342,7 @@
       transform: scale(0.95);
     }
 
-    /* 결핵 5대 의심 증상 체크리스트 */
+    /* 자가진단 체크리스트 */
     .symptom-checklist {
       margin: 22px 16px;
       padding: 20px 18px;
@@ -503,86 +533,7 @@
          CUT 1 : 2주 넘게 이어진 기침, 단순 감기일까?
     ========================================================== -->
     <section class="cut-wrapper" data-cut="1">
-      <svg class="svg-stage" viewBox="0 0 500 660" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="officeNight" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#0b111e"/>
-            <stop offset="100%" stop-color="#17233a"/>
-          </linearGradient>
-          <radialGradient id="monitorGlow" cx="0.3" cy="0.55" r="0.45">
-            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#0b111e" stop-opacity="0"/>
-          </radialGradient>
-          <filter id="glowEffect" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="5" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        <!-- 배경: 밤늦은 사무실/방 -->
-        <rect width="500" height="660" fill="url(#officeNight)"/>
-        <circle cx="160" cy="360" r="240" fill="url(#monitorGlow)"/>
-
-        <!-- 벽면 달력 (핵심 단서: 14일째 기침 체크!) -->
-        <g transform="translate(295, 115)">
-          <rect x="0" y="0" width="165" height="175" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
-          <rect x="0" y="0" width="165" height="38" rx="8" fill="#ef4444"/>
-          <text x="82" y="25" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="900">OCTOBER (기침 기록)</text>
-          
-          <!-- 달력 그리드 및 붉은 X 표시 (2주 연속!) -->
-          <g transform="translate(18, 52)" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round">
-            <!-- 1주차 -->
-            <circle cx="15" cy="15" r="10" fill="none"/>
-            <circle cx="45" cy="15" r="10" fill="none"/>
-            <circle cx="75" cy="15" r="10" fill="none"/>
-            <circle cx="105" cy="15" r="10" fill="none"/>
-            <!-- 2주차 -->
-            <circle cx="15" cy="48" r="10" fill="none"/>
-            <circle cx="45" cy="48" r="10" fill="none"/>
-            <circle cx="75" cy="48" r="10" fill="none"/>
-            <circle cx="105" cy="48" r="10" fill="#fee2e2"/>
-          </g>
-          <!-- 강조 링 -->
-          <rect x="10" y="122" width="145" height="36" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
-          <text x="82" y="145" text-anchor="middle" fill="#dc2626" font-size="14" font-weight="900" class="warn-pulse">⚠️ 기침 14일(2주) 경과!</text>
-        </g>
-
-        <!-- 주인공 '민준' 일러스트 (식은땀을 흘리며 기침하는 모습) -->
-        <g transform="translate(210, 420)">
-          <!-- 어깨/후드티 -->
-          <path d="M-130,210 C-120,80 -65,50 0,50 C65,50 120,80 130,210 Z" fill="#1e293b" stroke="#475569" stroke-width="2"/>
-          <!-- 목 -->
-          <rect x="-20" y="5" width="40" height="55" fill="#e2c8b5"/>
-          <!-- 얼굴 윤곽 -->
-          <path d="M-52,-65 C-52,-115 52,-115 52,-65 C52,-5 34,35 0,42 C-34,35 -52,-5 -52,-65 Z" fill="#f5dcc8"/>
-          <!-- 다크서클과 피곤한 눈매 -->
-          <path d="M-32,-42 Q-20,-35 -10,-42" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M-30,-36 Q-20,-31 -12,-36" fill="none" stroke="#94a3b8" stroke-width="2"/>
-          <path d="M10,-42 Q22,-35 32,-42" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round"/>
-          <!-- 붉어진 볼 (미열 표현) -->
-          <ellipse cx="-26" cy="-18" rx="14" ry="7" fill="#fb7185" opacity="0.55"/>
-          <ellipse cx="26" cy="-18" rx="14" ry="7" fill="#fb7185" opacity="0.55"/>
-          <!-- 식은땀 물방울 (야간 발한) -->
-          <path d="M-40,-60 Q-45,-48 -38,-45 Q-32,-48 -40,-60 Z" fill="#38bdf8"/>
-          <path d="M42,-30 Q37,-18 44,-15 Q50,-18 42,-30 Z" fill="#38bdf8"/>
-          <!-- 머리카락 -->
-          <path d="M-56,-55 C-65,-115 -20,-135 5,-130 C35,-135 68,-110 56,-50 C45,-80 20,-90 -10,-85 C-35,-85 -48,-75 -56,-55 Z" fill="#0f172a"/>
-          <!-- 입을 가리는 손과 붉은 기침 파동 -->
-          <circle cx="15" cy="12" r="24" fill="#f5dcc8" stroke="#cbd5e1" stroke-width="1.5"/>
-          <circle cx="48" cy="2" r="28" fill="none" stroke="#ff3b5c" stroke-width="2.5" stroke-dasharray="6 4" class="warn-pulse"/>
-          <circle cx="55" cy="0" r="45" fill="none" stroke="#ff3b5c" stroke-width="1.5" stroke-dasharray="10 6" class="warn-pulse"/>
-        </g>
-
-        <!-- 책상과 감기약 봉투들 -->
-        <rect x="0" y="565" width="500" height="95" fill="#090d16" stroke="#334155" stroke-width="2"/>
-        <!-- 감기약 상자 -->
-        <rect x="45" y="520" width="90" height="45" rx="4" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
-        <rect x="45" y="520" width="90" height="14" fill="#3b82f6"/>
-        <text x="90" y="550" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="800">종합감기약</text>
-      </svg>
+      <img src="cut1.png" class="webtoon-img" alt="1컷: 2주째 기침하는 주인공">
 
       <div class="narration-box" style="top: 24px;">
         "이상하다... 감기약을 계속 먹는데도 벌써 <strong>2주 넘게 기침</strong>이 멈추질 않네. 밤마다 식은땀도 나고..."
@@ -601,52 +552,7 @@
          CUT 2 : 공기 중으로 퍼지는 결핵균과 기침 예절의 중요성
     ========================================================== -->
     <section class="cut-wrapper" data-cut="2">
-      <svg class="svg-stage" viewBox="0 0 500 620" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="bioHazard" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stop-color="#ff3b5c" stop-opacity="0.4"/>
-            <stop offset="60%" stop-color="#9f1239" stop-opacity="0.15"/>
-            <stop offset="100%" stop-color="#090d16" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-
-        <rect width="500" height="620" fill="#090d16"/>
-        <circle cx="250" cy="300" r="240" fill="url(#bioHazard)"/>
-
-        <!-- 호흡기 비말(에어로졸) 확산 궤적 -->
-        <path d="M90,320 Q240,180 430,140" fill="none" stroke="#ff3b5c" stroke-width="2" stroke-dasharray="8 6" opacity="0.7"/>
-        <path d="M90,320 Q250,300 450,310" fill="none" stroke="#ff3b5c" stroke-width="2.5" stroke-dasharray="8 6" opacity="0.85"/>
-        <path d="M90,320 Q240,420 420,460" fill="none" stroke="#ff3b5c" stroke-width="2" stroke-dasharray="8 6" opacity="0.7"/>
-
-        <!-- 확대된 결핵균(Mycobacterium tuberculosis: 막대 모양 간균) 시각화 -->
-        <g class="germ-anim" transform="translate(265, 250)">
-          <circle cx="0" cy="0" r="68" fill="#1f1224" fill-opacity="0.85" stroke="#ff3b5c" stroke-width="3" filter="url(#glowEffect)"/>
-          <!-- 막대형 결핵균들 -->
-          <rect x="-28" y="-18" width="42" height="12" rx="6" transform="rotate(-20)" fill="#ff3b5c" stroke="#fda4af" stroke-width="1.5"/>
-          <rect x="-10" y="8" width="45" height="12" rx="6" transform="rotate(15)" fill="#fb7185" stroke="#ffe4e6" stroke-width="1.5"/>
-          <rect x="-25" y="-2" width="36" height="10" rx="5" transform="rotate(40)" fill="#f43f5e"/>
-          <text x="0" y="92" text-anchor="middle" fill="#fda4af" font-size="13" font-weight="800">[결핵균 비말 전파]</text>
-        </g>
-
-        <g class="germ-anim" transform="translate(390, 175) scale(0.65)">
-          <circle cx="0" cy="0" r="55" fill="#1f1224" stroke="#ff3b5c" stroke-width="3"/>
-          <rect x="-22" y="-8" width="44" height="14" rx="7" transform="rotate(-15)" fill="#ff3b5c"/>
-        </g>
-
-        <!-- 올바른 기침 예절 배지 (옷소매로 가리기) -->
-        <g transform="translate(40, 390)">
-          <rect x="0" y="0" width="420" height="115" rx="16" fill="#0f292e" stroke="#00e5bc" stroke-width="2"/>
-          <!-- 아이콘 원 -->
-          <circle cx="65" cy="57" r="38" fill="#06151a" stroke="#00e5bc" stroke-width="2"/>
-          <!-- 팔꿈치/옷소매로 입을 가리는 심볼 -->
-          <path d="M42,72 L68,42 L90,62" fill="none" stroke="#00e5bc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="62" cy="40" r="10" fill="#38bdf8"/>
-          
-          <text x="122" y="42" fill="#00e5bc" font-size="15" font-weight="900">💡 호흡기 감염병 예방의 첫걸음!</text>
-          <text x="122" y="68" fill="#f8fafc" font-size="13.5" font-weight="700">기침할 땐 손이 아닌 <tspan fill="#fde047">'옷소매 위쪽'</tspan>으로</text>
-          <text x="122" y="90" fill="#cbd5e1" font-size="12.5">입과 코를 가리고, 기침 후엔 비누로 손을 씻으세요.</text>
-        </g>
-      </svg>
+      <img src="cut2.png" class="webtoon-img" alt="2컷: 기침하는 주인공">
 
       <div class="narration-box warn" style="top: 22px;">
         <strong>결핵은 호흡기 감염병!</strong><br>
@@ -654,69 +560,32 @@
       </div>
 
       <div class="sfx-text" style="top: 135px; left: 35px; color: #fbbf24; font-size: 1.65rem; text-shadow: 0 0 12px rgba(251,191,36,0.8);">
-        퍼억- 슈우욱!!
+        콜록! 콜록!!
+      </div>
+
+      <!-- 올바른 기침 예절 배지 (옷소매로 가리기) -->
+      <div style="position: absolute; bottom: 20px; left: 5%; right: 5%; background: rgba(9, 14, 24, 0.88); border: 2px solid var(--med-teal); border-radius: 12px; padding: 10px;">
+        <p style="color: var(--med-teal); font-size: 0.9rem; font-weight: 900; margin-bottom: 4px;">💡 올바른 기침 예절</p>
+        <p style="font-size: 0.8rem; color: #fff;">기침할 땐 손이 아닌 '옷소매 위쪽'으로 입과 코를 가리고, 기침 후엔 비누로 손을 꼭 씻으세요!</p>
       </div>
     </section>
 
     <!-- =========================================================
          CUT 3 : 보건소/병원 흉부 X-Ray 인터랙티브 스캐너
     ========================================================== -->
-    <section class="cut-wrapper" data-cut="3" id="xrayCut">
-      <svg class="svg-stage" viewBox="0 0 500 560" xmlns="http://www.w3.org/2000/svg">
-        <rect width="500" height="560" fill="#060c17"/>
+    <section class="cut-wrapper" id="xrayCut" data-cut="3">
+      <div style="position: relative; width: 100%;">
+        <img src="cut3.png" class="webtoon-img" alt="3컷: 보건소 검진">
+        <!-- 검사용 빔/의심 음영 오버레이 -->
+        <div class="scanning-beam" id="scanBeam"></div>
+        <div class="xray-overlay" style="top: 18%; left: 63%;">
+          <div class="tb-lesion-spot" id="tbLesionSpot">
+            결핵 반응<br>감지!
+          </div>
+        </div>
+      </div>
 
-        <!-- 메디컬 그리드 배경 -->
-        <g stroke="#0f2942" stroke-width="1">
-          <line x1="0" y1="100" x2="500" y2="100"/>
-          <line x1="0" y1="200" x2="500" y2="200"/>
-          <line x1="0" y1="300" x2="500" y2="300"/>
-          <line x1="0" y1="400" x2="500" y2="400"/>
-          <line x1="125" y1="0" x2="125" y2="560"/>
-          <line x1="250" y1="0" x2="250" y2="560"/>
-          <line x1="375" y1="0" x2="375" y2="560"/>
-        </g>
-
-        <!-- 흉부 X-Ray 모니터 프레임 -->
-        <g transform="translate(75, 115)">
-          <rect x="0" y="0" width="350" height="330" rx="18" fill="#040811" stroke="#38bdf8" stroke-width="3"/>
-          
-          <!-- 기관지 & 갈비뼈/폐 그래픽 -->
-          <path d="M175,35 L175,115" stroke="#7dd3fc" stroke-width="10" stroke-linecap="round"/>
-          <path d="M175,110 L135,145 M175,110 L215,145" stroke="#7dd3fc" stroke-width="7" stroke-linecap="round"/>
-
-          <!-- 좌우 폐엽 실루엣 -->
-          <path d="M155,75 C95,75 65,135 65,220 C65,260 110,275 155,255 Z" fill="#0c253f" stroke="#38bdf8" stroke-width="2.5"/>
-          <path d="M195,75 C255,75 285,135 285,220 C285,260 240,275 195,255 Z" fill="#0c253f" stroke="#38bdf8" stroke-width="2.5"/>
-
-          <!-- 갈비뼈 라인 디테일 -->
-          <g stroke="#bae6fd" stroke-width="3" opacity="0.35" fill="none" stroke-linecap="round">
-            <path d="M85,120 Q120,110 150,125"/>
-            <path d="M75,155 Q120,145 150,160"/>
-            <path d="M75,190 Q120,180 150,195"/>
-            <path d="M265,120 Q230,110 200,125"/>
-            <path d="M275,155 Q230,145 200,160"/>
-            <path d="M275,190 Q230,180 200,195"/>
-          </g>
-
-          <!-- 스캔 전에는 숨겨져 있다가 스캔 시 드러나는 상엽 결핵 의심 음영 -->
-          <g id="tbLesionSpot" opacity="0.15" style="transition: opacity 0.6s ease;">
-            <circle cx="115" cy="130" r="28" fill="#ff3b5c" opacity="0.45" filter="url(#glowEffect)"/>
-            <circle cx="115" cy="130" r="14" fill="#fde047" filter="url(#glowEffect)"/>
-            <circle cx="115" cy="130" r="34" fill="none" stroke="#ff3b5c" stroke-width="2" stroke-dasharray="5 3"/>
-            <text x="115" y="82" text-anchor="middle" fill="#ff3b5c" font-size="12" font-weight="900">결핵균 반응 감지!</text>
-          </g>
-
-          <!-- 상하 이동하는 X-Ray 레이저 스캔 바 -->
-          <g id="laserBeam" class="scanning-beam" transform="translate(10, 45)">
-            <line x1="0" y1="0" x2="330" y2="0" stroke="#00e5bc" stroke-width="3" filter="url(#glowEffect)"/>
-            <rect x="0" y="0" width="330" height="25" fill="url(#monitorGlow)" opacity="0.4"/>
-          </g>
-
-          <text x="18" y="308" fill="#00e5bc" font-size="12" font-family="monospace" font-weight="700" id="scanStatusText">STATUS: READY TO SCAN...</text>
-        </g>
-      </svg>
-
-      <div class="speech-bubble doctor" style="top: 22px; left: 24px;">
+      <div class="speech-bubble doctor" style="top: 15px; left: 24px; max-width: 50%;">
         "2주 이상 기침이 계속된다면 지체 없이 <strong>흉부 X선 검사</strong>와 <strong>객담(가래) 검사</strong>를 받아야 합니다!"
       </div>
 
@@ -728,7 +597,7 @@
     <!-- 독자 직접 조작: X-Ray 정밀 스캔 버튼 -->
     <div class="xray-control-panel">
       <p style="font-size: 0.9rem; color: #cbd5e1;">
-        아래 버튼을 눌러 <strong>흉부 X-Ray 정밀 스캔</strong>을 실행하고 폐 상엽의 신호를 확인하세요!
+        아래 버튼을 눌러 <strong>흉부 X-Ray 정밀 스캔</strong>을 실행하고 폐 내부의 신호를 확인하세요!
       </p>
       <button class="scan-btn" id="scanBtn" onclick="runXrayScan()">🔍 흉부 X-Ray 정밀 스캔 실행</button>
     </div>
@@ -780,7 +649,7 @@
 
         <button class="choice-card" onclick="selectEnding('B', this)">
           <h4>
-            <span>B. 2주 이상 꾸준히 결핵약 복용 완주하기</span>
+            <span>B. 처방된 결핵약 하루도 거르지 않고 완주하기</span>
             <span style="color: var(--med-blue); font-size: 0.78rem;">[완치 달성 루트]</span>
           </h4>
           <p>증상이 좋아져도 임의로 약을 끊지 않고 6개월 이상 처방된 약을 끝까지 복용합니다.</p>
@@ -788,10 +657,10 @@
 
         <button class="choice-card" onclick="selectEnding('C', this)">
           <h4>
-            <span>C. 가족·동료를 위해 잠복결핵 검진까지 챙기기</span>
+            <span>C. 가족·동료를 위해 잠복결핵 검사까지 챙기기</span>
             <span style="color: var(--warn-amber); font-size: 0.78rem;">[완벽 방어 루트]</span>
           </h4>
-          <p>증상이 없더라도 결핵균이 몸속에 잠들어 있는 '잠복결핵' 단계에서 미리 치료해 발병을 90%까지 예방합니다.</p>
+          <p>증상이 없더라도 결핵균이 몸속에 잠들어 있는 '잠복결핵' 단계에서 미리 치료해 발병을 예방합니다.</p>
         </button>
       </div>
     </section>
@@ -898,12 +767,11 @@
     function runXrayScan() {
       initAudio();
       const lesion = document.getElementById('tbLesionSpot');
-      const statusText = document.getElementById('scanStatusText');
+      const scanBeam = document.getElementById('scanBeam');
       const btn = document.getElementById('scanBtn');
 
+      scanBeam.style.opacity = '1';
       lesion.style.opacity = '1';
-      statusText.textContent = 'ALERT: 좌측 상엽 결핵 의심 음영 발견! (조기 검진 성공)';
-      statusText.setAttribute('fill', '#fde047');
       btn.textContent = '✅ 흉부 X-Ray 스캔 완료 (예방지수 상승!)';
 
       if (!scanned) {
@@ -924,7 +792,7 @@
       const checkedCount = document.querySelectorAll('.symptom-item.checked').length;
       const adviceEl = document.getElementById('symptomAdvice');
       if (checkedCount >= 1) {
-        adviceEl.innerHTML = `🚨 <strong>${checkedCount}개의 의심 증상</strong>을 확인하셨습니다! 결핵은 조기에 발견하면 완치가 가능하니 미루지 말고 보건소 검진을 받으세요.`;
+        adviceEl.innerHTML = `🚨 <strong>${checkedCount}개의 의심 증상</strong>을 확인하셨습니다! 결핵은 조기에 발견하면 완치율이 100%에 가까우니 미루지 말고 보건소 검사(무료)를 받으세요.`;
       }
     }
 
@@ -935,23 +803,23 @@
       A: {
         badge: 'ENDING A : 빠른 조기 검진 성공!',
         color: '#00e5bc',
-        title: '보건소 무료 검진으로 지킨 건강',
-        desc: '민준은 옷소매로 기침을 가리는 예절을 지키며 즉시 보건소를 찾았습니다. 흉부 X선 검사를 통해 초기에 결핵을 발견했고, 주위 사람들에게 전파되기 전에 안전하게 치료를 시작했습니다!',
-        sfx: '삐빅- 조기발견!!'
+        title: '보건소 무료 검사로 지킨 건강',
+        desc: '민준은 옷소매로 기침을 가리는 예절을 잘 지키며 즉시 관할 보건소를 찾았습니다. 초기에 흉부 X선 검사를 받아 조기 진단 및 조기 치료에 성공했고, 주위 사람들에게 전파되는 위험도 안전하게 차단했습니다!',
+        sfx: '조기 검진 성공-!'
       },
       B: {
         badge: 'ENDING B : 6개월 복약 완주 & 완치!',
         color: '#38bdf8',
         title: '꾸준한 복약이 만드는 100% 완치',
-        desc: '결핵약을 복용한 지 2주가 지나자 전염력이 사라지고 기침도 멎었습니다. 민준은 임의로 약을 중단하지 않고 6개월간 성실히 복약을 마쳐 내성균 걱정 없이 완벽하게 건강을 되찾았습니다!',
+        desc: '결핵 치료를 시작한 지 약 2주가 지나자 전염력은 사라지고 기침도 멎었지만, 민준은 임의로 약을 끊지 않고 처방받은 6개월 동안 매일 꾸준히 복약했습니다. 그 결과 부작용이나 내성균 없이 건강을 완벽히 되찾았습니다!',
         sfx: '완치 성공-!!'
       },
       C: {
-        badge: 'ENDING C : 잠복결핵까지 완벽 차단!',
+        badge: 'ENDING C : 가족·동료의 건강까지 완벽 차단!',
         color: '#fbbf24',
-        title: '잠들어 있는 결핵균까지 사전 예방',
-        desc: '접촉자 검진을 통해 증상이 없던 가족의 잠복결핵감염까지 조기에 찾아냈습니다. 예방 치료를 통해 결핵 발병 위험을 90% 이상 차단하며 온 가족의 일상을 완벽하게 지켜냈습니다!',
-        sfx: '철벽 방어-!!'
+        title: '잠들어 있는 잠복결핵 감염까지 예방',
+        desc: '증상은 없었으나 주변 감염 전력이 우려되어 추가로 잠복결핵 검사까지 받았습니다. 몸속에 잠들어 있는 결핵균을 선제적 치료를 통해 안전하게 다스려, 결핵 발병 위험을 90% 이상 차단하고 일상의 평화를 지켰습니다!',
+        sfx: '철벽 사전 차단-!!'
       }
     };
 
@@ -966,21 +834,17 @@
 
       container.innerHTML = `
         <div class="cut-wrapper in-view" style="border-top: 3px solid ${data.color};">
-          <svg class="svg-stage" viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg">
-            <rect width="500" height="460" fill="#07111e"/>
-            <circle cx="250" cy="215" r="160" fill="${data.color}" opacity="0.15" filter="url(#glowEffect)"/>
-            <!-- 건강한 폐와 보호 방패 그래픽 -->
-            <path d="M250,95 L340,135 C340,225 300,285 250,315 C200,285 160,225 160,135 Z" fill="#0c253f" stroke="${data.color}" stroke-width="4" filter="url(#glowEffect)"/>
-            <path d="M220,205 L242,228 L285,180" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            <text x="250" y="45" text-anchor="middle" fill="${data.color}" font-size="14" font-weight="900" letter-spacing="2">${data.badge}</text>
-            <text x="250" y="76" text-anchor="middle" fill="#ffffff" font-size="21" font-weight="900">${data.title}</text>
-          </svg>
-          <div class="sfx-text" style="top: 165px; right: 38px; color: ${data.color}; font-size: 1.75rem; text-shadow: 0 0 14px ${data.color};">
-            ${data.sfx}
+          <div style="position: relative; width: 100%;">
+            <img src="ending.png" class="webtoon-img" alt="엔딩컷: 일상 복귀">
+            <div style="position: absolute; bottom: 15px; left: 5%; right: 5%; background: rgba(9, 14, 24, 0.92); border-left: 4px solid ${data.color}; padding: 14px 18px; border-radius: 4px 12px 12px 4px;">
+              <span style="color: ${data.color}; font-size: 0.78rem; font-weight: 900; letter-spacing: 2px;">${data.badge}</span>
+              <h3 style="color: #fff; font-size: 1.15rem; margin-top: 2px; margin-bottom: 6px;">${data.title}</h3>
+              <p style="color: #e2e8f0; font-size: 0.84rem; line-height: 1.5;">${data.desc}</p>
+              <span style="color: ${data.color}; font-size: 0.8rem; font-weight: 800; display: block; margin-top: 8px;">[최종 결핵 예방지수: ${score}점 / 100점]</span>
+            </div>
           </div>
-          <div class="narration-box" style="bottom: 20px; border-left-color: ${data.color};">
-            ${data.desc}<br>
-            <span style="color: ${data.color}; font-size: 0.82rem; font-weight: 800;">[최종 달성 결핵 예방지수: ${score}점 / 100점]</span>
+          <div class="sfx-text" style="top: 140px; right: 38px; color: ${data.color}; font-size: 1.75rem; text-shadow: 0 0 14px ${data.color};">
+            ${data.sfx}
           </div>
         </div>
       `;
