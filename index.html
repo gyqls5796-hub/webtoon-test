@@ -35,7 +35,6 @@
       overflow-x: hidden;
     }
 
-    /* 상단 진행 바 */
     .progress-bar {
       position: fixed;
       top: 0;
@@ -46,7 +45,6 @@
       z-index: 1000;
     }
 
-    /* 네이버 웹툰 스타일 세로 원고 컨테이너 */
     .webtoon-container {
       width: 100%;
       max-width: 480px;
@@ -57,7 +55,6 @@
       border-right: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    /* 상단 고정 네비게이션 바 */
     .hud-header {
       position: sticky;
       top: 0;
@@ -122,7 +119,7 @@
     }
 
     /* =========================================================
-       정통 웹툰 연출: 여백(Gutter) & 컷 분리 시스템
+       정통 웹툰 연출 & 오차 없는 이미지 좌우 분할 시스템
     ========================================================== */
     .story-block {
       margin-bottom: 70px;
@@ -136,7 +133,6 @@
       transform: translateY(0);
     }
 
-    /* 컷과 컷 사이의 내레이션 */
     .gutter-narration {
       margin: 0 24px 22px;
       padding: 14px 18px;
@@ -154,82 +150,75 @@
       background: #1c131d;
     }
 
-    /* 웹툰 패널 (컷 테두리) */
     .panel-frame {
       position: relative;
       width: 92%;
       margin: 0 auto;
       border: 2px solid #1e293b;
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
       background: #000;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     }
 
-    /* 좌우 2분할된 이미지를 각각 1컷씩 정사각형/세로형으로 완벽 분리 */
-    .split-crop-left,
-    .split-crop-right {
+    /* 2분할 이미지의 왼쪽 절반만 정확히 크롭 */
+    .crop-half-left {
       width: 100%;
-      aspect-ratio: 4 / 4.3;
       overflow: hidden;
       position: relative;
     }
-
-    .split-crop-left img {
-      width: 202%;
+    .crop-half-left img {
+      width: 200%;
       max-width: none;
-      height: 100%;
-      object-fit: cover;
-      object-position: left center;
+      height: auto;
+      margin-left: 0%;
       display: block;
     }
 
-    .split-crop-right img {
-      width: 202%;
+    /* 2분할 이미지의 오른쪽 절반만 정확히 크롭 (절대 오차 없음!) */
+    .crop-half-right {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .crop-half-right img {
+      width: 200%;
       max-width: none;
-      height: 100%;
-      object-fit: cover;
-      object-position: right center;
+      height: auto;
+      margin-left: -100%;
       display: block;
     }
 
-    /* 전체 와이드 컷 */
+    /* 3컷(진료실) 의사 선생님 단독 클로즈업 (왼쪽 60% 영역 확대) */
+    .crop-doctor-only {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .crop-doctor-only img {
+      width: 175%;
+      max-width: none;
+      height: auto;
+      margin-left: -5%;
+      display: block;
+    }
+
+    /* 3컷(진료실) 마스크 쓴 주인공 민준 단독 클로즈업 (오른쪽 영역 강제 이동!) */
+    .crop-patient-only {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .crop-patient-only img {
+      width: 185%;
+      max-width: none;
+      height: auto;
+      margin-left: -85%;
+      display: block;
+    }
+
     .full-img {
       width: 100%;
-      display: block;
-    }
-
-    /* 의사 선생님 단독 클로즈업 컷 */
-    .zoom-crop-doctor {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .zoom-crop-doctor img {
-      width: 155%;
-      max-width: none;
-      height: 100%;
-      object-fit: cover;
-      object-position: 12% 18%;
-      display: block;
-    }
-
-    /* 환자(주인공 민준) 단독 클로즈업 컷 (새로 추가!) */
-    .zoom-crop-patient {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .zoom-crop-patient img {
-      width: 165%;
-      max-width: none;
-      height: 100%;
-      object-fit: cover;
-      object-position: 92% 18%;
       display: block;
     }
 
@@ -257,26 +246,10 @@
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
       position: relative;
       border: 2px solid #0f172a;
-    }
-
-    /* 말풍선 꼬리 방향 (왼쪽 / 중앙 / 오른쪽) */
-    .bubble.tail-up-left {
-      align-self: flex-start;
-    }
-    .bubble.tail-up-left::before {
-      content: '';
-      position: absolute;
-      top: -12px;
-      left: 36px;
-      border-width: 0 10px 12px;
-      border-style: solid;
-      border-color: transparent transparent #ffffff;
-    }
-
-    .bubble.tail-up-center {
       align-self: center;
     }
-    .bubble.tail-up-center::before {
+
+    .bubble::before {
       content: '';
       position: absolute;
       top: -12px;
@@ -287,20 +260,6 @@
       border-color: transparent transparent #ffffff;
     }
 
-    .bubble.tail-up-right {
-      align-self: flex-end;
-    }
-    .bubble.tail-up-right::before {
-      content: '';
-      position: absolute;
-      top: -12px;
-      right: 36px;
-      border-width: 0 10px 12px;
-      border-style: solid;
-      border-color: transparent transparent #ffffff;
-    }
-
-    /* 의사 선생님 전용 말풍선 */
     .bubble.doctor {
       background: #e0f2fe;
       border-color: #0284c7;
@@ -310,20 +269,17 @@
       border-color: transparent transparent #e0f2fe;
     }
 
-    /* 독백(속마음) 말풍선 */
     .bubble.monologue {
       background: #1e293b;
       color: #f8fafc;
       border: 1.5px dashed #64748b;
       border-radius: 16px;
       font-weight: 500;
-      align-self: center;
     }
     .bubble.monologue::before {
       display: none;
     }
 
-    /* 효과음 */
     .sfx-badge {
       position: absolute;
       bottom: 14px;
@@ -337,7 +293,6 @@
       pointer-events: none;
     }
 
-    /* 기침 흔들림 효과 */
     @keyframes coughShake {
       0%, 100% { transform: translate(0, 0); }
       20% { transform: translate(-7px, 4px); }
@@ -396,7 +351,6 @@
       transform: scale(1);
     }
 
-    /* 인터랙티브 스캔 버튼 박스 */
     .interactive-box {
       width: 92%;
       margin: 18px auto 0;
@@ -420,7 +374,6 @@
       box-shadow: 0 0 18px rgba(0, 229, 188, 0.35);
     }
 
-    /* 체크리스트 & 선택지 UI */
     .symptom-checklist, .choice-section {
       width: 92%;
       margin: 40px auto;
@@ -506,7 +459,6 @@
   <div class="progress-bar" id="progressBar"></div>
 
   <main class="webtoon-container">
-    <!-- 상단 헤더 -->
     <header class="hud-header">
       <div class="ep-title">
         <span class="badge-campaign">결핵예방 웹툰</span>
@@ -520,47 +472,39 @@
 
     <div style="height: 30px;"></div>
 
-    <!-- =========================================================
-         SCENE 1 : 야근하며 기침하는 민준 (cut1.png 왼쪽 컷)
-    ========================================================== -->
+    <!-- SCENE 1 : cut1 왼쪽 절반 -->
     <article class="story-block" data-sound="cough">
       <div class="gutter-narration">
         프로젝트 마감으로 야근이 이어지던 10월의 어느 밤.<br>
         처음엔 그저 흔한 환절기 감기인 줄만 알았다.
       </div>
-
       <div class="panel-frame">
-        <div class="split-crop-left">
-          <img src="cut1.png" alt="1컷: 기침하는 민준">
+        <div class="crop-half-left">
+          <img src="cut1.png" onerror="tryNextExt(this, ['cut1.jpg', 'cut1.jpeg', 'cut1.webp'])" alt="1컷">
         </div>
         <div class="sfx-badge">콜록.. 콜록!</div>
       </div>
-
       <div class="dialogue-area">
-        <div class="bubble tail-up-center">
+        <div class="bubble">
           "쿨럭... 이상하네. 종합감기약을 일주일 넘게 먹었는데 왜 기침이 안 떨어지지?"
         </div>
       </div>
     </article>
 
-    <!-- =========================================================
-         SCENE 2 : 미열과 식은땀, 2주 경과 (cut1.png 오른쪽 컷)
-    ========================================================== -->
+    <!-- SCENE 2 : cut1 오른쪽 절반 -->
     <article class="story-block" data-sound="cough">
       <div class="gutter-narration warn">
         그렇게 또다시 일주일이 흘렀다.<br>
         기침이 시작된 지 어느덧 <strong>14일(2주)째</strong>.
       </div>
-
       <div class="panel-frame">
-        <div class="split-crop-right">
-          <img src="cut1.png" alt="2컷: 미열과 식은땀">
+        <div class="crop-half-right">
+          <img src="cut1.png" onerror="tryNextExt(this, ['cut1.jpg', 'cut1.jpeg', 'cut1.webp'])" alt="2컷">
         </div>
         <div class="sfx-badge" style="color: #fbbf24;">화끈.. 쿨럭!!</div>
       </div>
-
       <div class="dialogue-area">
-        <div class="bubble tail-up-center">
+        <div class="bubble">
           "오후만 되면 몸에 미열이 나고, 밤마다 식은땀이 줄줄 흘러... 입맛도 없어서 살까지 빠지잖아?"
         </div>
         <div class="bubble monologue">
@@ -569,71 +513,57 @@
       </div>
     </article>
 
-    <!-- =========================================================
-         SCENE 3 : 옷소매 기침 예절 (cut2.png 왼쪽 컷)
-    ========================================================== -->
+    <!-- SCENE 3 : cut2 왼쪽 절반 -->
     <article class="story-block" data-sound="cough">
       <div class="gutter-narration warn">
         갑자기 터져 나오는 기침.<br>
         혹시라도 호흡기 감염병일지 모른다는 생각에 민준은 급히 <strong>옷소매 위쪽(팔꿈치 안쪽)</strong>으로 입과 코를 막았다.
       </div>
-
       <div class="panel-frame">
-        <div class="split-crop-left">
-          <img src="cut2.png" alt="3컷: 옷소매 기침 예절">
+        <div class="crop-half-left">
+          <img src="cut2.png" onerror="tryNextExt(this, ['cut2.jpg', 'cut2.jpeg', 'cut2.webp'])" alt="3컷">
         </div>
         <div class="sfx-badge">콜록! 콜록!!</div>
       </div>
-
       <div class="dialogue-area">
-        <div class="bubble tail-up-center">
+        <div class="bubble">
           "휴... 손으로 입을 가리고 기침하면 손에 묻은 균이 문고리나 물건에 옮을 수 있다고 했어."
         </div>
       </div>
     </article>
 
-    <!-- =========================================================
-         SCENE 4 : 결심하는 눈빛 (cut2.png 오른쪽 컷)
-    ========================================================== -->
+    <!-- SCENE 4 : cut2 오른쪽 절반 -->
     <article class="story-block">
       <div class="panel-frame">
-        <div class="split-crop-right">
-          <img src="cut2.png" alt="4컷: 병원 방문 결심">
+        <div class="crop-half-right">
+          <img src="cut2.png" onerror="tryNextExt(this, ['cut2.jpg', 'cut2.jpeg', 'cut2.webp'])" alt="4컷">
         </div>
       </div>
-
       <div class="dialogue-area">
-        <div class="bubble tail-up-center">
+        <div class="bubble">
           "안 되겠어. <strong>'2주 이상 기침이 계속되면 결핵 검진'</strong>을 받아야 한다고 들었어. 내일 아침 바로 보건소에 가보자!"
         </div>
       </div>
     </article>
 
-    <!-- =========================================================
-         SCENE 5 : 보건소 진료실 전체 투샷과 흉부 X-Ray 스캔
-    ========================================================== -->
+    <!-- SCENE 5 : 보건소 진료실 전체 와이드 컷 -->
     <article class="story-block" id="xrayScene">
       <div class="gutter-narration">
         다음 날 오전, 마스크를 착용하고 방문한 관할 보건소.<br>
         무료로 진행되는 <strong>흉부 X선 검사</strong> 결과가 화면에 띄워졌다.
       </div>
-
       <div class="panel-frame">
-        <img src="cut3.png" class="full-img" alt="5컷: 보건소 X-Ray 진료 투샷">
-        <!-- 벽면 X-Ray 모니터 위에 정확히 맞춘 스캔 레이어 -->
+        <img src="cut3.png" onerror="tryNextExt(this, ['cut3.jpg', 'cut3.jpeg', 'cut3.webp'])" class="full-img" alt="5컷">
         <div class="xray-screen-target">
           <div class="scan-laser" id="scanLaser"></div>
           <div class="lesion-marker" id="lesionMarker"></div>
         </div>
       </div>
-
       <div class="dialogue-area">
-        <div class="bubble doctor tail-up-left">
+        <div class="bubble doctor">
           "민준 씨, 2주 넘게 기침이 지속되어 바로 오시길 정말 잘하셨습니다. 여기 흉부 X선 사진을 함께 보실까요?"
         </div>
       </div>
-
-      <!-- 인터랙티브 스캔 버튼 -->
       <div class="interactive-box">
         <p style="font-size: 0.88rem; color: #cbd5e1;">
           👆 의사 선생님이 가리키는 <strong>벽면 X-Ray 모니터</strong>를 정밀 스캔해 보세요!
@@ -642,45 +572,35 @@
       </div>
     </article>
 
-    <!-- =========================================================
-         SCENE 6 : 의사 선생님 단독 클로즈업 + 의사 대사만 배치!
-    ========================================================== -->
+    <!-- SCENE 6 : 의사 선생님 단독 클로즈업 -->
     <article class="story-block">
       <div class="panel-frame">
-        <div class="zoom-crop-doctor">
-          <img src="cut3.png" alt="6컷: 의사 선생님 단독 클로즈업">
+        <div class="crop-doctor-only">
+          <img src="cut3.png" onerror="tryNextExt(this, ['cut3.jpg', 'cut3.jpeg', 'cut3.webp'])" alt="6컷: 의사 클로즈업">
         </div>
       </div>
-
       <div class="dialogue-area">
-        <!-- 의사 선생님이 화면 중앙에 계시므로 꼬리도 중앙(tail-up-center)으로 정렬 -->
-        <div class="bubble doctor tail-up-center">
+        <div class="bubble doctor">
           "다행히 아주 초기 단계에 발견되었습니다! 결핵은 <strong>약 복용 후 약 2주가 지나면 전염력이 사라지고, 6개월 이상 꾸준히 복약하면 100% 완치</strong>할 수 있습니다."
         </div>
       </div>
     </article>
 
-    <!-- =========================================================
-         SCENE 7 (신규 분리!) : 주인공(민준) 단독 클로즈업 + 민준 대사 배치!
-    ========================================================== -->
+    <!-- SCENE 7 : 마스크 쓴 주인공(민준) 단독 클로즈업 (margin-left: -85%로 확실하게 오른쪽 인물 포커스!) -->
     <article class="story-block">
       <div class="panel-frame">
-        <div class="zoom-crop-patient">
-          <img src="cut3.png" alt="7컷: 마스크 쓴 주인공 민준 단독 클로즈업">
+        <div class="crop-patient-only">
+          <img src="cut3.png" onerror="tryNextExt(this, ['cut3.jpg', 'cut3.jpeg', 'cut3.webp'])" alt="7컷: 주인공 민준 클로즈업">
         </div>
       </div>
-
       <div class="dialogue-area">
-        <!-- 이제 화면에 주인공이 명확히 보이므로 주인공 밑에 말풍선이 자연스럽게 연결됨 -->
-        <div class="bubble tail-up-center">
+        <div class="bubble">
           "휴, 다행이네요! 감기인 줄 알고 계속 방치했으면 주변 동료들에게까지 옮길 뻔했어요. 보건소에서 무료로 검진받길 정말 잘했네요!"
         </div>
       </div>
     </article>
 
-    <!-- =========================================================
-         자가진단 체크리스트 & 결말 선택지
-    ========================================================== -->
+    <!-- 자가진단 체크리스트 & 결말 선택지 -->
     <section class="symptom-checklist">
       <h4 style="color: var(--med-teal); margin-bottom: 6px;">📋 민준이 겪었던 결핵 의심 증상 되짚어보기</h4>
       <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 12px;">
@@ -715,12 +635,9 @@
       </button>
     </section>
 
-    <!-- =========================================================
-         ENDING SCENE : 봄날의 완치 엔딩 (ending.png 2컷 연속 연출)
-    ========================================================== -->
+    <!-- 엔딩 렌더링 영역 -->
     <section id="endingDisplay" class="ending-container"></section>
 
-    <!-- 하단 요약 카드 -->
     <footer class="info-summary-card">
       <h3 style="color: var(--med-teal); font-size: 0.98rem;">🏥 결핵 예방 핵심 3대 수칙</h3>
       <ul class="rule-list">
@@ -732,6 +649,15 @@
   </main>
 
   <script>
+    // 파일 이름이 cut4.png이든 ending.png이든 확장자가 jpg이든 자동으로 찾아주는 헬퍼 함수!
+    function tryNextExt(imgEl, fallbacks) {
+      const idx = parseInt(imgEl.dataset.fbIdx || '0', 10);
+      if (idx < fallbacks.length) {
+        imgEl.dataset.fbIdx = idx + 1;
+        imgEl.src = fallbacks[idx];
+      }
+    }
+
     // 1. 효과음 신디사이저
     let audioCtx = null;
     let isAudioOn = false;
@@ -767,7 +693,7 @@
       osc.stop(audioCtx.currentTime + duration);
     }
 
-    // 2. 스크롤 감지 및 흔들림 연출
+    // 2. 스크롤 감지
     const blocks = document.querySelectorAll('.story-block');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -791,7 +717,7 @@
       document.getElementById('progressBar').style.width = progress + '%';
     });
 
-    // 3. X-Ray 모니터 정밀 스캔
+    // 3. X-Ray 스캔
     let score = 60;
     let scanned = false;
 
@@ -822,7 +748,7 @@
       }
     }
 
-    // 4. 엔딩 2컷(배경 컷 -> 주인공 미소 컷) 연속 렌더링
+    // 4. 엔딩 렌더링 (ending.png 뿐만 아니라 cut4.png, ending.jpg 등 모든 이름 자동 탐색!)
     function selectEnding(type, btnEl) {
       initAudio();
       document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
@@ -833,29 +759,31 @@
         ? '"6개월 동안 하루도 빠짐없이 약을 챙겨 먹었더니, 오늘 드디어 완치 판정을 받았다!"'
         : '"나뿐만 아니라 가족과 동료들도 미리 잠복결핵 검진을 받은 덕분에 모두가 안전하게 봄을 맞이했다!"';
 
+      const fallbackList = "['cut4.png', 'ending.jpg', 'cut4.jpg', 'ending.jpeg', 'cut4.jpeg', 'ending.webp']";
+
       const container = document.getElementById('endingDisplay');
       container.innerHTML = `
-        <!-- 엔딩 8컷: 벚꽃 흩날리는 거리 풍경 (ending.png 왼쪽 분리) -->
+        <!-- 엔딩 8컷: 벚꽃 거리 배경 (왼쪽 절반) -->
         <article class="story-block in-view">
           <div class="gutter-narration">
             6개월 뒤, 따스한 봄바람이 불어오는 아침.
           </div>
           <div class="panel-frame">
-            <div class="split-crop-left">
-              <img src="ending.png" alt="봄날의 거리">
+            <div class="crop-half-left">
+              <img src="ending.png" onerror="tryNextExt(this, ${fallbackList})" alt="봄날의 거리">
             </div>
           </div>
         </article>
 
-        <!-- 엔딩 9컷: 건강을 되찾고 환하게 웃는 민준 (ending.png 오른쪽 분리) -->
+        <!-- 엔딩 9컷: 완치 후 환하게 웃는 민준 (오른쪽 절반) -->
         <article class="story-block in-view">
           <div class="panel-frame">
-            <div class="split-crop-right">
-              <img src="ending.png" alt="완치 후 미소 짓는 민준">
+            <div class="crop-half-right">
+              <img src="ending.png" onerror="tryNextExt(this, ${fallbackList})" alt="완치 후 미소 짓는 민준">
             </div>
           </div>
           <div class="dialogue-area">
-            <div class="bubble tail-up-center">
+            <div class="bubble">
               ${endingDialogue}
             </div>
             <div class="bubble monologue" style="text-align: center; border-color: var(--med-teal); color: var(--med-teal);">
