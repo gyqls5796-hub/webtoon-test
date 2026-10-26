@@ -2,870 +2,960 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>신비한 골목의 편의점 - 인터랙티브 웹툰</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Phosphor Icons CDN -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>심야의 골동품점: 시간의 태엽 | ARGON Interactive Webtoon</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Noto+Sans+KR:wght@400;600;800;900&display=swap');
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+    :root {
+      --bg-dark: #07080d;
+      --viewer-bg: #0d101a;
+      --gold: #f5c542;
+      --gold-glow: rgba(245, 197, 66, 0.45);
+      --cyan: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.45);
+      --crimson: #ff2a5f;
+      --text-main: #f0f4f8;
+      --text-sub: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
 
     body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background-color: #0b0d13;
-      color: #f1f5f9;
-      user-select: none;
-      -webkit-user-select: none;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(245, 197, 66, 0.05) 0%, transparent 50%);
+      color: var(--text-main);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      justify-content: center;
       overflow-x: hidden;
     }
 
-    .comic-font {
-      font-family: 'Gaegu', cursive;
+    /* 상단 스크롤 진행 바 */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--gold), var(--crimson));
+      width: 0%;
+      z-index: 1000;
+      box-shadow: 0 0 10px var(--cyan);
+      transition: width 0.1s ease-out;
     }
 
-    /* 패널 진입 트랜지션 */
-    .comic-panel {
+    /* 모바일 웹툰 뷰어 프레임 */
+    .webtoon-container {
+      width: 100%;
+      max-width: 520px;
+      min-height: 100vh;
+      background-color: var(--viewer-bg);
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.95);
+      position: relative;
+      padding-bottom: 120px;
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* 상단 고정 HUD (상태창 & 오디오 컨트롤) */
+    .hud-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 16, 26, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ep-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-argon {
+      background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+      font-size: 0.65rem;
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .hud-stats {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 4px 10px;
+      border-radius: 99px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .audio-btn {
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: var(--cyan);
+      padding: 5px 11px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .audio-btn.active {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 14px var(--cyan-glow);
+    }
+
+    /* 각 웹툰 컷 공통 스타일 */
+    .cut-wrapper {
+      position: relative;
+      width: 100%;
+      margin: 0;
+      overflow: hidden;
       opacity: 0;
-      transform: translateY(35px) scale(0.98);
-      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: opacity, transform;
+      transform: translateY(45px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .comic-panel.active {
+
+    .cut-wrapper.in-view {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateY(0);
     }
 
-    /* 번개/화면 흔들림 연출 */
-    @keyframes screenShake {
-      0% { transform: translate(0, 0); }
-      15% { transform: translate(-7px, 5px) rotate(-1deg); }
-      30% { transform: translate(7px, -5px) rotate(1deg); }
-      45% { transform: translate(-5px, -3px); }
-      60% { transform: translate(5px, 3px); }
-      75% { transform: translate(-2px, 1px); }
-      100% { transform: translate(0, 0); }
-    }
-    .shake-effect {
-      animation: screenShake 0.45s ease-in-out;
+    .svg-stage {
+      width: 100%;
+      display: block;
+      height: auto;
     }
 
-    /* 네온 깜빡임 */
-    @keyframes neonPulse {
-      0%, 100% { filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8)); opacity: 1; }
-      50% { filter: drop-shadow(0 0 16px rgba(245, 158, 11, 1)); opacity: 0.85; }
-    }
-    .neon-glow {
-      animation: neonPulse 2s infinite ease-in-out;
-    }
-
-    /* 빗줄기 배경 애니메이션 */
-    @keyframes rainDrop {
-      0% { transform: translateY(-50px); opacity: 0; }
-      50% { opacity: 0.8; }
-      100% { transform: translateY(600px); opacity: 0.2; }
-    }
-    .rain-line {
+    /* 말풍선 & 내레이션 박스 */
+    .narration-box {
       position: absolute;
-      width: 1.5px;
-      height: 35px;
-      background: linear-gradient(to bottom, transparent, rgba(147, 197, 253, 0.6));
-      animation: rainDrop 1.2s infinite linear;
+      left: 6%;
+      right: 6%;
+      background: rgba(10, 12, 20, 0.85);
+      border-left: 3px solid var(--gold);
+      backdrop-filter: blur(6px);
+      padding: 14px 18px;
+      color: #e2e8f0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      letter-spacing: -0.2px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      border-radius: 4px 12px 12px 4px;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.7s ease 0.35s;
     }
 
-    /* 커스텀 스크롤바 */
-    ::-webkit-scrollbar {
-      width: 4px;
+    .cut-wrapper.in-view .narration-box {
+      opacity: 1;
+      transform: translateY(0);
     }
-    ::-webkit-scrollbar-track {
-      background: #0f172a;
+
+    .speech-bubble {
+      position: absolute;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 14px 20px;
+      border-radius: 24px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      max-width: 78%;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65);
+      opacity: 0;
+      transform: scale(0.85);
+      transition: all 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s;
+      z-index: 10;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #f59e0b;
-      border-radius: 2px;
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 28px;
+      border-width: 12px 10px 0;
+      border-style: solid;
+      border-color: #ffffff transparent;
+    }
+
+    .speech-bubble.right::after {
+      left: auto;
+      right: 28px;
+    }
+
+    .speech-bubble.dark-magic {
+      background: linear-gradient(135deg, #13182b, #090c15);
+      color: var(--cyan);
+      border: 1.5px solid var(--cyan);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+    }
+
+    .speech-bubble.dark-magic::after {
+      border-color: var(--cyan) transparent;
+    }
+
+    .cut-wrapper.in-view .speech-bubble {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* 만화 효과음 (SFX) */
+    .sfx-text {
+      position: absolute;
+      font-weight: 900;
+      font-style: italic;
+      pointer-events: none;
+      z-index: 15;
+      opacity: 0;
+      transform: scale(1.4) rotate(-8deg);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.55s;
+    }
+
+    .cut-wrapper.in-view .sfx-text {
+      opacity: 1;
+      transform: scale(1) rotate(-8deg);
+    }
+
+    /* 화면 흔들림 & 글리치 연출 */
+    @keyframes intenseShake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      15% { transform: translate(-10px, -6px) rotate(-1deg); }
+      30% { transform: translate(10px, 4px) rotate(1deg); }
+      45% { transform: translate(-8px, 6px) rotate(-0.5deg); }
+      60% { transform: translate(8px, -4px) rotate(0.5deg); }
+      75% { transform: translate(-4px, 2px) rotate(0deg); }
+    }
+
+    .shake-active {
+      animation: intenseShake 0.65s ease-in-out;
+    }
+
+    /* 기어 회전 애니메이션 */
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spinReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.55; filter: drop-shadow(0 0 8px var(--cyan)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 20px var(--cyan)); }
+    }
+    @keyframes rainDrop {
+      0% { transform: translateY(-100px); opacity: 0; }
+      50% { opacity: 0.6; }
+      100% { transform: translateY(700px); opacity: 0; }
+    }
+
+    .gear-cw { transform-origin: center; animation: spinSlow 24s linear infinite; }
+    .gear-ccw { transform-origin: center; animation: spinReverse 18s linear infinite; }
+    .pulse-magic { animation: pulseGlow 3s ease-in-out infinite; }
+
+    /* 인터랙티브 선택지 구역 */
+    .choice-section {
+      margin: 30px 18px;
+      padding: 26px 20px;
+      background: linear-gradient(180deg, rgba(20, 26, 46, 0.95), rgba(11, 14, 24, 0.98));
+      border: 1px solid rgba(245, 197, 66, 0.35);
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(245, 197, 66, 0.05);
+      text-align: center;
+    }
+
+    .choice-title {
+      color: var(--gold);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .choice-question {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .choice-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .choice-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 16px 18px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      color: var(--text-main);
+    }
+
+    .choice-card:hover {
+      background: rgba(0, 240, 255, 0.08);
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 240, 255, 0.2);
+    }
+
+    .choice-card.selected {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.18), rgba(245, 197, 66, 0.15));
+      border-color: var(--gold);
+      box-shadow: 0 0 25px var(--gold-glow);
+    }
+
+    .choice-card h4 {
+      font-size: 0.98rem;
+      margin-bottom: 4px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .choice-card p {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      line-height: 1.4;
+    }
+
+    /* 멀티 엔딩 컷 컨테이너 */
+    .ending-container {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 직접 조작 가능한 인터랙티브 태엽 퍼즐 */
+    .interactive-dial-box {
+      text-align: center;
+      padding: 24px 16px;
+      background: radial-gradient(circle, rgba(28, 36, 66, 0.6) 0%, rgba(13, 16, 26, 0.95) 80%);
+      border-top: 1px solid rgba(0, 240, 255, 0.2);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .wind-btn {
+      margin-top: 14px;
+      padding: 12px 28px;
+      border-radius: 99px;
+      border: 1.5px solid var(--gold);
+      background: linear-gradient(135deg, rgba(245, 197, 66, 0.25), rgba(245, 197, 66, 0.05));
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
+      transition: transform 0.15s, box-shadow 0.2s;
+    }
+
+    .wind-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* 하단 작가의 말 & 에피소드 푸터 */
+    .webtoon-footer {
+      margin: 50px 20px 0;
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      text-align: center;
+    }
+
+    .like-btn {
+      background: rgba(255, 42, 95, 0.15);
+      border: 1px solid var(--crimson);
+      color: #ff6b8b;
+      padding: 10px 24px;
+      border-radius: 99px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 0.2s;
+    }
+
+    .like-btn.liked {
+      background: var(--crimson);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(255, 42, 95, 0.5);
     }
   </style>
 </head>
-<body class="flex justify-center min-h-screen">
+<body>
 
-  <!-- 전체 리더 모바일 프레임 (최대 480px) -->
-  <main id="readerApp" class="w-full max-w-[480px] min-h-screen bg-[#11141e] relative shadow-2xl flex flex-col border-x border-slate-800">
-    
-    <!-- 상단 스크롤 진행 바 -->
-    <div class="fixed top-0 left-0 right-0 max-w-[480px] mx-auto z-50 h-1 bg-slate-900">
-      <div id="progressBar" class="h-full bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-500 w-0 transition-all duration-150"></div>
-    </div>
+  <!-- 상단 진행 표시줄 -->
+  <div class="progress-bar" id="progressBar"></div>
 
-    <!-- 상단 고정 헤더 -->
-    <header class="sticky top-0 z-40 bg-[#11141e]/90 backdrop-blur-md px-4 py-3 border-b border-slate-800 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-        <h1 class="text-sm font-bold text-slate-100 tracking-tight">신비한 골목의 편의점 <span class="text-xs text-amber-400 font-normal ml-1">제1화</span></h1>
+  <main class="webtoon-container" id="viewer">
+    <!-- 상단 HUD 헤더 -->
+    <header class="hud-header">
+      <div class="ep-title">
+        <span class="badge-argon">4 Argon</span>
+        <span>EP.01 시간의 태엽</span>
       </div>
-      <div class="flex items-center gap-2">
-        <!-- 사운드 토글 -->
-        <button id="soundToggle" class="p-2 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-200 transition text-sm flex items-center justify-center w-8 h-8" title="효과음 켜기/끄기">
-          <i class="ph-bold ph-speaker-high" id="soundIcon"></i>
-        </button>
-        <!-- 좋아요 버튼 -->
-        <button id="likeBtn" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs font-semibold hover:bg-rose-500/20 transition">
-          <i class="ph-fill ph-heart text-rose-500"></i>
-          <span id="likeCount">1,248</span>
-        </button>
+      <div class="hud-stats">
+        <div class="stat-pill" title="시간 동기화율">
+          <span>⏳</span>
+          <span id="syncRate">50%</span>
+        </div>
+        <button class="audio-btn" id="audioBtn" onclick="toggleAudio()">🔇 BGM 켜기</button>
       </div>
     </header>
 
-    <!-- 스크롤 힌트 알림 -->
-    <div id="scrollNotice" class="text-center py-2 bg-amber-500/10 text-amber-300 text-xs flex items-center justify-center gap-1.5 border-b border-amber-500/20">
-      <i class="ph-bold ph-mouse-scroll"></i>
-      <span>아래로 스크롤하여 웹툰을 감상하세요</span>
+    <!-- =========================================================
+         CUT 1 : 비 내리는 네온 골목과 심야 골동품점 외관
+    ========================================================== -->
+    <section class="cut-wrapper" data-cut="1">
+      <svg class="svg-stage" viewBox="0 0 500 720" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="nightSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#050711"/>
+            <stop offset="55%" stop-color="#0f172e"/>
+            <stop offset="100%" stop-color="#1b1930"/>
+          </linearGradient>
+          <radialGradient id="moonGlow" cx="0.78" cy="0.18" r="0.35">
+            <stop offset="0%" stop-color="#ffefc2" stop-opacity="0.9"/>
+            <stop offset="30%" stop-color="#f5c542" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#0f172e" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="shopWindow" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffcf54" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#ff6b2b" stop-opacity="0.35"/>
+          </linearGradient>
+          <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- 밤하늘 배경 -->
+        <rect width="500" height="720" fill="url(#nightSky)"/>
+        <circle cx="390" cy="130" r="170" fill="url(#moonGlow)"/>
+        <circle cx="390" cy="130" r="36" fill="#fffbeb" filter="url(#neonGlow)"/>
+
+        <!-- 원경 빌딩 실루엣 (패럴랙스 레이어) -->
+        <g class="parallax-layer" data-speed="0.08" fill="#080b16">
+          <rect x="20" y="180" width="95" height="420"/>
+          <rect x="105" y="240" width="75" height="360"/>
+          <rect x="330" y="210" width="110" height="390"/>
+          <polygon points="20,180 67,130 115,180"/>
+        </g>
+
+        <!-- 안개 효과 -->
+        <ellipse cx="250" cy="520" rx="340" ry="90" fill="#1e293b" opacity="0.45"/>
+
+        <!-- 골동품점 고딕 건물 -->
+        <g transform="translate(85, 230)">
+          <!-- 본체 -->
+          <rect x="20" y="70" width="290" height="310" fill="#121626" stroke="#2d3748" stroke-width="2"/>
+          <!-- 지붕 -->
+          <polygon points="0,75 165,-30 330,75" fill="#0b0e1a" stroke="#f5c542" stroke-width="1.5"/>
+          <!-- 지붕 위 시계탑 장식 -->
+          <circle cx="165" cy="30" r="26" fill="#090d16" stroke="#f5c542" stroke-width="2.5"/>
+          <line x1="165" y1="30" x2="165" y2="12" stroke="#00f0ff" stroke-width="2"/>
+          <line x1="165" y1="30" x2="180" y2="30" stroke="#f5c542" stroke-width="2"/>
+
+          <!-- 네온 간판 -->
+          <rect x="55" y="95" width="220" height="44" rx="8" fill="#090b14" stroke="#00f0ff" stroke-width="2.5" filter="url(#neonGlow)"/>
+          <text x="165" y="124" text-anchor="middle" fill="#00f0ff" font-size="20" font-weight="900" letter-spacing="4" filter="url(#neonGlow)">CHRONOS 00:00</text>
+
+          <!-- 쇼윈도 (따뜻한 황금빛) -->
+          <rect x="45" y="165" width="130" height="145" rx="6" fill="url(#shopWindow)" stroke="#f5c542" stroke-width="2"/>
+          <!-- 쇼윈도 내부 기어 실루엣 -->
+          <circle cx="110" cy="240" r="38" fill="none" stroke="#422006" stroke-width="6" stroke-dasharray="12 8" class="gear-cw"/>
+          
+          <!-- 출입문 -->
+          <rect x="195" y="165" width="85" height="195" rx="4" fill="#1e1b2e" stroke="#f5c542" stroke-width="2"/>
+          <rect x="210" y="180" width="55" height="90" fill="url(#shopWindow)" opacity="0.7"/>
+          <circle cx="268" cy="275" r="5" fill="#f5c542" filter="url(#neonGlow)"/>
+        </g>
+
+        <!-- 젖은 아스팔트 바닥 & 네온 반사광 -->
+        <rect x="0" y="590" width="500" height="130" fill="#060810"/>
+        <ellipse cx="250" cy="635" rx="160" ry="22" fill="#00f0ff" opacity="0.22" filter="url(#neonGlow)"/>
+        <ellipse cx="210" cy="660" rx="110" ry="15" fill="#f5c542" opacity="0.28" filter="url(#neonGlow)"/>
+
+        <!-- 우산 쓴 주인공 뒷모습 실루엣 -->
+        <g transform="translate(215, 445)">
+          <!-- 우산 -->
+          <path d="M-55,35 Q15,-35 85,35 Z" fill="#05070e" stroke="#00f0ff" stroke-width="1.5"/>
+          <!-- 코트 입은 인물 -->
+          <path d="M-5,35 L-20,175 L45,175 L30,35 Z" fill="#080b14"/>
+          <!-- 붉은 머플러 포인트 -->
+          <path d="M5,42 Q35,55 48,85" stroke="#ff2a5f" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#neonGlow)"/>
+        </g>
+
+        <!-- 빗줄기 레이어 -->
+        <g stroke="#94a3b8" stroke-width="1.2" opacity="0.45">
+          <line x1="60" y1="40" x2="40" y2="130"/>
+          <line x1="150" y1="120" x2="130" y2="210"/>
+          <line x1="320" y1="70" x2="300" y2="160"/>
+          <line x1="440" y1="180" x2="420" y2="270"/>
+          <line x1="90" y1="360" x2="70" y2="450"/>
+          <line x1="410" y1="390" x2="390" y2="480"/>
+        </g>
+      </svg>
+
+      <div class="narration-box" style="top: 34px;">
+        비 내리는 자정, 지도에도 존재하지 않는 막다른 골목 끝.<br>
+        멈춰버린 내 시간을 되돌려줄 유일한 가게의 불이 켜졌다.
+      </div>
+      <div class="sfx-text" style="bottom: 155px; right: 38px; color: #00f0ff; font-size: 1.7rem; text-shadow: 0 0 12px #00f0ff;">
+        치직.. 치지직-
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CUT 2 : 가게 내부 진입 & 신비로운 마스터 '크로노스' 등장
+    ========================================================== -->
+    <section class="cut-wrapper" data-cut="2">
+      <svg class="svg-stage" viewBox="0 0 500 680" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="magicAura" cx="0.5" cy="0.45" r="0.5">
+            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.35"/>
+            <stop offset="55%" stop-color="#6366f1" stop-opacity="0.12"/>
+            <stop offset="100%" stop-color="#090c15" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#fff3b0"/>
+            <stop offset="50%" stop-color="#f5c542"/>
+            <stop offset="100%" stop-color="#9a6b13"/>
+          </linearGradient>
+        </defs>
+
+        <rect width="500" height="680" fill="#090c15"/>
+        <circle cx="250" cy="310" r="240" fill="url(#magicAura)"/>
+
+        <!-- 거대한 배경 황금 태엽 장치들 -->
+        <g opacity="0.35">
+          <circle cx="110" cy="180" r="95" fill="none" stroke="url(#goldGrad)" stroke-width="14" stroke-dasharray="24 14" class="gear-cw"/>
+          <circle cx="110" cy="180" r="65" fill="none" stroke="url(#goldGrad)" stroke-width="4"/>
+          <circle cx="395" cy="220" r="115" fill="none" stroke="#00f0ff" stroke-width="10" stroke-dasharray="18 12" class="gear-ccw"/>
+          <circle cx="250" cy="110" r="60" fill="none" stroke="url(#goldGrad)" stroke-width="8" stroke-dasharray="12 8" class="gear-cw"/>
+        </g>
+
+        <!-- 공중에 떠 있는 기하학 마법진 -->
+        <g class="pulse-magic" transform="translate(250, 320)">
+          <circle r="155" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="8 6"/>
+          <polygon points="0,-145 125,72 -125,72" fill="none" stroke="#00f0ff" stroke-width="1.2" opacity="0.6"/>
+          <polygon points="0,145 125,-72 -125,-72" fill="none" stroke="#f5c542" stroke-width="1.2" opacity="0.6"/>
+        </g>
+
+        <!-- 골동품점 마스터 '크로노스' (정교한 캐릭터 일러스트) -->
+        <g transform="translate(250, 355)">
+          <!-- 망토/정장 어깨 실루엣 -->
+          <path d="M-145,250 C-135,95 -75,55 0,55 C75,55 135,95 145,250 Z" fill="#111629" stroke="#f5c542" stroke-width="2"/>
+          <!-- 조끼 & 금장 장식 -->
+          <path d="M-45,60 L0,165 L45,60 Z" fill="#1e1b38" stroke="#f5c542" stroke-width="1.5"/>
+          <!-- 붉은 크라바트(넥타이)와 보석 -->
+          <polygon points="0,68 -18,110 0,145 18,110" fill="#b91c1c"/>
+          <circle cx="0" cy="95" r="7" fill="#00f0ff" filter="url(#neonGlow)"/>
+
+          <!-- 목과 얼굴 -->
+          <rect x="-18" y="15" width="36" height="50" fill="#e2d5c5"/>
+          <path d="M-48,-55 C-48,-95 48,-95 48,-55 C48,5 32,38 0,45 C-32,38 -48,5 -48,-55 Z" fill="#f3e8ee"/>
+
+          <!-- 은발 머리카락 -->
+          <path d="M-54,-45 C-65,-95 -20,-115 0,-110 C25,-115 65,-95 54,-45 C50,-15 62,15 48,30 C44,0 38,-35 28,-50 C10,-30 -15,-35 -32,-50 C-40,-30 -44,0 -48,30 C-60,15 -50,-15 -54,-45 Z" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+
+          <!-- 표정: 신비로운 미소와 기계식 모노클(외알 안경) -->
+          <!-- 왼쪽 눈 (청록색 발광) -->
+          <ellipse cx="-20" cy="-22" rx="9" ry="5" fill="#090d16"/>
+          <circle cx="-20" cy="-22" r="4" fill="#00f0ff" filter="url(#neonGlow)"/>
+          <!-- 오른쪽 눈: 황금 태엽 모노클 -->
+          <circle cx="22" cy="-22" r="18" fill="#090d16" fill-opacity="0.85" stroke="url(#goldGrad)" stroke-width="3.5"/>
+          <circle cx="22" cy="-22" r="11" fill="none" stroke="#00f0ff" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <circle cx="22" cy="-22" r="4" fill="#f5c542" filter="url(#neonGlow)"/>
+          <!-- 모노클 체인 -->
+          <path d="M38,-15 Q55,35 35,85" fill="none" stroke="#f5c542" stroke-width="1.8" stroke-dasharray="3 2"/>
+
+          <!-- 입매 -->
+          <path d="M-10,16 Q0,23 12,15" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+
+          <!-- 클래식 실크해트 (모자) -->
+          <ellipse cx="0" cy="-82" rx="78" ry="16" fill="#0b0f1d" stroke="#f5c542" stroke-width="2"/>
+          <path d="M-48,-82 L-40,-175 L40,-175 L48,-82 Z" fill="#11172b" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="-46" y="-102" width="92" height="16" fill="#b91c1c"/>
+        </g>
+
+        <!-- 전면 카운터 테이블 -->
+        <rect x="0" y="595" width="500" height="85" fill="#05070d" stroke="#f5c542" stroke-width="2"/>
+      </svg>
+
+      <div class="sfx-text" style="top: 40px; left: 32px; color: #f5c542; font-size: 1.5rem; text-shadow: 0 0 12px rgba(245,197,66,0.8);">
+        딸랑- 째깍..
+      </div>
+
+      <div class="speech-bubble" style="top: 75px; right: 24px;">
+        "어서 오십시오. 당신이 잃어버린 <strong>'그날의 기억'</strong>을 되찾으러 오셨군요."
+      </div>
+
+      <div class="speech-bubble dark-magic right" style="bottom: 110px; left: 26px;">
+        "단, 시간의 태엽을 감는 대가는 결코 가볍지 않습니다."
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CUT 3 : 직접 태엽을 감아보는 인터랙티브 클로즈업 컷
+    ========================================================== -->
+    <section class="cut-wrapper" data-cut="3" id="artifactCut">
+      <svg class="svg-stage" viewBox="0 0 500 580" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="coreBurst" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.9"/>
+            <stop offset="40%" stop-color="#3b82f6" stop-opacity="0.4"/>
+            <stop offset="75%" stop-color="#ff2a5f" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#070912" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <rect width="500" height="580" fill="#070912"/>
+
+        <!-- 집중선 (스피드 라인) -->
+        <g stroke="#1e293b" stroke-width="1.5" opacity="0.7">
+          <line x1="250" y1="290" x2="0" y2="0"/>
+          <line x1="250" y1="290" x2="250" y2="0"/>
+          <line x1="250" y1="290" x2="500" y2="0"/>
+          <line x1="250" y1="290" x2="0" y2="290"/>
+          <line x1="250" y1="290" x2="500" y2="290"/>
+          <line x1="250" y1="290" x2="0" y2="580"/>
+          <line x1="250" y1="290" x2="250" y2="580"/>
+          <line x1="250" y1="290" x2="500" y2="580"/>
+        </g>
+
+        <!-- 에너지 코어 발광 -->
+        <circle id="coreAura" cx="250" cy="290" r="210" fill="url(#coreBurst)"/>
+
+        <!-- 아티팩트 회중시계 본체 (회전 제어 대상) -->
+        <g id="interactiveClock" transform="translate(250, 290)">
+          <!-- 외곽 황금 링 -->
+          <circle r="135" fill="#0b0f1c" stroke="url(#goldGrad)" stroke-width="10"/>
+          <circle r="120" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="10 6"/>
+
+          <!-- 내부 정밀 기어들 -->
+          <g id="innerGearGroup">
+            <circle r="88" fill="none" stroke="#f5c542" stroke-width="12" stroke-dasharray="18 10"/>
+            <polygon points="0,-95 22,-25 95,0 22,25 0,95 -22,25 -95,0 -22,-25" fill="url(#goldGrad)" opacity="0.85"/>
+            <circle r="42" fill="#070a14" stroke="#00f0ff" stroke-width="3"/>
+          </g>
+
+          <!-- 시계 바늘 -->
+          <line id="clockHandHour" x1="0" y1="0" x2="0" y2="-65" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+          <line id="clockHandMin" x1="0" y1="0" x2="78" y2="0" stroke="#00f0ff" stroke-width="3.5" stroke-linecap="round"/>
+          <circle r="10" fill="#ff2a5f" filter="url(#neonGlow)"/>
+        </g>
+      </svg>
+
+      <div class="narration-box" style="top: 22px;">
+        카운터 위에 놓인 아티팩트 <strong>[크로노스 코어]</strong>.<br>
+        태엽을 감아 시간 동기화율을 높이면 닫혀 있던 차원의 틈이 열린다!
+      </div>
+
+      <div class="sfx-text" id="clockSfx" style="bottom: 35px; right: 28px; color: #ff2a5f; font-size: 2rem; text-shadow: 0 0 15px #ff2a5f;">
+        쿠구구궁-!!
+      </div>
+    </section>
+
+    <!-- 독자 직접 조작 패널 -->
+    <div class="interactive-dial-box">
+      <p style="font-size: 0.9rem; color: #cbd5e1;">
+        아래 버튼을 눌러 직접 <strong>시간의 태엽</strong>을 감아보세요! (현재 <span id="windCountText" style="color: var(--cyan); font-weight: 800;">0</span> / 3회)
+      </p>
+      <button class="wind-btn" onclick="windClock()">⚙️ 태엽 감기 (+동기화율 상승)</button>
     </div>
 
-    <!-- 웹툰 콘텐츠 본문 영역 -->
-    <article class="flex-1 flex flex-col items-center px-3 py-6 space-y-12">
+    <!-- =========================================================
+         CUT 4 : 운명의 분기점 (선택지에 따라 엔딩 컷 변화)
+    ========================================================== -->
+    <section class="choice-section">
+      <div class="choice-title">Destiny Branch</div>
+      <h3 class="choice-question">폭주하는 시간의 문 앞에서, 당신의 선택은?</h3>
 
-      <!-- ================= 1컷: 비 내리는 어두운 골목 & 간판 ================= -->
-      <section class="comic-panel w-full" data-panel="1">
-        <div class="relative bg-slate-900 rounded-2xl overflow-hidden border-2 border-slate-700 shadow-xl">
-          <!-- 빗줄기 배경 레이어 -->
-          <div class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
-            <div class="rain-line" style="left: 15%; animation-delay: 0.1s;"></div>
-            <div class="rain-line" style="left: 35%; animation-delay: 0.6s;"></div>
-            <div class="rain-line" style="left: 60%; animation-delay: 0.3s;"></div>
-            <div class="rain-line" style="left: 85%; animation-delay: 0.8s;"></div>
-          </div>
-
-          <!-- 1컷 SVG 일러스트 -->
-          <svg viewBox="0 0 440 560" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#070a14" />
-                <stop offset="100%" stop-color="#161c2e" />
-              </linearGradient>
-              <linearGradient id="pavementGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#111827" />
-                <stop offset="100%" stop-color="#030712" />
-              </linearGradient>
-              <radialGradient id="neonLight" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-
-            <!-- 하늘 & 배경 건물 -->
-            <rect width="440" height="560" fill="url(#skyGrad)" />
-            <polygon points="0,150 130,190 130,480 0,520" fill="#0f172a" />
-            <polygon points="440,140 310,185 310,480 440,520" fill="#0f172a" />
-            
-            <!-- 바닥 도로 및 빗물 반사 -->
-            <rect y="460" width="440" height="100" fill="url(#pavementGrad)"/>
-            <ellipse cx="220" cy="510" rx="140" ry="22" fill="#fbbf24" fill-opacity="0.15" />
-
-            <!-- 편의점 전면 외관 -->
-            <rect x="130" y="190" width="180" height="290" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-            <rect x="145" y="270" width="150" height="210" fill="#0284c7" fill-opacity="0.25" stroke="#38bdf8" stroke-width="2" rx="4"/>
-            <line x1="220" y1="270" x2="220" y2="480" stroke="#38bdf8" stroke-width="2"/>
-
-            <!-- 따스한 내부 조명 -->
-            <circle cx="220" cy="340" r="85" fill="url(#neonLight)" />
-
-            <!-- 달빛 24시 편의점 간판 -->
-            <g class="neon-glow">
-              <rect x="110" y="160" width="220" height="55" rx="8" fill="#1e1b4b" stroke="#f59e0b" stroke-width="3"/>
-              <!-- 초승달 아이콘 -->
-              <path d="M135 188 A14 14 0 1 0 152 174 A11 11 0 0 1 135 188 Z" fill="#fbbf24" />
-              <text x="165" y="197" fill="#fef08a" font-size="18" font-weight="900" font-family="'Noto Sans KR'">달빛 편의점</text>
-              <text x="280" y="196" fill="#38bdf8" font-size="12" font-weight="bold">24H</text>
-            </g>
-
-            <!-- 비 내리는 실루엣 주인공 뒷모습 -->
-            <g transform="translate(190, 390)">
-              <!-- 우산 -->
-              <path d="M-10,-10 Q30,-45 70,-10 Q30,-20 -10,-10 Z" fill="#1e293b" stroke="#475569" stroke-width="2"/>
-              <line x1="30" y1="-30" x2="30" y2="35" stroke="#64748b" stroke-width="3"/>
-              <!-- 코트 입은 몸체 -->
-              <path d="M12,20 C10,5 50,5 48,20 L58,85 L2,85 Z" fill="#0f172a"/>
-            </g>
-          </svg>
-
-          <!-- 효과음 타이포 (주룩주룩) -->
-          <div class="absolute top-10 left-6 text-sky-300 font-extrabold tracking-widest text-2xl comic-font opacity-80 rotate-[-12deg] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-            주룩... 주룩...
-          </div>
-
-          <!-- 독백 내레이션 박스 -->
-          <div class="absolute bottom-4 inset-x-4 bg-slate-950/85 backdrop-blur-sm border border-slate-700 p-3 rounded-xl text-center shadow-lg">
-            <p class="text-sm text-slate-200 leading-relaxed">
-              자정이 지난 막차 시간.<br>
-              분명 낮에는 본 적 없던 <span class="text-amber-400 font-semibold">새로운 골목</span>이 나타났다.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= 2컷: 문을 열고 입장 (딸랑~) ================= -->
-      <section class="comic-panel w-full" data-panel="2" data-sound="door">
-        <div class="relative bg-slate-900 rounded-2xl overflow-hidden border-2 border-slate-700 shadow-xl">
-          <svg viewBox="0 0 440 560" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="warmShop" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#fffbeb" />
-                <stop offset="100%" stop-color="#fef3c7" />
-              </linearGradient>
-            </defs>
-
-            <!-- 어두운 문틀 밖 -->
-            <rect width="440" height="560" fill="#0f172a" />
-
-            <!-- 열리는 유리문 및 내부 쏟아지는 황금빛 -->
-            <polygon points="70,40 370,40 390,520 50,520" fill="url(#warmShop)" />
-
-            <!-- 진열대 실루엣 -->
-            <rect x="75" y="180" width="80" height="260" fill="#cbd5e1" opacity="0.6" rx="4"/>
-            <line x1="75" y1="240" x2="155" y2="240" stroke="#94a3b8" stroke-width="4"/>
-            <line x1="75" y1="310" x2="155" y2="310" stroke="#94a3b8" stroke-width="4"/>
-            <line x1="75" y1="380" x2="155" y2="380" stroke="#94a3b8" stroke-width="4"/>
-
-            <rect x="285" y="180" width="80" height="260" fill="#cbd5e1" opacity="0.6" rx="4"/>
-            <line x1="285" y1="240" x2="365" y2="240" stroke="#94a3b8" stroke-width="4"/>
-            <line x1="285" y1="310" x2="365" y2="310" stroke="#94a3b8" stroke-width="4"/>
-
-            <!-- 열리는 도어 유리 프레임 투시 -->
-            <polygon points="50,50 180,90 170,510 40,520" fill="#38bdf8" fill-opacity="0.2" stroke="#0284c7" stroke-width="3"/>
-            <circle cx="160" cy="300" r="8" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
-
-            <!-- 문 위 도어벨 종 -->
-            <g transform="translate(195, 60)">
-              <line x1="25" y1="0" x2="25" y2="20" stroke="#b45309" stroke-width="3"/>
-              <path d="M12,20 C12,12 38,12 38,20 L42,38 L8,38 Z" fill="#f59e0b"/>
-              <circle cx="25" cy="42" r="5" fill="#d97706"/>
-              <!-- 소리 파륜 -->
-              <path d="M0,25 Q-15,35 0,45" fill="none" stroke="#f59e0b" stroke-width="2"/>
-              <path d="M50,25 Q65,35 50,45" fill="none" stroke="#f59e0b" stroke-width="2"/>
-            </g>
-
-            <!-- 손잡이를 미는 주인공의 손 -->
-            <path d="M190,320 C220,310 240,325 210,340 Z" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
-          </svg>
-
-          <!-- 도어벨 효과음 타이포 (딸랑~!) -->
-          <div class="absolute top-16 right-10 comic-font text-4xl text-amber-300 font-extrabold tracking-wider rotate-[15deg] drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)] animate-bounce">
-            딸랑~~♪
-          </div>
-
-          <!-- 말풍선 -->
-          <div class="absolute bottom-5 right-5 bg-white text-slate-900 px-4 py-2.5 rounded-2xl rounded-tr-none shadow-xl border-2 border-slate-900 font-bold text-sm">
-            "실례합니다... 우산 좀 살 수 있나요?"
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= 3컷: 앞치마를 두른 고양이 점원의 등장 ================= -->
-      <section class="comic-panel w-full" data-panel="3" data-sound="cat">
-        <div class="relative bg-slate-900 rounded-2xl overflow-hidden border-2 border-slate-700 shadow-xl">
-          <svg viewBox="0 0 440 560" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-            <!-- 편의점 카운터 조명 배경 -->
-            <rect width="440" height="560" fill="#1e293b" />
-            <radialGradient id="catSpot" cx="50%" cy="40%" r="55%">
-              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#1e293b" stop-opacity="0"/>
-            </radialGradient>
-            <rect width="440" height="560" fill="url(#catSpot)" />
-
-            <!-- 카운터 테이블 -->
-            <rect y="380" width="440" height="180" fill="#334155" stroke="#475569" stroke-width="3"/>
-            <rect x="280" y="320" width="120" height="90" fill="#0f172a" rx="6"/>
-            <!-- 바코드 스캐너 기기 -->
-            <line x1="300" y1="360" x2="380" y2="360" stroke="#ef4444" stroke-width="3"/>
-
-            <!-- 신비한 턱시도 고양이 점원 -->
-            <g id="catCashier" transform="translate(140, 150)">
-              <!-- 꼬리 살랑살랑 -->
-              <path d="M18,220 Q-25,180 5,140 Q15,130 10,120" fill="none" stroke="#090d16" stroke-width="16" stroke-linecap="round"/>
-              <path d="M10,120 Q5,110 12,112" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
-
-              <!-- 몸체 (검은 털) -->
-              <ellipse cx="80" cy="190" rx="65" ry="85" fill="#090d16" />
-              <!-- 가슴 흰 털 턱시도 -->
-              <path d="M60,140 L100,140 L80,210 Z" fill="#ffffff"/>
-
-              <!-- 초록색 편의점 앞치마 -->
-              <path d="M40,170 L120,170 L125,260 L35,260 Z" fill="#059669" stroke="#047857" stroke-width="2"/>
-              <!-- 앞치마 이름표 -->
-              <rect x="50" y="190" width="30" height="15" fill="#ffffff" rx="2"/>
-              <text x="53" y="201" font-size="8" font-weight="bold" fill="#065f46">매니저</text>
-
-              <!-- 고양이 머리 -->
-              <ellipse cx="80" cy="100" rx="55" ry="46" fill="#090d16" />
-              <!-- 왼쪽 귀 -->
-              <polygon points="35,75 25,20 65,58" fill="#090d16" stroke="#090d16" stroke-width="2"/>
-              <polygon points="37,70 30,30 60,60" fill="#fda4af"/>
-              <!-- 오른쪽 귀 -->
-              <polygon points="125,75 135,20 95,58" fill="#090d16" stroke="#090d16" stroke-width="2"/>
-              <polygon points="123,70 130,30 100,60" fill="#fda4af"/>
-
-              <!-- 빛나는 신비로운 황금빛 눈동자 -->
-              <ellipse cx="58" cy="98" rx="14" ry="17" fill="#fbbf24"/>
-              <ellipse cx="102" cy="98" rx="14" ry="17" fill="#fbbf24"/>
-              <ellipse cx="58" cy="98" rx="4" ry="13" fill="#050811"/>
-              <ellipse cx="102" cy="98" rx="4" ry="13" fill="#050811"/>
-              <!-- 눈 하이라이트 -->
-              <circle cx="55" cy="92" r="3" fill="#ffffff"/>
-              <circle cx="99" cy="92" r="3" fill="#ffffff"/>
-
-              <!-- 코와 입, 수염 -->
-              <polygon points="76,115 84,115 80,121" fill="#fda4af"/>
-              <path d="M73,124 Q80,130 80,122 Q80,130 87,124" fill="none" stroke="#ffffff" stroke-width="2"/>
-              <line x1="30" y1="115" x2="65" y2="118" stroke="#ffffff" stroke-width="1.5"/>
-              <line x1="28" y1="126" x2="65" y2="123" stroke="#ffffff" stroke-width="1.5"/>
-              <line x1="130" y1="115" x2="95" y2="118" stroke="#ffffff" stroke-width="1.5"/>
-              <line x1="132" y1="126" x2="95" y2="123" stroke="#ffffff" stroke-width="1.5"/>
-
-              <!-- 카운터에 올린 앞발 -->
-              <ellipse cx="50" cy="235" rx="12" ry="10" fill="#ffffff" stroke="#e2e8f0"/>
-              <ellipse cx="110" cy="235" rx="12" ry="10" fill="#ffffff" stroke="#e2e8f0"/>
-            </g>
-          </svg>
-
-          <!-- 효과음 (번쩍, 찌릿) -->
-          <div class="absolute top-12 left-8 comic-font text-3xl text-amber-400 font-extrabold tracking-widest rotate-[-8deg] drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-            번 쩍 - !
-          </div>
-
-          <!-- 고양이 대사 말풍선 -->
-          <div class="absolute top-6 right-5 bg-amber-100 text-amber-950 px-4 py-3 rounded-2xl rounded-tl-none border-2 border-amber-900 font-bold text-sm shadow-2xl">
-            "인간 손님은 오랜만이구냥.<br><span class="text-rose-600 font-extrabold">특별한 물건</span>을 찾으러 왔냥?"
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= 4컷: 긴장감 넘치는 클로즈업 + 진열품 제안 (화면 흔들림 연출) ================= -->
-      <section class="comic-panel w-full" data-panel="4" data-shake="true" data-sound="thunder">
-        <div class="relative bg-slate-900 rounded-2xl overflow-hidden border-2 border-amber-500 shadow-2xl">
-          <!-- 집중선 배경 (만화 액션선) -->
-          <svg viewBox="0 0 440 560" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-            <rect width="440" height="560" fill="#450a0a" />
-            
-            <!-- 방사형 스피드 라인 -->
-            <g stroke="#7f1d1d" stroke-width="3" opacity="0.7">
-              <line x1="220" y1="280" x2="0" y2="0" stroke-width="8"/>
-              <line x1="220" y1="280" x2="110" y2="0" stroke-width="5"/>
-              <line x1="220" y1="280" x2="220" y2="0" stroke-width="7"/>
-              <line x1="220" y1="280" x2="330" y2="0" stroke-width="4"/>
-              <line x1="220" y1="280" x2="440" y2="0" stroke-width="9"/>
-              <line x1="220" y1="280" x2="440" y2="180" stroke-width="6"/>
-              <line x1="220" y1="280" x2="440" y2="380" stroke-width="8"/>
-              <line x1="220" y1="280" x2="440" y2="560" stroke-width="10"/>
-              <line x1="220" y1="280" x2="220" y2="560" stroke-width="7"/>
-              <line x1="220" y1="280" x2="0" y2="560" stroke-width="10"/>
-              <line x1="220" y1="280" x2="0" y2="340" stroke-width="6"/>
-              <line x1="220" y1="280" x2="0" y2="160" stroke-width="7"/>
-            </g>
-
-            <!-- 중앙 테이블 카운터 -->
-            <ellipse cx="220" cy="380" rx="180" ry="70" fill="#18181b" stroke="#f59e0b" stroke-width="3"/>
-
-            <!-- 아이템 A: 따뜻한 캔커피 -->
-            <g transform="translate(100, 240)">
-              <!-- 광채 -->
-              <circle cx="35" cy="60" r="45" fill="#38bdf8" fill-opacity="0.2"/>
-              <!-- 캔 몸체 -->
-              <rect x="15" y="20" width="40" height="75" rx="8" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
-              <ellipse cx="35" cy="20" rx="20" ry="6" fill="#bae6fd"/>
-              <ellipse cx="35" cy="95" rx="20" ry="6" fill="#0369a1"/>
-              <!-- 라벨 -->
-              <rect x="16" y="42" width="38" height="30" fill="#0f172a"/>
-              <text x="21" y="62" font-size="10" font-weight="bold" fill="#38bdf8">COFFEE</text>
-              <!-- 김 모락모락 -->
-              <path d="M28,12 Q24,2 28,-6" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
-              <path d="M42,10 Q46,0 42,-8" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
-            </g>
-
-            <!-- VS 글자 -->
-            <text x="205" y="315" fill="#facc15" font-size="28" font-weight="900" font-style="italic">VS</text>
-
-            <!-- 아이템 B: 찬란한 황금 츄르 -->
-            <g transform="translate(265, 230)">
-              <!-- 금빛 후광 -->
-              <circle cx="45" cy="70" r="50" fill="#eab308" fill-opacity="0.25"/>
-              <!-- 츄르 스틱 포장지 -->
-              <path d="M20,105 L65,25 Q75,18 80,30 L38,115 Q30,122 20,105 Z" fill="#f59e0b" stroke="#fef08a" stroke-width="2"/>
-              <circle cx="62" cy="42" r="5" fill="#ef4444"/>
-              <text x="35" y="80" transform="rotate(-55 35 80)" font-size="9" font-weight="bold" fill="#78350f">GOLD CHURU</text>
-              <!-- 별 반짝이 이펙트 -->
-              <polygon points="75,15 78,22 85,25 78,28 75,35 72,28 65,25 72,22" fill="#fff" />
-              <polygon points="20,80 22,85 27,87 22,89 20,94 18,89 13,87 18,85" fill="#fff" />
-            </g>
-          </svg>
-
-          <!-- 거대한 충격 의성어 (쿠구궁!) -->
-          <div class="absolute top-8 inset-x-0 text-center comic-font text-5xl text-rose-500 font-black tracking-widest drop-shadow-[0_4px_10px_rgba(0,0,0,1)]">
-            쿠 구 구 궁 - !
-          </div>
-
-          <!-- 상황 설명 자막 -->
-          <div class="absolute bottom-4 inset-x-4 bg-black/85 border border-amber-500/50 p-3 rounded-xl text-center">
-            <p class="text-xs sm:text-sm text-slate-100 font-semibold">
-              점원은 당신 앞에 단 두 가지만 올려놓았다.<br>
-              <span class="text-amber-400 font-bold">"너의 지친 영혼을 달랠 것을 골라보라냥!"</span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= 5컷: 독자 인터랙티브 선택지 ================= -->
-      <section class="comic-panel w-full" data-panel="5">
-        <div class="bg-gradient-to-b from-slate-900 to-indigo-950 p-5 rounded-2xl border-2 border-indigo-500/60 shadow-2xl text-center">
-          <div class="inline-block px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold mb-3 border border-indigo-400/30">
-            당신의 운명을 선택하세요
-          </div>
-          <h3 class="text-lg font-extrabold text-white mb-2">어느 것을 고르시겠습니까?</h3>
-          <p class="text-xs text-slate-400 mb-5">선택에 따라 결말의 연출과 일러스트가 달라집니다.</p>
-
-          <div class="space-y-3">
-            <!-- 선택지 A 버튼 -->
-            <button id="btnChoiceA" onclick="chooseEnding('A')" class="w-full group p-4 rounded-xl bg-slate-800 hover:bg-sky-900/60 border-2 border-sky-500/40 hover:border-sky-400 text-left transition-all duration-200 transform active:scale-95 flex items-center justify-between shadow-lg">
-              <div class="flex items-center gap-3">
-                <span class="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center text-sky-400 text-xl font-black border border-sky-500/40 group-hover:scale-110 transition">
-                  <i class="ph-bold ph-coffee"></i>
-                </span>
-                <div>
-                  <h4 class="font-bold text-sm text-white group-hover:text-sky-300 transition">A. 따뜻한 캔커피를 집는다</h4>
-                  <p class="text-xs text-slate-400">피로를 씻어내고 평온한 밤을 맞이한다</p>
-                </div>
-              </div>
-              <i class="ph-bold ph-arrow-right text-slate-500 group-hover:text-sky-400 transition"></i>
-            </button>
-
-            <!-- 선택지 B 버튼 -->
-            <button id="btnChoiceB" onclick="chooseEnding('B')" class="w-full group p-4 rounded-xl bg-slate-800 hover:bg-amber-900/60 border-2 border-amber-500/40 hover:border-amber-400 text-left transition-all duration-200 transform active:scale-95 flex items-center justify-between shadow-lg">
-              <div class="flex items-center gap-3">
-                <span class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400 text-xl font-black border border-amber-500/40 group-hover:scale-110 transition">
-                  <i class="ph-bold ph-sparkle"></i>
-                </span>
-                <div>
-                  <h4 class="font-bold text-sm text-white group-hover:text-amber-300 transition">B. 고양이에게 황금 츄르를 건넨다</h4>
-                  <p class="text-xs text-slate-400">점원에게 깜짝 선물을 바쳐 신뢰를 얻는다</p>
-                </div>
-              </div>
-              <i class="ph-bold ph-arrow-right text-slate-500 group-hover:text-amber-400 transition"></i>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= 6컷 (분기 A): 커피의 힐링 엔딩 ================= -->
-      <section id="endingA" class="hidden w-full comic-panel">
-        <div class="relative bg-slate-900 rounded-2xl overflow-hidden border-2 border-sky-400 shadow-2xl">
-          <svg viewBox="0 0 440 540" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="warmHeal" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#0369a1" />
-                <stop offset="50%" stop-color="#1e293b" />
-                <stop offset="100%" stop-color="#0f172a" />
-              </linearGradient>
-            </defs>
-            <rect width="440" height="540" fill="url(#warmHeal)"/>
-
-            <!-- 따스한 커피 김과 온기 원형 파동 -->
-            <circle cx="220" cy="240" r="140" fill="#38bdf8" fill-opacity="0.15" />
-            <circle cx="220" cy="240" r="90" fill="#f59e0b" fill-opacity="0.15" />
-
-            <!-- 커피를 마시고 미소짓는 주인공 실루엣 -->
-            <g transform="translate(170, 150)">
-              <circle cx="50" cy="50" r="40" fill="#fde68a"/>
-              <!-- 만족스러운 눈/입 표정 -->
-              <path d="M30,48 Q40,40 50,48" fill="none" stroke="#78350f" stroke-width="3"/>
-              <path d="M58,48 Q68,40 78,48" fill="none" stroke="#78350f" stroke-width="3"/>
-              <path d="M46,65 Q54,75 62,65" fill="none" stroke="#78350f" stroke-width="3"/>
-
-              <!-- 커피 캔을 들고 마시는 손 -->
-              <rect x="35" y="80" width="30" height="50" rx="4" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
-            </g>
-
-            <!-- 만족한 고양이의 끄덕임 -->
-            <g transform="translate(290, 310)">
-              <ellipse cx="40" cy="50" rx="30" ry="25" fill="#090d16"/>
-              <polygon points="18,35 15,10 32,25" fill="#090d16"/>
-              <polygon points="48,25 65,10 62,35" fill="#090d16"/>
-              <!-- 웃는 눈 ^^ -->
-              <path d="M28,45 Q34,38 40,45" fill="none" stroke="#f59e0b" stroke-width="2"/>
-              <path d="M46,45 Q52,38 58,45" fill="none" stroke="#f59e0b" stroke-width="2"/>
-            </g>
-          </svg>
-
-          <!-- 효과음 (사르르~) -->
-          <div class="absolute top-8 right-6 comic-font text-3xl text-sky-300 font-extrabold rotate-[10deg]">
-            사 르 르... 온 기 가 퍼 진 다
-          </div>
-
-          <!-- 엔딩 메시지 -->
-          <div class="absolute bottom-5 inset-x-5 bg-sky-950/90 border border-sky-400 p-4 rounded-xl text-center">
-            <span class="text-xs font-bold text-sky-400 uppercase tracking-widest">Ending A: 안식의 밤</span>
-            <p class="text-sm text-slate-100 font-semibold mt-1">
-              "한 모금 넘기자 하루의 피로가 눈 녹듯 사라졌다.<br>
-              가게 문을 나서니 비는 이미 개어 있었다."
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= 6컷 (분기 B): 고양이 계약 엔딩 ================= -->
-      <section id="endingB" class="hidden w-full comic-panel">
-        <div class="relative bg-slate-900 rounded-2xl overflow-hidden border-2 border-amber-400 shadow-2xl">
-          <svg viewBox="0 0 440 540" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="partyGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#451a03" />
-                <stop offset="50%" stop-color="#78350f" />
-                <stop offset="100%" stop-color="#1e1b4b" />
-              </linearGradient>
-            </defs>
-            <rect width="440" height="540" fill="url(#partyGrad)"/>
-
-            <!-- 황금빛 폭죽 빛방울들 -->
-            <circle cx="80" cy="100" r="8" fill="#facc15" opacity="0.8"/>
-            <circle cx="340" cy="80" r="10" fill="#fb7185" opacity="0.8"/>
-            <circle cx="60" cy="260" r="6" fill="#38bdf8" opacity="0.8"/>
-            <circle cx="360" cy="240" r="9" fill="#4ade80" opacity="0.8"/>
-
-            <!-- 츄르를 핥고 기절할 듯 행복해하는 거대 고양이 -->
-            <g transform="translate(130, 110)">
-              <ellipse cx="90" cy="110" rx="75" ry="60" fill="#090d16"/>
-              <polygon points="30,70 15,20 65,45" fill="#090d16"/>
-              <polygon points="115,45 165,20 150,70" fill="#090d16"/>
-              
-              <!-- 감동받은 왕눈이 눈동자 -->
-              <ellipse cx="60" cy="105" rx="18" ry="22" fill="#fbbf24"/>
-              <ellipse cx="120" cy="105" rx="18" ry="22" fill="#fbbf24"/>
-              <circle cx="56" cy="98" r="7" fill="#ffffff"/>
-              <circle cx="64" cy="112" r="3" fill="#ffffff"/>
-              <circle cx="116" cy="98" r="7" fill="#ffffff"/>
-              <circle cx="124" cy="112" r="3" fill="#ffffff"/>
-
-              <!-- 츄르 먹방 입과 혀 -->
-              <path d="M85,125 Q90,145 95,125" fill="#f43f5e"/>
-
-              <!-- 쥐고 있는 황금 츄르 -->
-              <rect x="75" y="130" width="30" height="80" rx="6" fill="#eab308" stroke="#fef08a" stroke-width="2"/>
-              <ellipse cx="60" cy="150" rx="14" ry="12" fill="#ffffff"/>
-              <ellipse cx="120" cy="150" rx="14" ry="12" fill="#ffffff"/>
-
-              <!-- 감동의 눈물 -->
-              <path d="M40,118 Q35,135 42,145" fill="none" stroke="#38bdf8" stroke-width="3"/>
-              <path d="M140,118 Q145,135 138,145" fill="none" stroke="#38bdf8" stroke-width="3"/>
-            </g>
-
-            <!-- VIP 골드 카드 하사 -->
-            <g transform="translate(130, 360)">
-              <rect width="180" height="100" rx="10" fill="#eab308" stroke="#fef08a" stroke-width="3" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.6))"/>
-              <text x="25" y="40" font-size="14" font-weight="900" fill="#78350f">달빛 편의점 VIP</text>
-              <text x="25" y="65" font-size="10" font-weight="bold" fill="#92400e">평생 츄르 동맹 회원권</text>
-              <circle cx="145" cy="50" r="16" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
-            </g>
-          </svg>
-
-          <!-- 효과음 (골골골골) -->
-          <div class="absolute top-8 left-8 comic-font text-4xl text-amber-300 font-black rotate-[-10deg] animate-pulse">
-            골 골 골 골 ~ ♥
-          </div>
-
-          <!-- 엔딩 메시지 -->
-          <div class="absolute bottom-5 inset-x-5 bg-amber-950/90 border border-amber-400 p-4 rounded-xl text-center">
-            <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Ending B: 신비한 동맹</span>
-            <p class="text-sm text-slate-100 font-semibold mt-1">
-              "고양이는 황홀경에 빠져 골골송을 불렀다.<br>
-              이제 나는 언제든 이 비밀 편의점에 올 수 있는 <span class="text-amber-300 font-bold">VIP 손님</span>이 되었다!"
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 다시 보기 및 공유 액션 바 (엔딩 선택 후 노출) -->
-      <div id="footerActions" class="hidden w-full flex-col items-center gap-3 pt-6 border-t border-slate-800">
-        <button onclick="resetStory()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-slate-950 font-bold rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
-          <i class="ph-bold ph-arrow-counter-clockwise"></i>
-          다른 선택지로 다시 보기
+      <div class="choice-grid">
+        <button class="choice-card" onclick="selectEnding('A', this)">
+          <h4>
+            <span>A. 태엽을 끝까지 역회전시킨다</span>
+            <span style="color: var(--cyan); font-size: 0.8rem;">[과거 회귀 루트]</span>
+          </h4>
+          <p>모든 대가를 감수하고 사건이 벌어지기 전인 1년 전 그날 밤으로 도약합니다.</p>
         </button>
-        <button onclick="copyShareLink()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium rounded-xl border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
-          <i class="ph-bold ph-share-network"></i>
-          친구에게 이 웹툰 공유하기
+
+        <button class="choice-card" onclick="selectEnding('B', this)">
+          <h4>
+            <span>B. 시계 코어를 깨뜨려 현재에 남는다</span>
+            <span style="color: var(--gold); font-size: 0.8rem;">[운명 개척 루트]</span>
+          </h4>
+          <p>과거에 얽매이지 않고 아티팩트의 마력을 흡수해 새로운 시간선을 개척합니다.</p>
         </button>
-        <div id="copyAlert" class="hidden text-xs text-emerald-400 font-semibold transition">
-          ✓ 링크가 클립보드에 복사되었습니다!
-        </div>
-      </div>
 
-    </article>
+        <button class="choice-card" onclick="selectEnding('C', this)">
+          <h4>
+            <span>C. 마스터 크로노스에게 시계를 넘긴다</span>
+            <span style="color: var(--crimson); font-size: 0.8rem;">[시크릿 계약 루트]</span>
+          </h4>
+          <p>기억을 거래하는 대신, 이 심야 골동품점의 새로운 후계자로 계약을 맺습니다.</p>
+        </button>
+      </div>
+    </section>
 
-    <!-- 하단 댓글 미리보기 및 푸터 -->
-    <footer class="bg-slate-900 border-t border-slate-800 px-5 py-6 mt-12 text-slate-400 text-xs">
-      <div class="flex items-center justify-between mb-4">
-        <span class="font-bold text-slate-200 text-sm">베스트 댓글 (3)</span>
-        <span class="text-amber-400 text-[11px]">전체보기 &gt;</span>
-      </div>
-      <div class="space-y-3">
-        <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
-          <div class="flex justify-between text-slate-300 font-semibold mb-1">
-            <span>집사1호</span>
-            <span class="text-slate-500 text-[10px]">10분 전</span>
-          </div>
-          <p class="text-slate-300">츄르 안 주고 배겨? 나였어도 바로 황금 츄르 바쳤다 ㅋㅋㅋ</p>
-        </div>
-        <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
-          <div class="flex justify-between text-slate-300 font-semibold mb-1">
-            <span>야근러</span>
-            <span class="text-slate-500 text-[10px]">35분 전</span>
-          </div>
-          <p class="text-slate-300">스크롤 내리다가 쾅 흔들릴 때 깜짝 놀랐네 연출 미쳤다 ㄷㄷ</p>
-        </div>
-      </div>
-      <p class="text-center text-slate-600 mt-6 text-[11px]">
-        © 2026 달빛 편의점 All Rights Reserved. 바이브 코딩 인터랙티브 웹툰 프로토타입
+    <!-- =========================================================
+         멀티 엔딩 렌더링 영역
+    ========================================================== -->
+    <section id="endingDisplay" class="ending-container"></section>
+
+    <!-- 푸터 & 좋아요 -->
+    <footer class="webtoon-footer">
+      <p style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.5;">
+        <strong>[작가의 말]</strong><br>
+        4 Argon 모델로 제작된 인터랙티브 웹툰 데모입니다.<br>
+        단일 HTML 파일로 GitHub Pages에서 즉시 동작합니다.
       </p>
+      <button class="like-btn" id="likeBtn" onclick="toggleLike()">❤️ 응원하기 <span id="likeCount">1,284</span></button>
     </footer>
-
   </main>
 
-  <!-- 웹 오디오 API 효과음 합성 엔진 (외부 URL 불필요, 자립형 오디오) -->
   <script>
+    // =========================================================
+    // 1. Web Audio API 자체 신디사이저 사운드 엔진
+    // =========================================================
     let audioCtx = null;
-    let isSoundEnabled = true;
+    let isAudioOn = false;
+    let bgmInterval = null;
 
-    // 브라우저 보안 정책 상 첫 터치/클릭 시 오디오 컨텍스트 활성화
     function initAudio() {
       if (!audioCtx) {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (AudioContext) {
-          audioCtx = new AudioContext();
-        }
+        audioCtx = new AudioContext();
       }
-      if (audioCtx && audioCtx.state === 'suspended') {
+      if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
     }
 
-    // 간단한 사운드 신시사이저 함수들
-    const soundPlayer = {
-      // 문 열릴 때 딸랑 종소리
-      doorChime: () => {
-        if (!isSoundEnabled || !audioCtx) return;
-        const now = audioCtx.currentTime;
-        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-          gain.gain.setValueAtTime(0.12, now + idx * 0.08);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.6);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now + idx * 0.08);
-          osc.stop(now + idx * 0.08 + 0.6);
-        });
-      },
-
-      // 고양이 마주쳤을 때 신비로운 저음 울림
-      catMystic: () => {
-        if (!isSoundEnabled || !audioCtx) return;
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(140, now);
-        osc.frequency.exponentialRampToValueAtTime(280, now + 0.4);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.7);
-      },
-
-      // 액션 패널 도달 시 쿠구궁 천둥 충격음
-      thunderRumble: () => {
-        if (!isSoundEnabled || !audioCtx) return;
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(80, now);
-        osc.frequency.linearRampToValueAtTime(30, now + 0.5);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.55);
-      },
-
-      // 클릭 및 선택 효과음
-      clickPop: () => {
-        if (!isSoundEnabled || !audioCtx) return;
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.15);
-      }
-    };
-
-    // 화면 터치/스크롤 인터랙션 초기화
-    window.addEventListener('click', initAudio, { once: true });
-    window.addEventListener('touchstart', initAudio, { once: true });
-
-    // 사운드 토글 버튼 핸들러
-    const soundToggle = document.getElementById('soundToggle');
-    const soundIcon = document.getElementById('soundIcon');
-    soundToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
+    function toggleAudio() {
       initAudio();
-      isSoundEnabled = !isSoundEnabled;
-      if (isSoundEnabled) {
-        soundIcon.className = 'ph-bold ph-speaker-high';
-        soundToggle.classList.remove('opacity-50');
+      isAudioOn = !isAudioOn;
+      const btn = document.getElementById('audioBtn');
+      if (isAudioOn) {
+        btn.classList.add('active');
+        btn.textContent = '🔊 BGM 재생 중';
+        startAmbientBGM();
+        playChime(523.25, 0.3);
       } else {
-        soundIcon.className = 'ph-bold ph-speaker-slash';
-        soundToggle.classList.add('opacity-50');
+        btn.classList.remove('active');
+        btn.textContent = '🔇 BGM 켜기';
+        stopAmbientBGM();
       }
-    });
+    }
 
-    // 좋아요 버튼 인터랙션
-    const likeBtn = document.getElementById('likeBtn');
-    const likeCount = document.getElementById('likeCount');
-    let liked = false;
-    likeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      initAudio();
-      soundPlayer.clickPop();
-      let currentVal = parseInt(likeCount.innerText.replace(',', ''));
-      if (!liked) {
-        likeCount.innerText = (currentVal + 1).toLocaleString();
-        likeBtn.classList.add('bg-rose-500/30', 'scale-105');
-        liked = true;
-      } else {
-        likeCount.innerText = (currentVal - 1).toLocaleString();
-        likeBtn.classList.remove('bg-rose-500/30', 'scale-105');
-        liked = false;
-      }
-    });
+    function playChime(freq = 440, duration = 0.4, type = 'sine') {
+      if (!isAudioOn || !audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
 
-    // 스크롤 프로그레스 바 연동
-    window.addEventListener('scroll', () => {
-      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.getElementById('progressBar').style.width = scrolled + '%';
-    });
+    function startAmbientBGM() {
+      stopAmbientBGM();
+      const notes = [220, 261.63, 329.63, 392, 329.63, 293.66];
+      let idx = 0;
+      bgmInterval = setInterval(() => {
+        if (!isAudioOn) return;
+        playChime(notes[idx % notes.length], 1.4, 'triangle');
+        idx++;
+      }, 1500);
+    }
 
-    // IntersectionObserver를 이용한 컷별 스크롤 트리거 연출
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.35
-    };
+    function stopAmbientBGM() {
+      if (bgmInterval) clearInterval(bgmInterval);
+    }
 
-    const playedSounds = new Set();
-
-    const panelObserver = new IntersectionObserver((entries) => {
+    // =========================================================
+    // 2. 스크롤 감지 (Intersection Observer) & 패럴랙스
+    // =========================================================
+    const cuts = document.querySelectorAll('.cut-wrapper');
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const panel = entry.target;
-          panel.classList.add('active');
-
-          const panelNum = panel.getAttribute('data-panel');
-          const soundType = panel.getAttribute('data-sound');
-          const shouldShake = panel.getAttribute('data-shake') === 'true';
-
-          // 4컷 액션 도달 시 화면 흔들림 효과 발동
-          if (shouldShake && !panel.classList.contains('shaken')) {
-            panel.classList.add('shaken');
-            const reader = document.getElementById('readerApp');
-            reader.classList.add('shake-effect');
-            setTimeout(() => {
-              reader.classList.remove('shake-effect');
-            }, 500);
-          }
-
-          // 패널별 효과음 1회 재생
-          if (soundType && !playedSounds.has(panelNum)) {
-            playedSounds.add(panelNum);
-            if (soundType === 'door') soundPlayer.doorChime();
-            if (soundType === 'cat') soundPlayer.catMystic();
-            if (soundType === 'thunder') soundPlayer.thunderRumble();
+          entry.target.classList.add('in-view');
+          const cutNo = entry.target.dataset.cut;
+          if (cutNo === '2') playChime(659.25, 0.5);
+          if (cutNo === '3') {
+            entry.target.classList.add('shake-active');
+            playChime(110, 0.7, 'sawtooth');
           }
         }
       });
-    }, observerOptions);
+    }, { threshold: 0.28 });
 
-    document.querySelectorAll('.comic-panel').forEach(panel => {
-      panelObserver.observe(panel);
+    cuts.forEach(cut => observer.observe(cut));
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = progress + '%';
     });
 
-    // 선택지 인터랙션 처리 (분기 A or B)
-    function chooseEnding(choice) {
+    // =========================================================
+    // 3. 태엽 감기 인터랙션 및 동기화율 상태 관리
+    // =========================================================
+    let windCount = 0;
+    let syncRate = 50;
+    let rotationAngle = 0;
+
+    function windClock() {
       initAudio();
-      soundPlayer.clickPop();
+      windCount++;
+      syncRate = Math.min(100, syncRate + 15);
+      rotationAngle -= 120;
 
-      const endingA = document.getElementById('endingA');
-      const endingB = document.getElementById('endingB');
-      const footerActions = document.getElementById('footerActions');
+      document.getElementById('syncRate').textContent = syncRate + '%';
+      document.getElementById('windCountText').textContent = Math.min(windCount, 3);
 
-      // 기존 엔딩 숨기기
-      endingA.classList.add('hidden');
-      endingA.classList.remove('active');
-      endingB.classList.add('hidden');
-      endingB.classList.remove('active');
+      const gear = document.getElementById('innerGearGroup');
+      const hourHand = document.getElementById('clockHandHour');
+      const minHand = document.getElementById('clockHandMin');
 
-      if (choice === 'A') {
-        endingA.classList.remove('hidden');
-        setTimeout(() => endingA.classList.add('active'), 50);
-        endingA.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } else {
-        endingB.classList.remove('hidden');
-        setTimeout(() => endingB.classList.add('active'), 50);
-        endingB.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      gear.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      gear.style.transform = `rotate(${rotationAngle}deg)`;
+      hourHand.setAttribute('transform', `rotate(${rotationAngle * 0.5})`);
+      minHand.setAttribute('transform', `rotate(${rotationAngle * 2})`);
+
+      const cut3 = document.getElementById('artifactCut');
+      cut3.classList.remove('shake-active');
+      void cut3.offsetWidth;
+      cut3.classList.add('shake-active');
+
+      if (isAudioOn) {
+        playChime(300 + windCount * 120, 0.35, 'sawtooth');
       }
-
-      // 하단 액션 버튼 표시
-      footerActions.classList.remove('hidden');
-      footerActions.classList.add('flex');
     }
 
-    // 다시 보기 리셋
-    function resetStory() {
-      initAudio();
-      soundPlayer.clickPop();
-      document.getElementById('endingA').classList.add('hidden');
-      document.getElementById('endingB').classList.add('hidden');
-      document.getElementById('footerActions').classList.add('hidden');
-      
-      const panel5 = document.querySelector('[data-panel="5"]');
-      panel5.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // =========================================================
+    // 4. 멀티 엔딩 분기 시스템
+    // =========================================================
+    const endings = {
+      A: {
+        badge: 'ENDING A : 시간 역행자',
+        color: '#00f0ff',
+        title: '1년 전, 모든 것이 시작되던 밤으로',
+        desc: '태엽이 한계치를 넘어 역회전하자 공간이 푸른 빛으로 부서져 내렸다. 눈을 떴을 때, 내 손에는 아직 깨지지 않은 시계와 바꾸고 싶었던 운명의 첫 페이지가 쥐어져 있었다.',
+        sfx: '파아아앙-!!'
+      },
+      B: {
+        badge: 'ENDING B : 차원 개척자',
+        color: '#f5c542',
+        title: '과거의 사슬을 끊어낸 각성',
+        desc: '시계 코어를 산산조각 내자 봉인되어 있던 황금빛 마력이 전신으로 흘러들었다. 크로노스는 만족스러운 미소를 지으며 내게 고개를 숙였다. "과거가 아닌 미래를 택하셨군요."',
+        sfx: '콰직-! 번쩍!!'
+      },
+      C: {
+        badge: 'SECRET ENDING : 영원의 마스터',
+        color: '#ff2a5f',
+        title: '심야 골동품점의 새로운 주인',
+        desc: '태엽 시계를 크로노스에게 건네자, 그가 쓰고 있던 실크해트와 황금 외알 안경이 내 손위로 옮겨졌다. 이제 자정이 되면, 내가 길 잃은 시간 여행자들을 맞이할 차례다.',
+        sfx: '째깍... 째깍...'
+      }
+    };
+
+    function selectEnding(type, btnEl) {
+      document.querySelectorAll('.choice-card').forEach(el => el.classList.remove('selected'));
+      btnEl.classList.add('selected');
+
+      const data = endings[type];
+      const container = document.getElementById('endingDisplay');
+
+      container.innerHTML = `
+        <div class="cut-wrapper in-view" style="border-top: 2px solid ${data.color};">
+          <svg class="svg-stage" viewBox="0 0 500 520" xmlns="http://www.w3.org/2000/svg">
+            <rect width="500" height="520" fill="#060812"/>
+            <circle cx="250" cy="240" r="190" fill="${data.color}" opacity="0.18" filter="url(#neonGlow)"/>
+            <circle cx="250" cy="240" r="120" fill="none" stroke="${data.color}" stroke-width="3" stroke-dasharray="14 8" class="gear-cw"/>
+            <polygon points="250,90 380,310 120,310" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+            <circle cx="250" cy="240" r="35" fill="${data.color}" filter="url(#neonGlow)"/>
+            <text x="250" y="45" text-anchor="middle" fill="${data.color}" font-size="15" font-weight="800" letter-spacing="3">${data.badge}</text>
+            <text x="250" y="80" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="900">${data.title}</text>
+          </svg>
+          <div class="sfx-text" style="top: 195px; right: 45px; color: ${data.color}; font-size: 1.9rem; text-shadow: 0 0 15px ${data.color};">
+            ${data.sfx}
+          </div>
+          <div class="narration-box" style="bottom: 24px; border-left-color: ${data.color};">
+            ${data.desc}<br>
+            <span style="color: ${data.color}; font-size: 0.82rem; font-weight: 700;">[최종 시간 동기화율: ${syncRate}% 달성]</span>
+          </div>
+        </div>
+      `;
+
+      container.style.display = 'block';
+      if (isAudioOn) playChime(type === 'A' ? 587.33 : type === 'B' ? 659.25 : 440, 0.8, 'triangle');
+      container.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // 공유 링크 복사 (iframe 및 모바일 호환 클립보드)
-    function copyShareLink() {
-      initAudio();
-      soundPlayer.clickPop();
-      
-      const dummyInput = document.createElement('input');
-      dummyInput.value = window.location.href;
-      document.body.appendChild(dummyInput);
-      dummyInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(dummyInput);
-
-      const alertMsg = document.getElementById('copyAlert');
-      alertMsg.classList.remove('hidden');
-      setTimeout(() => alertMsg.classList.add('hidden'), 2500);
+    // 좋아요 버튼 토글
+    let liked = false;
+    function toggleLike() {
+      liked = !liked;
+      const btn = document.getElementById('likeBtn');
+      const countEl = document.getElementById('likeCount');
+      btn.classList.toggle('liked', liked);
+      countEl.textContent = liked ? '1,285' : '1,284';
     }
   </script>
 </body>
