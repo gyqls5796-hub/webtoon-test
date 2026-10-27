@@ -3,27 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <title>할아버지의 오래된 기침 (1탄) - 결핵 예방 및 관리</title>
-  
-  <!-- 어르신들이 읽기 편한 나눔바른고딕/눈누 폰트 적용 -->
+  <title>할아버지의 오래된 기침 (1탄) - 결핵 예방 및 관리 웹툰</title>
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
-  
   <style>
     :root {
-      --bg-color: #f7f9fc;
+      --bg-color: #f0f4f8;
       --card-bg: #ffffff;
-      --text-dark: #1a1a1a;
-      --text-gray: #555555;
-      --primary-color: #2b6cb0;
-      --primary-dark: #1a436e;
-      --accent-color: #e53e3e;
-      --border-radius: 16px;
-      
-      /* 글자 크기 조절 단계 (1단계 ~ 4단계) */
-      --font-scale: 1.2; /* 기본값: 크게 */
+      --text-dark: #111827;
+      --text-gray: #4b5563;
+      --primary: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --accent: #dc2626;
+      --green: #059669;
+      --orange: #d97706;
+      /* 글자 크기 배율 (기본: 2단계 '크게') */
+      --font-scale: 1.25;
     }
 
-    /* 기본 리셋 및 모바일 최적화 */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -32,10 +28,10 @@
     }
 
     body {
-      font-family: 'Nanum Gothic', sans-serif;
+      font-family: 'Nanum Gothic', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-dark);
-      line-height: 1.6;
+      line-height: 1.65;
       word-break: keep-all;
       overflow-x: hidden;
       display: flex;
@@ -43,430 +39,1120 @@
       align-items: center;
     }
 
-    /* 상단 고정 바 (글자 조절 등) */
+    /* ================= 1. 상단 고정 바 ================= */
     .header-bar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: auto;
-      background-color: #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
       z-index: 1000;
-      padding: 12px 16px;
+      border-bottom: 3px solid var(--primary);
+    }
+
+    .header-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .header-top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid var(--primary-color);
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .header-title-box h1 {
-      font-size: calc(14px * var(--font-scale));
+    .title-wrap h1 {
+      font-size: calc(16px * var(--font-scale));
       font-weight: 800;
-      color: var(--primary-color);
+      color: var(--primary-dark);
+      letter-spacing: -0.5px;
     }
 
-    .header-title-box p {
-      font-size: calc(10px * var(--font-scale));
-      color: var(--text-gray);
-      font-weight: bold;
+    .title-wrap p {
+      font-size: calc(12px * var(--font-scale));
+      color: var(--accent);
+      font-weight: 800;
     }
 
-    /* 글자 크기 조절 버튼부 (어르신 터치용 48px 이상 확보) */
-    .font-control-group {
+    /* 글자 크기 조절 버튼 그룹 (어르신 맞춤 큼직한 버튼) */
+    .font-controls {
       display: flex;
       align-items: center;
       gap: 6px;
+      background: #eff6ff;
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 2px solid #bfdbfe;
     }
 
     .font-btn {
-      background-color: #edf2f7;
-      border: 2px solid #cbd5e0;
-      color: #2d3748;
-      font-size: 16px;
+      min-width: 48px;
+      min-height: 44px;
+      background: #ffffff;
+      border: 2px solid var(--primary);
+      color: var(--primary-dark);
+      font-size: 17px;
       font-weight: 800;
-      padding: 8px 14px;
       border-radius: 8px;
       cursor: pointer;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 46px;
-      min-height: 44px;
-      transition: all 0.2s;
+      padding: 0 10px;
     }
 
     .font-btn:active {
-      background-color: var(--primary-color);
-      color: white;
-      border-color: var(--primary-color);
+      background: var(--primary);
+      color: #ffffff;
     }
 
-    .font-indicator {
-      font-size: 12px;
+    .font-badge {
+      font-size: 14px;
       font-weight: 800;
-      color: var(--primary-color);
-      background: #ebf8ff;
-      padding: 4px 8px;
-      border-radius: 20px;
-      border: 1px solid #ebf8ff;
+      color: var(--primary-dark);
+      min-width: 48px;
+      text-align: center;
     }
 
-    /* 전체 콘텐츠 감싸기 (가림 방지 padding은 JS에서 실시간 보정) */
+    /* 제작자용 AI 작화 및 저장 툴바 */
+    .studio-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    .studio-btn {
+      flex: 1;
+      min-height: 38px;
+      background: #f8fafc;
+      border: 1px solid #94a3b8;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      cursor: pointer;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .studio-btn.primary {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+
+    .studio-btn.save {
+      background: #dcfce7;
+      border-color: #10b981;
+      color: #065f46;
+    }
+
+    /* ================= 2. 본문 컨테이너 ================= */
     .container {
       width: 100%;
-      max-width: 600px; /* 스마트폰 전용 폭 제한 */
-      padding-top: 80px; /* 기본 여유값 */
-      padding-bottom: 100px;
+      max-width: 640px;
+      padding: 130px 12px 130px 12px; /* JS ResizeObserver가 실시간 자동 보정 */
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 28px;
     }
 
-    /* 웹툰 1컷 카드 스타일 (유연한 전체 스크롤형) */
+    .section-banner {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #ffffff;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: calc(16px * var(--font-scale));
+      font-weight: 800;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    }
+
+    /* 웹툰 컷 카드 (내부 스크롤 없이 전체 높이 유연 확장) */
     .toon-card {
-      background-color: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      border: 2px solid #cbd5e1;
       overflow: hidden;
-      border: 1px solid #e2e8f0;
       display: flex;
       flex-direction: column;
     }
 
-    /* 컷 번호 표시 */
-    .card-badge {
-      background-color: var(--primary-color);
-      color: white;
-      font-size: calc(11px * var(--font-scale));
-      font-weight: bold;
-      padding: 6px 14px;
-      align-self: flex-start;
-      border-bottom-right-radius: 12px;
-    }
-
-    /* 웹툰 이미지 (가로 100% 꽉 차게, 세로는 원본 비율 유지) */
-    .image-container {
-      width: 100%;
-      position: relative;
-      background-color: #eaeaea;
-    }
-
-    .image-container img {
-      width: 100%;
-      height: auto;
-      display: block;
-      aspect-ratio: 4 / 3; /* 요청하신 원본 비율 그대로 유지 */
-      object-fit: cover;
-    }
-
-    /* 💡 플레이스홀더 (네이버 웹툰 작화 이미지 적용 위치) */
-    .image-placeholder {
-      width: 100%;
-      aspect-ratio: 4/3;
+    .card-header {
+      background: #f8fafc;
+      padding: 10px 14px;
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e2e8f0;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cut-badge {
+      background: var(--primary);
+      color: #ffffff;
+      font-size: calc(13px * var(--font-scale));
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mini-btn {
+      background: #ffffff;
+      border: 1.5px solid #94a3b8;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      color: #1e293b;
+    }
+
+    .mini-btn.tts {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      color: #1d4ed8;
+    }
+
+    /* ================= 3. 웹툰 이미지 박스 (4:3 비율 고정) ================= */
+    .image-box {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #e2e8f0;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 2px solid #1e293b;
+    }
+
+    .image-box img,
+    .image-box svg {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.82);
+      color: #ffffff;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
-      color: #4a5568;
-      font-weight: bold;
-      font-size: 14px;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 800;
       text-align: center;
       padding: 20px;
     }
 
-    /* 말풍선 및 대사 박스 (스크롤 절대 없음, 글자 크기 비례 늘어남) */
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border: 5px solid #ffffff;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ================= 4. 대사 및 설명 영역 (내부 스크롤 없음) ================= */
     .content-box {
-      padding: 20px;
-      border-top: 1px solid #edf2f7;
-    }
-
-    .dialogue {
-      font-size: calc(15px * var(--font-scale));
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 12px;
-      line-height: 1.5;
-    }
-
-    /* 경상도 사투리나 대화 강조 */
-    .accent-text {
-      color: var(--accent-color);
-      font-weight: 800;
-    }
-
-    /* 보충 설명 및 정보 */
-    .info-box {
-      background-color: #ebf8ff;
-      border-left: 5px solid var(--primary-color);
-      padding: 12px;
-      border-radius: 6px;
-      font-size: calc(13px * var(--font-scale));
-      color: #2b6cb0;
-      font-weight: 600;
-      margin-top: 10px;
-    }
-
-    /* 22컷 요약 카드 전용 디자인 */
-    .summary-card {
-      background-color: #fffaf0;
-      border: 3px solid #dd6b20;
-    }
-    
-    .summary-list {
-      margin-top: 15px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
+    }
+
+    .scene-desc {
+      font-size: calc(14px * var(--font-scale));
+      color: var(--text-gray);
+      font-weight: 700;
+      background: #f1f5f9;
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+
+    .speech-bubble {
+      background: #fffbeb;
+      border: 2.5px solid #f59e0b;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: calc(16px * var(--font-scale));
+      font-weight: 800;
+      color: var(--text-dark);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .speaker-name {
+      display: inline-block;
+      background: #d97706;
+      color: #ffffff;
+      font-size: calc(13px * var(--font-scale));
+      padding: 2px 10px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+    }
+
+    .speaker-nurse .speaker-name { background: var(--green); }
+    .speaker-nurse { background: #ecfdf5; border-color: #10b981; }
+
+    .speaker-haeun .speaker-name { background: var(--primary); }
+    .speaker-haeun { background: #eff6ff; border-color: #60a5fa; }
+
+    .key-message {
+      background: #fef2f2;
+      border-left: 6px solid var(--accent);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: calc(15px * var(--font-scale));
+      font-weight: 800;
+      color: #991b1b;
+    }
+
+    /* 22컷 요약 카드 전용 */
+    .summary-card {
+      border: 4px solid var(--orange);
+      background: #fffbeb;
+    }
+
+    .summary-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 8px;
     }
 
     .summary-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: calc(14px * var(--font-scale));
+      background: #ffffff;
+      border: 2px solid #fcd34d;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: calc(16px * var(--font-scale));
       font-weight: 800;
-      color: #2d3748;
+      color: #111827;
     }
 
-    .summary-check {
-      color: #dd6b20;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    /* 하단 고정 바 (네비게이션 및 다음화 안내) */
+    /* ================= 5. 하단 고정 바 ================= */
     .footer-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background-color: #ffffff;
-      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.12);
       z-index: 1000;
-      padding: 14px 16px;
+      border-top: 3px solid var(--primary);
+    }
+
+    .footer-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 10px 14px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      border-top: 2px solid var(--primary-color);
     }
 
-    .footer-info {
+    .footer-slogan {
       text-align: center;
-      font-size: calc(12px * var(--font-scale));
+      font-size: calc(13px * var(--font-scale));
       font-weight: 800;
-      color: var(--primary-color);
+      color: var(--accent);
     }
 
-    .btn-group {
+    .nav-btns {
       display: flex;
-      justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .action-btn {
+    .nav-btn {
       flex: 1;
-      height: 48px;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: calc(14px * var(--font-scale));
+      min-height: 48px;
       border: none;
+      border-radius: 12px;
+      font-size: calc(14px * var(--font-scale));
+      font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      text-decoration: none;
     }
 
-    .btn-prev {
-      background-color: #e2e8f0;
-      color: #4a5568;
+    .nav-btn.prev { background: #e2e8f0; color: #1e293b; }
+    .nav-btn.tts-all { background: #dbeafe; color: #1e40af; }
+    .nav-btn.call { background: var(--green); color: #ffffff; flex: 1.3; }
+
+    /* AI 설정 모달 */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
     }
 
-    .btn-next {
-      background-color: var(--primary-color);
-      color: white;
+    .modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    .btn-prev:active { background-color: #cbd5e0; }
-    .btn-next:active { background-color: var(--primary-dark); }
+    .modal-card h3 {
+      font-size: 20px;
+      color: var(--primary-dark);
+    }
+
+    .modal-card input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 15px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- 1. 상단 가림 없는 고정 바 -->
+  <!-- ================= 상단 고정 메뉴 ================= -->
   <header class="header-bar" id="headerBar">
-    <div class="header-title-box">
-      <h1>할아버지의 오래된 기침 👴💨</h1>
-      <p>결핵 예방 및 관리 (1탄)</p>
-    </div>
-    <div class="font-control-group">
-      <button class="font-btn" onclick="adjustFont(-1)" aria-label="글자 작게">-</button>
-      <span class="font-indicator" id="fontIndicator">크게</span>
-      <button class="font-btn" onclick="adjustFont(1)" aria-label="글자 크게">+</button>
+    <div class="header-inner">
+      <div class="header-top-row">
+        <div class="title-wrap">
+          <h1>할아버지의 오래된 기침 (1탄)</h1>
+          <p>기침 2주 넘으면 ➔ 보건소 무료 검진!</p>
+        </div>
+        <div class="font-controls">
+          <button class="font-btn" onclick="changeFontSize(-1)" aria-label="글자 작게">가 -</button>
+          <span class="font-badge" id="fontBadge">크게</span>
+          <button class="font-btn" onclick="changeFontSize(1)" aria-label="글자 크게">가 +</button>
+        </div>
+      </div>
+
+      <!-- 제작자 스튜디오 바 (배포용 완성본을 저장할 때는 자동으로 숨겨집니다) -->
+      <div class="studio-bar" id="studioBar">
+        <button class="studio-btn primary" onclick="openAiModal()">🎨 AI 고화질 웹툰 자동작화</button>
+        <button class="studio-btn save" onclick="exportStandaloneHtml()">💾 완성본 HTML 저장</button>
+      </div>
     </div>
   </header>
 
-  <!-- 2. 전체 페이지 스크롤형 본문 -->
-  <main class="container" id="contentContainer">
+  <!-- ================= 웹툰 본문 (전체 페이지 스크롤) ================= -->
+  <main class="container" id="mainContainer"></main>
 
-    <!-- 1컷 -->
-    <article class="toon-card" id="cut1">
-      <div class="card-badge">1컷 / 22</div>
-      <div class="image-container">
-        <!-- 💡 실제 고화질 네이버웹툰풍 이미지는 여기에 삽입됩니다 -->
-        <img src="https://images.unsplash.com/photo-1542435503-956c469947f6?auto=format&fit=crop&q=80&w=800" alt="마을회관에서 기침하는 할아버지">
-      </div>
-      <div class="content-box">
-        <p class="dialogue">
-          <span class="accent-text">친구:</span> "말순이 형님, 기침이 와 그리 오래가노?"<br>
-          <span class="accent-text">할아버지:</span> "환절기 감기 아이가. 약국 약 먹으모 낫는다."
-        </p>
-        <div class="info-box">📢 마을회관에서 박말순 할아버지가 마른기침을 콜록콜록 하십니다.</div>
-      </div>
-    </article>
-
-    <!-- 2컷 -->
-    <article class="toon-card" id="cut2">
-      <div class="card-badge">2컷 / 22</div>
-      <div class="image-container">
-        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800" alt="약을 먹는 할아버지와 기침 3주째 달력">
-      </div>
-      <div class="content-box">
-        <p class="dialogue">달력에는 벌써 3주째 '기침 시작'이라고 적혀 있습니다. 할아버지는 그저 감기려니 하고 약국 약을 털어 드십니다.</p>
-        <div class="info-box">⚠️ 기침이 2주일 넘게 가면 감기가 아닐 수 있습니다!</div>
-      </div>
-    </article>
-
-    <!-- 3컷 -->
-    <article class="toon-card" id="cut3">
-      <div class="card-badge">3컷 / 22</div>
-      <div class="image-container">
-        <div class="image-placeholder">밤중, 식은땀을 흘리며 잠을 설치는 할아버지와 걱정하는 할머니</div>
-      </div>
-      <div class="content-box">
-        <p class="dialogue">밤이 되자 할아버지는 이불이 축축하게 젖을 정도로 식은땀을 흘립니다. 할머니가 걱정스러운 눈빛으로 바라봅니다.</p>
-      </div>
-    </article>
-
-    <!-- 4컷 -->
-    <article class="toon-card" id="cut4">
-      <div class="card-badge">4컷 / 22</div>
-      <div class="image-container">
-        <div class="image-placeholder">밥상 앞에서 숟가락을 놓는 할아버지</div>
-      </div>
-      <div class="content-box">
-        <p class="dialogue">
-          <span class="accent-text">할머니:</span> "영감, 요새 와 이래 못 묵노? 바지도 헐렁하네."<br>
-          <span class="accent-text">할아버지:</span> "나이 들모 다 그렇지."
-        </p>
-      </div>
-    </article>
-
-    <!-- 5컷 (중요 정보 컷) -->
-    <article class="toon-card" id="cut5">
-      <div class="card-badge">5컷 (핵심 증상)</div>
-      <div class="image-container">
-        <div class="image-placeholder">할아버지 몸에 표시되는 결핵 증상 5가지 (2주 기침, 가래, 열, 식은땀, 체중감소)</div>
-      </div>
-      <div class="content-box">
-        <p class="dialogue" style="color:var(--accent-color)">🚨 나이 탓이 아니에요! 결핵의 의심 증상들</p>
-        <div class="info-box" style="background:#fff5f5; border-color:var(--accent-color); color:var(--text-dark)">
-          • 2주 넘는 기침 / 가래<br>
-          • 미열 (특히 오후나 밤에)<br>
-          • 밤에 나는 식은땀<br>
-          • 입맛이 없고 몸무게가 줄어듦
-        </div>
-      </div>
-    </article>
-
-    <!-- (중간 6~21컷은 모바일 최적화로 세로로 자연스럽게 배치됨...) -->
-    <!-- [공간 절약을 위해 중간 컷들의 텍스트는 콤팩트하게 구성되어 있으나, 글자 크기에 맞춰 늘어납니다] -->
-
-    <!-- 22컷 (최종 요약 카드) -->
-    <article class="toon-card summary-card" id="cut22">
-      <div class="card-badge" style="background:#dd6b20;">마지막 / 요약</div>
-      <div class="content-box">
-        <h2 style="font-size:calc(18px * var(--font-scale)); color:#dd6b20; text-align:center;">꼭 기억하세요! 잊지 말 장</h2>
-        <div class="summary-list">
-          <div class="summary-item">
-            <span class="summary-check">✔</span>
-            <span>기침이 <span style="color:var(--accent-color)">2주</span> 넘으면 ➔ <span style="color:var(--primary-color)">보건소 · 병원</span> 가기!</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-check">✔</span>
-            <span><span style="color:var(--accent-color)">65세 이상</span> 어르신 ➔ <span style="color:var(--primary-color)">매년 1회 무료 검진</span> 받기!</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-check">✔</span>
-            <span>결핵약은 <span style="color:var(--accent-color)">6개월 이상</span> ➔ 끊지 말고 끝까지 드시기!</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-check">✔</span>
-            <span>가족도 함께 ➔ 증상이 없어도 검사받기!</span>
-          </div>
-        </div>
-        <p style="margin-top:20px; text-align:center; font-weight:800; font-size:calc(14px * var(--font-scale)); color:var(--primary-color)">
-          다음 이야기: 2탄 「결핵, 미리 막는 법」
-        </p>
-      </div>
-    </article>
-
-  </main>
-
-  <!-- 3. 하단 네비게이션 고정 바 -->
+  <!-- ================= 하단 고정 메뉴 ================= -->
   <footer class="footer-bar" id="footerBar">
-    <div class="footer-info">마을회관 기침 소리, 그냥 넘기지 마세요!</div>
-    <div class="btn-group">
-      <button class="action-btn btn-prev" onclick="alert('첫 페이지입니다.')">처음으로</button>
-      <a href="https://m.search.naver.com/search.naver?query=보건소" target="_blank" style="text-decoration:none; flex:1.5;">
-        <button class="action-btn btn-next">🏥 가까운 보건소 찾기</button>
-      </a>
+    <div class="footer-inner">
+      <div class="footer-slogan">📢 "기침 2주 넘으면 감기가 아닐 수 있습니다 → 보건소로 오이소!"</div>
+      <div class="nav-btns">
+        <button class="nav-btn prev" onclick="window.scrollTo({top:0, behavior:'smooth'})">⬆ 맨 위로</button>
+        <button class="nav-btn tts-all" onclick="readCurrentVisibleCut()">🔊 읽어주기</button>
+        <a class="nav-btn call" href="https://m.search.naver.com/search.naver?query=가까운+보건소" target="_blank">🏥 보건소 찾기</a>
+      </div>
     </div>
   </footer>
 
+  <!-- ================= AI 웹툰 작화 모달 ================= -->
+  <div class="modal-backdrop" id="aiModal">
+    <div class="modal-card">
+      <h3>🎨 네이버 웹툰 스타일 AI 작화 스튜디오</h3>
+      <p style="font-size:14px; color:#475569;">
+        Google Gemini API 키를 입력하면 1컷~22컷 전체를 <strong>실제 한국 웹툰 작가 스타일(컬러 셀 채색 만화)</strong>로 자동 생성하여 채워 넣습니다.<br>
+        ※ API 키 없이도 각 컷의 <strong>[📁 그림 넣기]</strong> 버튼으로 직접 만화 이미지를 넣으실 수 있습니다.
+      </p>
+      <input type="password" id="apiKeyInput" placeholder="AIzaSy... (Gemini API Key 입력)">
+      <div style="display:flex; gap:8px;">
+        <button class="nav-btn call" onclick="startBatchAiDraw()">🚀 22컷 전체 웹툰 그리기</button>
+        <button class="nav-btn prev" onclick="closeAiModal()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 숨겨진 파일 업로더 (컷별 이미지 직접 교체용) -->
+  <input type="file" id="fileInput" accept="image/*" style="display:none">
+
   <script>
-    // 글자 크기 조절 시스템 (1: 보통, 2: 크게, 3: 더크게, 4: 최대)
-    let currentScaleIndex = 2; // 기본값: 크게
-    const scaleValues = [0.9, 1.2, 1.5, 1.8];
-    const scaleTexts = ["보통", "크게", "더크게", "최대"];
+    // =========================================================================
+    // 1. 시나리오 22컷 전체 데이터 (경상도 사투리 & 어르신 맞춤 원칙 100% 반영)
+    // =========================================================================
+    const WEBTOON_CUTS = [
+      // --- 프롤로그: 증상 (1~6컷) ---
+      {
+        cut: 1, section: "프롤로그: 수상한 기침 (1~6컷)",
+        scene: "마을회관. 박말순 할아버지(75세)가 장기판 앞에서 마른기침을 콜록콜록 합니다.",
+        sfx: "콜록! 콜록!", mood: "cough", bg: "#fef3c7",
+        dialogues: [
+          { speaker: "마을회관 친구", role: "friend", text: "말순이 형님, 기침이 와 그리 오래가노?" },
+          { speaker: "박말순 할아버지", role: "grandpa", text: "환절기 감기 아이가. 약국 약 먹으모 낫는다." }
+        ],
+        tip: "기침이 2주 넘게 계속되면 단순 감기가 아닐 수 있습니다."
+      },
+      {
+        cut: 2,
+        scene: "약국 감기약을 털어 먹는 할아버지. 벽걸이 달력에 '기침 시작' 표시가 벌써 3주째입니다.",
+        sfx: "벌써 3주째...", mood: "calendar", bg: "#fee2e2",
+        dialogues: [
+          { speaker: "박말순 할아버지", role: "grandpa", text: "이상하네... 약을 이래 무도 기침이 안 떨어지노." }
+        ],
+        tip: "핵심 기억! 기침이 2주 이상 이어지면 꼭 보건소로 가세요."
+      },
+      {
+        cut: 3,
+        scene: "깊은 밤. 잠자리에서 식은땀으로 이불이 흠뻑 젖어 있고, 할머니가 걱정스레 바라봅니다.",
+        sfx: "식은땀 줄줄", mood: "night", bg: "#dbeafe",
+        dialogues: [
+          { speaker: "할머니", role: "grandma", text: "영감, 자면서 식은땀을 와 이래 많이 흘리노... 이불이 다 젖었네." }
+        ],
+        tip: "밤에 자면서 식은땀이 많이 나는 것도 결핵의 주요 증상입니다."
+      },
+      {
+        cut: 4,
+        scene: "아침 밥상. 입맛이 없어 숟가락을 힘없이 내려놓는 할아버지.",
+        sfx: "입맛 없음", mood: "table", bg: "#ffedd5",
+        dialogues: [
+          { speaker: "할머니", role: "grandma", text: "영감, 요새 와 이래 밥을 못 묵노? 바지도 헐렁하네." },
+          { speaker: "박말순 할아버지", role: "grandpa", text: "나이 들모 다 그렇지 뭐..." }
+        ],
+        tip: "나이 탓이라고 넘기지 마세요! 체중 감소와 피로감은 몸이 보내는 신호입니다."
+      },
+      {
+        cut: 5,
+        scene: "[중요 정보 컷] 할아버지 몸에 나타난 결핵 의심 증상 5가지!",
+        sfx: "결핵 5대 증상!", mood: "info5", bg: "#fef2f2",
+        dialogues: [
+          { speaker: "꼭 확인하세요!", role: "nurse", text: "① 2주 넘는 기침  ② 가래  ③ 미열  ④ 밤에 식은땀  ⑤ 몸무게 줄고 기운 없음" }
+        ],
+        tip: "기침 2주 ➔ 지체 없이 보건소!"
+      },
+      {
+        cut: 6,
+        scene: "주말에 놀러 온 대학생 손녀 하은이가 기침하며 야위어 가는 할아버지를 유심히 보며 표정이 굳습니다.",
+        sfx: "유심...", mood: "serious", bg: "#f3e8ff",
+        dialogues: [
+          { speaker: "손녀 하은", role: "haeun", text: "(할아버지 기침 소리가 예사롭지 않은데... 살도 너무 빠지셨어!)" }
+        ],
+        tip: "가족들이 어르신의 기침 기간을 함께 살펴봐 주세요."
+      },
 
-    function adjustFont(direction) {
-      currentScaleIndex += direction;
-      if (currentScaleIndex < 0) currentScaleIndex = 0;
-      if (currentScaleIndex > 3) currentScaleIndex = 3;
+      // --- 대처 (7~12컷) ---
+      {
+        cut: 7, section: "대처: 보건소 무료 검진 (7~12컷)",
+        scene: "손녀 하은이가 할아버지의 거친 두 손을 꼭 잡으며 진지하게 말씀드립니다.",
+        sfx: "기침 2주 → 보건소!", mood: "holdhands", bg: "#eff6ff",
+        dialogues: [
+          { speaker: "손녀 하은", role: "haeun", text: "할아버지, 기침 2주 넘으면 보건소 가야 돼요. 감기가 아닐 수도 있어요!" },
+          { speaker: "박말순 할아버지", role: "grandpa", text: "내가 와 결핵이고, 그거 못 먹던 옛날 병 아이가…" }
+        ],
+        tip: "결핵은 옛날 병이 아닙니다. 지금도 우리 주변에 흔히 있습니다."
+      },
+      {
+        cut: 8,
+        scene: "[인식 개선] 하은이가 스마트폰의 큼직한 뉴스 통계를 할아버지께 보여드립니다.",
+        sfx: "2명 중 1명이 어르신!", mood: "phone", bg: "#e0f2fe",
+        dialogues: [
+          { speaker: "손녀 하은", role: "haeun", text: "할아버지 여 보소! 요즘도 결핵 환자 2명 중 1명이 65세 이상 어르신이래요." },
+          { speaker: "박말순 할아버지", role: "grandpa", text: "허어, 참말이가?!" }
+        ],
+        tip: "65세 이상 어르신은 면역력이 약해져 결핵에 걸리기 쉽습니다."
+      },
+      {
+        cut: 9,
+        scene: "보건소 방문. 할아버지가 신분증을 내밀어 접수하고, 간호사 선생님이 환하게 맞이합니다.",
+        sfx: "검사는 무료!", mood: "clinic", bg: "#ecfdf5",
+        dialogues: [
+          { speaker: "보건소 간호사", role: "nurse", text: "어르신 오셨어요! 신분증만 있으시면 65세 이상 결핵 검사는 무료예요." },
+          { speaker: "박말순 할아버지", role: "grandpa", text: "오메, 돈이 하나도 안 든다고예?" }
+        ],
+        tip: "신분증만 챙겨서 가까운 보건소에 방문하세요. (65세 이상 매년 1회 무료)"
+      },
+      {
+        cut: 10,
+        scene: "흉부 X선(엑스레이) 촬영실. 가슴을 기계에 대고 숨을 참자 금방 촬영이 끝납니다.",
+        sfx: "찰칵! 1분 완성", mood: "xray", bg: "#f1f5f9",
+        dialogues: [
+          { speaker: "박말순 할아버지", role: "grandpa", text: "이래 찍으모 끝이가? 아픈 것도 없고 참말로 간단하네!" }
+        ],
+        tip: "가슴 엑스레이 사진 한 장이면 폐 건강을 바로 확인할 수 있습니다."
+      },
+      {
+        cut: 11,
+        scene: "엑스레이 사진에서 의심 소견이 보이자 간호사가 가래검사 통을 친절히 건넵니다.",
+        sfx: "정확한 가래검사", mood: "sputum", bg: "#fef9c3",
+        dialogues: [
+          { speaker: "보건소 간호사", role: "nurse", text: "폐 사진에 흔적이 보여서요, 내일 아침 첫 가래를 이 통에 받아 오세요." }
+        ],
+        tip: "X선에서 의심되면 가래검사로 결핵균이 있는지 정확히 확인합니다."
+      },
+      {
+        cut: 12,
+        scene: "며칠 후 결과: 결핵 확진. 할아버지가 충격에 말을 잃자 할머니가 옆에서 손을 꼭 잡아줍니다.",
+        sfx: "결핵 확진...", mood: "shock", bg: "#fee2e2",
+        dialogues: [
+          { speaker: "할머니", role: "grandma", text: "영감, 너무 겁먹지 마소. 일찍 알았으니 인자 고치모 된다 아이가." }
+        ],
+        tip: "결핵 진단을 받아도 놀라지 마세요. 완치할 수 있는 병입니다!"
+      },
 
-      // CSS 변수 업데이트
-      document.documentElement.style.setProperty('--font-scale', scaleValues[currentScaleIndex]);
-      
-      // 표시 텍스트 및 가독성 UI 업데이트
-      document.getElementById('fontIndicator').innerText = scaleTexts[currentScaleIndex];
-      
-      // 글자 크기가 커졌을 때 상하단 고정 바 가림 방지 재계산
-      adjustPadding();
+      // --- 관리 (13~20컷) ---
+      {
+        cut: 13, section: "관리: 꾸준히 약 먹으면 완치! (13~20컷)",
+        scene: "보건소 간호사 선생님이 따뜻한 미소로 할아버지와 할머니를 안심시킵니다.",
+        sfx: "2주면 전염 걱정 뚝!", mood: "nurse_smile", bg: "#d1fae5",
+        dialogues: [
+          { speaker: "보건소 간호사", role: "nurse", text: "결핵은 약을 꾸준히 먹으면 깨끗이 낫는 병이에요!" },
+          { speaker: "보건소 간호사", role: "nurse", text: "치료 시작하고 2주쯤 지나면 남에게 옮길 걱정도 크게 줄어듭니다." }
+        ],
+        tip: "결핵약 복용 후 2주가 지나면 전염력이 거의 사라집니다."
+      },
+      {
+        cut: 14,
+        scene: "할머니와 손녀 하은이도 함께 보건소에서 가족 접촉자 검진을 받습니다.",
+        sfx: "가족도 무료 검진!", mood: "family", bg: "#e0e7ff",
+        dialogues: [
+          { speaker: "보건소 간호사", role: "nurse", text: "같이 사는 가족분들은 지금 기침 증상이 없어도 꼭 함께 검진을 받으세요." },
+          { speaker: "할머니", role: "grandma", text: "예, 우리도 같이 검사받고 안심하렵니다." }
+        ],
+        tip: "환자와 함께 사는 가족도 보건소에서 무료로 검진받을 수 있습니다."
+      },
+      {
+        cut: 15,
+        scene: "[낙인 해소] 방 구석에 풀 죽어 앉은 할아버지에게 간호사가 설명하고, 할머니가 따뜻하게 같이 밥을 먹습니다.",
+        sfx: "밥그릇으론 안 옮아요!", mood: "stigma_free", bg: "#ffedd5",
+        dialogues: [
+          { speaker: "보건소 간호사", role: "nurse", text: "어르신! 밥그릇이나 수건, 이불로는 절대 안 옮아요. 기침이나 숨으로 퍼지는 병이에요." },
+          { speaker: "할머니", role: "grandma", text: "영감 들었제? 기죽지 말고 어여 같이 밥 묵자!" }
+        ],
+        tip: "결핵은 부끄러운 병이 아닙니다. 식기나 침구류로는 전염되지 않습니다."
+      },
+      {
+        cut: 16,
+        scene: "큼직한 결핵 약봉지와 복약 달력에 '하루도 빠지지 않고 6개월!' 표시가 선명합니다.",
+        sfx: "꾸준히 6개월!", mood: "med_calendar", bg: "#fef3c7",
+        dialogues: [
+          { speaker: "보건소 간호사", role: "nurse", text: "하루도 빠지지 않고 6개월 이상 끝까지 드셔야 결핵균이 완전히 사라져요!" }
+        ],
+        tip: "결핵 치료의 핵심은 '매일 거르지 않고 최소 6개월간 복용'입니다."
+      },
+      {
+        cut: 17,
+        scene: "한 달쯤 뒤 기침이 멈추고 몸이 좀 나아지자 약통을 밀어놓는 할아버지. 할머니가 호통칩니다!",
+        sfx: "약 끊으모 절대 안 돼!", mood: "scold", bg: "#fee2e2",
+        dialogues: [
+          { speaker: "박말순 할아버지", role: "grandpa", text: "인자 기침도 안 나고 다 나은 것 같은데, 약 그만 무도 안 되나?" },
+          { speaker: "할머니", role: "grandma", text: "영감! 큰일 날 소리 하네! 약 끊으모 안 된다 안 카나!" }
+        ],
+        tip: "증상이 좋아졌다고 약을 임의로 끊으면 결핵균이 다시 살아납니다!"
+      },
+      {
+        cut: 18,
+        scene: "[핵심 경고 컷] 간호사가 내성 결핵의 위험성과 부작용 대처법을 단호하게 알려줍니다.",
+        sfx: "임의 중단 절대 금지!", mood: "warning", bg: "#fef2f2",
+        dialogues: [
+          { speaker: "보건소 간호사", role: "nurse", text: "약을 마음대로 끊으면 약이 안 듣는 무서운 '내성 결핵'이 될 수 있어요!" },
+          { speaker: "보건소 간호사", role: "nurse", text: "피부 발진, 눈 노래짐, 속이 너무 불편하면 약을 끊지 말고 먼저 병원이나 보건소에 연락하세요." }
+        ],
+        tip: "약 먹고 불편한 증상이 생기면 혼자 끊지 말고 즉시 보건소로 전화하세요!"
+      },
+      {
+        cut: 19,
+        scene: "치료비 안내 창구. 국가에서 결핵 치료비를 지원해 주어 할아버지가 안도의 숨을 내쉽니다.",
+        sfx: "치료비 걱정 뚝!", mood: "cost_free", bg: "#dcfce7",
+        dialogues: [
+          { speaker: "보건소 간호사", role: "nurse", text: "결핵은 국가(산정특례)에서 진료비와 약값 본인부담금을 지원해 드려요. 돈 걱정은 덜으셔도 돼요!" },
+          { speaker: "박말순 할아버지", role: "grandpa", text: "고맙습니더. 나라에서 약값까지 도와주니 맘 편히 치료받겠심더." }
+        ],
+        tip: "결핵 산정특례 지원으로 치료비 부담 없이 치료받을 수 있습니다."
+      },
+      {
+        cut: 20,
+        scene: "외출할 땐 마스크를 착용하고, 기침할 땐 옷소매로 입과 코를 가리며, 방 창문을 열어 자주 환기하는 할아버지.",
+        sfx: "옷소매 기침 예절 & 환기", mood: "etiquette", bg: "#e0f2fe",
+        dialogues: [
+          { speaker: "박말순 할아버지", role: "grandpa", text: "기침할 땐 손 말고 옷소매로 입 가리기! 창문도 활짝 열어서 환기하기!" }
+        ],
+        tip: "올바른 기침 예절과 실내 환기는 가족과 이웃을 지키는 첫걸음입니다."
+      },
+
+      // --- 에필로그 (21~22컷) ---
+      {
+        cut: 21, section: "에필로그: 건강 되찾은 말순 할아버지 (21~22컷)",
+        scene: "6개월 후 완치! 살이 다시 보기 좋게 오른 할아버지가 마을회관에서 친구들에게 호탕하게 외칩니다.",
+        sfx: "완치! 보건소 가라!", mood: "happy_end", bg: "#fef9c3",
+        dialogues: [
+          { speaker: "박말순 할아버지", role: "grandpa", text: "마! 기침 2주 넘으모 감기약만 묵지 말고 보건소 가라! 검사도 무료다!" },
+          { speaker: "마을회관 친구", role: "friend", text: "형님 얼굴이 훤해졌네! 그라모 나도 오늘 당장 가 볼게예!" }
+        ],
+        tip: "기침 2주 ➔ 보건소! 주변 친구분들께도 꼭 알려주세요."
+      },
+      {
+        cut: 22,
+        scene: "[최종 요약 카드] 어르신들이 한눈에 기억하는 결핵 예방·관리 4대 수칙",
+        sfx: "꼭 기억하세요!", mood: "summary", bg: "#fffbeb",
+        isSummary: true,
+        dialogues: [],
+        tip: "다음 이야기: 2탄 「결핵, 미리 막는 법」에서 계속됩니다!"
+      }
+    ];
+
+    // =========================================================================
+    // 2. 내장형 K-웹툰 일러스트 렌더러 (빈 회색 박스가 절대 나오지 않도록 기본 만화 제공)
+    // =========================================================================
+    function createWebtoonSvg(item) {
+      const bg = item.bg || "#f8fafc";
+      const cutNum = item.cut;
+      const sfx = item.sfx || "";
+
+      // 인물 표정 및 포즈 분기
+      const isSick = cutNum <= 6 || cutNum === 12;
+      const isHappy = cutNum === 9 || cutNum === 13 || cutNum >= 19;
+      const showNurse = [9, 11, 13, 14, 15, 16, 18, 19].includes(cutNum);
+      const showHaeun = [6, 7, 8, 14].includes(cutNum);
+      const showGrandma = [3, 4, 12, 14, 15, 17].includes(cutNum);
+
+      const mouthPath = isHappy
+        ? "M 185 198 Q 200 212 215 198"
+        : (isSick ? "M 186 205 Q 200 192 214 205" : "M 188 200 L 212 200");
+
+      const sweatDrops = isSick ? `
+        <path d="M 145 145 Q 140 160 148 165 Q 155 160 145 145" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+        <path d="M 255 150 Q 250 165 258 170 Q 265 165 255 150" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+      ` : "";
+
+      // 동반 등장인물 (우측 배치)
+      let partnerSvg = "";
+      if (showNurse) {
+        partnerSvg = `
+          <g transform="translate(380, 75)">
+            <!-- 간호사 머리카락 & 캡 -->
+            <path d="M 40 70 Q 40 15 100 15 Q 160 15 160 70 L 165 130 L 35 130 Z" fill="#1e293b"/>
+            <polygon points="70,18 130,18 122,38 78,38" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <path d="M 100 22 L 100 34 M 94 28 L 106 28" stroke="#dc2626" stroke-width="3.5"/>
+            <!-- 얼굴 -->
+            <ellipse cx="100" cy="85" rx="44" ry="48" fill="#fde68a" stroke="#1e293b" stroke-width="3"/>
+            <circle cx="83" cy="78" r="5" fill="#1e293b"/>
+            <circle cx="117" cy="78" r="5" fill="#1e293b"/>
+            <path d="M 86 104 Q 100 116 114 104" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+            <!-- 간호사 가운 & 청진기 -->
+            <path d="M 30 220 L 48 135 Q 100 125 152 135 L 170 220 Z" fill="#ffffff" stroke="#1e293b" stroke-width="3.5"/>
+            <path d="M 75 135 L 100 175 L 125 135" fill="#dcfce7" stroke="#1e293b" stroke-width="3"/>
+            <rect x="115" y="160" width="26" height="14" rx="3" fill="#10b981" stroke="#1e293b" stroke-width="2"/>
+          </g>
+        `;
+      } else if (showHaeun) {
+        partnerSvg = `
+          <g transform="translate(380, 80)">
+            <!-- 손녀 하은 단발머리 -->
+            <path d="M 38 80 Q 38 18 100 18 Q 162 18 162 80 L 168 145 L 32 145 Z" fill="#451a03"/>
+            <ellipse cx="100" cy="86" rx="43" ry="46" fill="#fef3c7" stroke="#1e293b" stroke-width="3"/>
+            <circle cx="83" cy="80" r="5.5" fill="#1e293b"/>
+            <circle cx="117" cy="80" r="5.5" fill="#1e293b"/>
+            <path d="M 88 106 Q 100 114 112 106" fill="none" stroke="#1e293b" stroke-width="3"/>
+            <path d="M 32 220 L 50 136 Q 100 128 150 136 L 168 220 Z" fill="#60a5fa" stroke="#1e293b" stroke-width="3.5"/>
+          </g>
+        `;
+      } else if (showGrandma) {
+        partnerSvg = `
+          <g transform="translate(380, 80)">
+            <!-- 할머니 파마머리 -->
+            <circle cx="65" cy="40" r="24" fill="#9ca3af" stroke="#1e293b" stroke-width="3"/>
+            <circle cx="100" cy="32" r="26" fill="#9ca3af" stroke="#1e293b" stroke-width="3"/>
+            <circle cx="135" cy="40" r="24" fill="#9ca3af" stroke="#1e293b" stroke-width="3"/>
+            <ellipse cx="100" cy="88" rx="44" ry="46" fill="#fed7aa" stroke="#1e293b" stroke-width="3"/>
+            <path d="M 75 78 Q 83 72 91 78 M 109 78 Q 117 72 125 78" fill="none" stroke="#1e293b" stroke-width="3"/>
+            <path d="M 85 108 Q 100 102 115 108" fill="none" stroke="#1e293b" stroke-width="3"/>
+            <path d="M 32 220 L 50 138 Q 100 130 150 138 L 168 220 Z" fill="#f472b6" stroke="#1e293b" stroke-width="3.5"/>
+          </g>
+        `;
+      } else {
+        // 마을회관 친구 할아버지
+        partnerSvg = `
+          <g transform="translate(385, 82)">
+            <ellipse cx="100" cy="86" rx="44" ry="48" fill="#fed7aa" stroke="#1e293b" stroke-width="3"/>
+            <path d="M 56 68 Q 100 30 144 68" fill="#d1d5db" stroke="#1e293b" stroke-width="3"/>
+            <circle cx="83" cy="82" r="4.5" fill="#1e293b"/>
+            <circle cx="117" cy="82" r="4.5" fill="#1e293b"/>
+            <path d="M 86 108 Q 100 115 114 108" fill="none" stroke="#1e293b" stroke-width="3"/>
+            <path d="M 32 220 L 50 138 Q 100 130 150 138 L 168 220 Z" fill="#65a30d" stroke="#1e293b" stroke-width="3.5"/>
+          </g>
+        `;
+      }
+
+      return `
+        <svg viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bgGrad${cutNum}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${bg}"/>
+              <stop offset="100%" stop-color="#ffffff"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 배경 벽면 & 바닥 -->
+          <rect width="640" height="480" fill="url(#bgGrad${cutNum})"/>
+          <rect x="0" y="340" width="640" height="140" fill="#e5d3b3" stroke="#1e293b" stroke-width="3"/>
+          <line x1="25" y1="60" x2="215" y2="60" stroke="#94a3b8" stroke-width="2" opacity="0.4"/>
+
+          <!-- 배경 소품 (창문 & 달력) -->
+          <rect x="35" y="40" width="95" height="110" rx="4" fill="#bae6fd" stroke="#1e293b" stroke-width="3"/>
+          <line x1="82" y1="40" x2="82" y2="150" stroke="#1e293b" stroke-width="3"/>
+          <line x1="35" y1="95" x2="130" y2="95" stroke="#1e293b" stroke-width="3"/>
+
+          <rect x="295" y="38" width="76" height="92" rx="4" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+          <rect x="295" y="38" width="76" height="24" fill="#dc2626"/>
+          <text x="333" y="55" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle">보건 달력</text>
+          <text x="333" y="95" font-size="16" font-weight="800" fill="#dc2626" text-anchor="middle">2주 이상</text>
+          <text x="333" y="116" font-size="13" font-weight="800" fill="#1e293b" text-anchor="middle">기침 주의</text>
+
+          <!-- 주인공 박말순 할아버지 (좌측 클로즈업) -->
+          <g transform="translate(20, 65)">
+            <!-- 몸통 (갈색 조끼 & 셔츠) -->
+            <path d="M 95 310 L 120 215 Q 200 198 280 215 L 305 310 Z" fill="#78716c" stroke="#1e293b" stroke-width="4"/>
+            <path d="M 155 212 L 200 268 L 245 212" fill="#cbd5e1" stroke="#1e293b" stroke-width="3.5"/>
+            <!-- 목 & 얼굴 -->
+            <rect x="180" y="185" width="40" height="38" fill="#fdba74" stroke="#1e293b" stroke-width="3"/>
+            <ellipse cx="200" cy="142" rx="56" ry="62" fill="#fed7aa" stroke="#1e293b" stroke-width="4"/>
+            <!-- 백발 머리카락 -->
+            <path d="M 142 125 Q 145 62 200 62 Q 255 62 258 125 Q 230 92 200 95 Q 170 92 142 125 Z" fill="#e5e7eb" stroke="#1e293b" stroke-width="3.5"/>
+            <!-- 이마 및 눈가 주름 -->
+            <path d="M 172 104 Q 200 100 228 104 M 176 112 Q 200 108 224 112" stroke="#9a3412" stroke-width="2" fill="none"/>
+            <!-- 눈썹 & 눈 -->
+            <path d="M 164 128 L 190 132 M 236 128 L 210 132" stroke="#4b5563" stroke-width="4.5" stroke-linecap="round"/>
+            <circle cx="178" cy="145" r="5.5" fill="#1e293b"/>
+            <circle cx="222" cy="145" r="5.5" fill="#1e293b"/>
+            <!-- 코 & 팔자주름 & 입 -->
+            <path d="M 200 142 L 194 170 L 208 172" fill="none" stroke="#9a3412" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 175 175 L 165 196 M 225 175 L 235 196" stroke="#9a3412" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="${mouthPath}" fill="none" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+            ${sweatDrops}
+          </g>
+
+          <!-- 우측 등장인물 -->
+          ${partnerSvg}
+
+          <!-- 만화 효과음 배지 (SFX) -->
+          <g transform="translate(24, 365)">
+            <rect x="0" y="0" width="592" height="90" rx="16" fill="#ffffff" stroke="#1e293b" stroke-width="4"/>
+            <rect x="14" y="14" width="175" height="62" rx="12" fill="#dc2626"/>
+            <text x="101" y="53" font-size="23" font-weight="900" fill="#ffffff" text-anchor="middle">${sfx}</text>
+            <text x="210" y="43" font-size="20" font-weight="800" fill="#111827">${item.cut}컷 핵심 메시지</text>
+            <text x="210" y="70" font-size="18" font-weight="700" fill="#1d4ed8">"기침 2주 넘으면 보건소 무료 검진!"</text>
+          </g>
+        </svg>
+      `;
     }
 
-    // 상하단 고정 바 가림 방지 (실시간 크기 측정 및 패딩 적용)
-    function adjustPadding() {
-      const headerHeight = document.getElementById('headerBar').offsetHeight;
-      const footerHeight = document.getElementById('footerBar').offsetHeight;
-      const container = document.getElementById('contentContainer');
-      
-      container.style.paddingTop = (headerHeight + 16) + 'px';
-      container.style.paddingBottom = (footerHeight + 24) + 'px';
+    // =========================================================================
+    // 3. 웹툰 22컷 DOM 렌더링 및 로컬스토리지 이미지 복원
+    // =========================================================================
+    const mainContainer = document.getElementById('mainContainer');
+    let currentUploadCut = null;
+
+    function renderAllCuts() {
+      mainContainer.innerHTML = '';
+
+      WEBTOON_CUTS.forEach(item => {
+        // 섹션 배너 출력
+        if (item.section) {
+          const banner = document.createElement('div');
+          banner.className = 'section-banner';
+          banner.textContent = item.section;
+          mainContainer.appendChild(banner);
+        }
+
+        // 22컷 요약 카드는 별도 레이아웃
+        if (item.isSummary) {
+          const summaryCard = document.createElement('article');
+          summaryCard.className = 'toon-card summary-card';
+          summaryCard.id = `cut-${item.cut}`;
+          summaryCard.innerHTML = `
+            <div class="card-header">
+              <span class="cut-badge" style="background:#d97706;">22컷 / 핵심 요약 카드</span>
+              <div class="card-actions">
+                <button class="mini-btn tts" onclick="speakCut(${item.cut})">🔊 소리 듣기</button>
+              </div>
+            </div>
+            <div class="content-box">
+              <h2 style="font-size:calc(20px * var(--font-scale)); color:#b45309; text-align:center;">
+                📌 어르신 결핵 예방 4대 수칙
+              </h2>
+              <div class="summary-list">
+                <div class="summary-item">✔ 기침 2주 넘으면 ➔ <span style="color:#dc2626;">보건소 · 병원</span></div>
+                <div class="summary-item">✔ 65세 이상 어르신 ➔ <span style="color:#1d4ed8;">매년 1회 무료 검진</span></div>
+                <div class="summary-item">✔ 결핵약은 <span style="color:#dc2626;">6개월 이상</span>, 끊지 말고 끝까지!</div>
+                <div class="summary-item">✔ 같이 사는 <span style="color:#059669;">가족도 함께 무료 검진</span></div>
+              </div>
+              <div class="key-message" style="text-align:center; margin-top:8px;">
+                📖 ${item.tip}
+              </div>
+            </div>
+          `;
+          mainContainer.appendChild(summaryCard);
+          return;
+        }
+
+        // 일반 웹툰 컷 (1~21컷)
+        const savedImg = localStorage.getItem(`tb_toon_cut_${item.cut}`);
+        const mediaHtml = savedImg
+          ? `<img id="img-cut-${item.cut}" src="${savedImg}" alt="${item.cut}컷 웹툰 이미지">`
+          : `<div id="svg-cut-${item.cut}" style="width:100%;height:100%;">${createWebtoonSvg(item)}</div>`;
+
+        const dialoguesHtml = item.dialogues.map(d => {
+          const roleClass = d.role === 'nurse' ? 'speaker-nurse' : (d.role === 'haeun' ? 'speaker-haeun' : '');
+          return `
+            <div class="speech-bubble ${roleClass}">
+              <span class="speaker-name">${d.speaker}</span>
+              <div>"${d.text}"</div>
+            </div>
+          `;
+        }).join('');
+
+        const card = document.createElement('article');
+        card.className = 'toon-card';
+        card.id = `cut-${item.cut}`;
+        card.innerHTML = `
+          <div class="card-header">
+            <span class="cut-badge">${item.cut}컷 / 22</span>
+            <div class="card-actions">
+              <button class="mini-btn tts" onclick="speakCut(${item.cut})">🔊 소리 듣기</button>
+              <button class="mini-btn studio-only" onclick="triggerFileUpload(${item.cut})">📁 그림 넣기</button>
+              <button class="mini-btn studio-only" onclick="generateSingleAiCut(${item.cut})">✨ AI작화</button>
+            </div>
+          </div>
+          <div class="image-box" id="box-cut-${item.cut}">
+            ${mediaHtml}
+            <div class="loading-overlay" id="loader-cut-${item.cut}">
+              <div class="spinner"></div>
+              <div>네이버 웹툰 스타일로<br>${item.cut}컷 만화를 그리는 중...</div>
+            </div>
+          </div>
+          <div class="content-box">
+            <div class="scene-desc">🎬 ${item.scene}</div>
+            ${dialoguesHtml}
+            <div class="key-message">💡 ${item.tip}</div>
+          </div>
+        `;
+        mainContainer.appendChild(card);
+      });
     }
 
-    // 화면 크기 변화 및 로드 시 가림 방지 적용
-    window.addEventListener('resize', adjustPadding);
-    window.addEventListener('load', adjustPadding);
+    // =========================================================================
+    // 4. 어르신 맞춤 글자 크기 4단계 조절 & 상하단 고정바 가림 방지(ResizeObserver)
+    // =========================================================================
+    const FONT_SCALES = [1.0, 1.25, 1.5, 1.8];
+    const FONT_LABELS = ["보통", "크게", "더크게", "최대"];
+    let currentFontIdx = 1; // 기본값: 크게(1.25)
 
-    // ResizeObserver를 통해 글자 크기 변화로 엘리먼트 크기가 변할 때 감지
-    const resizeObserver = new ResizeObserver(() => {
-      adjustPadding();
+    function changeFontSize(delta) {
+      currentFontIdx = Math.max(0, Math.min(FONT_SCALES.length - 1, currentFontIdx + delta));
+      document.documentElement.style.setProperty('--font-scale', FONT_SCALES[currentFontIdx]);
+      document.getElementById('fontBadge').textContent = FONT_LABELS[currentFontIdx];
+      updateSafePadding();
+    }
+
+    function updateSafePadding() {
+      const headerH = document.getElementById('headerBar').offsetHeight;
+      const footerH = document.getElementById('footerBar').offsetHeight;
+      mainContainer.style.paddingTop = (headerH + 18) + 'px';
+      mainContainer.style.paddingBottom = (footerH + 24) + 'px';
+    }
+
+    const barObserver = new ResizeObserver(updateSafePadding);
+    barObserver.observe(document.getElementById('headerBar'));
+    barObserver.observe(document.getElementById('footerBar'));
+    window.addEventListener('resize', updateSafePadding);
+
+    // =========================================================================
+    // 5. 한국어 음성 읽어주기 (TTS - 눈이 침침한 어르신 배려)
+    // =========================================================================
+    function speakCut(cutNum) {
+      if (!('speechSynthesis' in window)) {
+        alert('이 브라우저에서는 음성 읽기 기능을 지원하지 않습니다.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const item = WEBTOON_CUTS.find(c => c.cut === cutNum);
+      if (!item) return;
+
+      let fullText = `${item.cut}컷. ${item.scene}. `;
+      if (item.isSummary) {
+        fullText += "기침 2주 넘으면 보건소 병원 가기. 65세 이상 매년 1회 무료 검진. 결핵약은 6개월 이상 끝까지 복용. 가족도 함께 검진.";
+      } else {
+        item.dialogues.forEach(d => {
+          fullText += `${d.speaker}, ${d.text}. `;
+        });
+        fullText += item.tip;
+      }
+
+      const utter = new SpeechSynthesisUtterance(fullText);
+      utter.lang = 'ko-KR';
+      utter.rate = 0.9; // 어르신들이 듣기 편하게 약간 천천히
+      window.speechSynthesis.speak(utter);
+    }
+
+    function readCurrentVisibleCut() {
+      const cards = document.querySelectorAll('.toon-card');
+      const midY = window.innerHeight / 2;
+      for (const card of cards) {
+        const rect = card.getBoundingClientRect();
+        if (rect.top <= midY && rect.bottom >= 100) {
+          const cutNum = parseInt(card.id.replace('cut-', ''), 10);
+          speakCut(cutNum);
+          return;
+        }
+      }
+      speakCut(1);
+    }
+
+    // =========================================================================
+    // 6. 직접 그림 넣기 & Gemini AI 고화질 네이버 웹툰 작화 스튜디오
+    // =========================================================================
+    const fileInput = document.getElementById('fileInput');
+    function triggerFileUpload(cutNum) {
+      currentUploadCut = cutNum;
+      fileInput.value = '';
+      fileInput.click();
+    }
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file || !currentUploadCut) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        applyCutImage(currentUploadCut, ev.target.result);
+      };
+      reader.readAsDataURL(file);
     });
-    resizeObserver.observe(document.getElementById('headerBar'));
-    resizeObserver.observe(document.getElementById('footerBar'));
+
+    function applyCutImage(cutNum, dataUrl) {
+      try {
+        localStorage.setItem(`tb_toon_cut_${cutNum}`, dataUrl);
+      } catch (e) {
+        console.warn('브라우저 저장 용량 초과로 현재 화면에만 유지됩니다.');
+      }
+      const box = document.getElementById(`box-cut-${cutNum}`);
+      const loader = document.getElementById(`loader-cut-${cutNum}`);
+      box.innerHTML = `<img id="img-cut-${cutNum}" src="${dataUrl}" alt="${cutNum}컷 웹툰 이미지">`;
+      if (loader) box.appendChild(loader);
+    }
+
+    function openAiModal() {
+      const savedKey = localStorage.getItem('gemini_api_key') || '';
+      document.getElementById('apiKeyInput').value = savedKey;
+      document.getElementById('aiModal').style.display = 'flex';
+    }
+
+    function closeAiModal() {
+      document.getElementById('aiModal').style.display = 'none';
+    }
+
+    async function generateSingleAiCut(cutNum) {
+      let apiKey = localStorage.getItem('gemini_api_key');
+      if (!apiKey) {
+        openAiModal();
+        return;
+      }
+      const item = WEBTOON_CUTS.find(c => c.cut === cutNum);
+      if (!item || item.isSummary) return;
+
+      const loader = document.getElementById(`loader-cut-${cutNum}`);
+      if (loader) loader.style.display = 'flex';
+
+      const prompt = `Korean Naver webtoon style high-quality digital manhwa illustration, clean bold ink line art, warm cell shading, expressive Korean characters, 4:3 aspect ratio, no text in speech bubbles. Scene: ${item.scene}. Main character: 75-year-old Korean rural grandfather with gray hair and warm brown vest.`;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            instances: [{ prompt }],
+            parameters: { sampleCount: 1, aspectRatio: "4:3" }
+          })
+        });
+        const data = await res.json();
+        const b64 = data?.predictions?.[0]?.bytesBase64Encoded;
+        if (b64) {
+          applyCutImage(cutNum, `data:image/png;base64,${b64}`);
+        } else {
+          alert(`AI 이미지 생성 실패: API 키 권한을 확인하거나 [📁 그림 넣기]를 이용해 주세요.`);
+        }
+      } catch (err) {
+        alert('네트워크 오류가 발생했습니다: ' + err.message);
+      } finally {
+        if (loader) loader.style.display = 'none';
+      }
+    }
+
+    async function startBatchAiDraw() {
+      const keyVal = document.getElementById('apiKeyInput').value.trim();
+      if (!keyVal) {
+        alert('Gemini API 키를 입력해 주세요.');
+        return;
+      }
+      localStorage.setItem('gemini_api_key', keyVal);
+      closeAiModal();
+
+      for (let i = 1; i <= 21; i++) {
+        await generateSingleAiCut(i);
+      }
+      alert('🎉 21컷 전체 고화질 웹툰 작화가 완료되었습니다! [💾 완성본 HTML 저장]을 눌러 배포용 파일을 만드세요.');
+    }
+
+    // =========================================================================
+    // 7. 카카오톡 배포용 단일 HTML 파일 내보내기 (그림 데이터 완전 내장)
+    // =========================================================================
+    function exportStandaloneHtml() {
+      const clone = document.documentElement.cloneNode(true);
+      // 제작자 전용 버튼 숨기기
+      const studioBar = clone.querySelector('#studioBar');
+      if (studioBar) studioBar.remove();
+      clone.querySelectorAll('.studio-only').forEach(el => el.remove());
+
+      const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '결핵예방웹툰_1탄_할아버지의오래된기침_완성본.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // 초기 실행
+    renderAllCuts();
+    updateSafePadding();
   </script>
 </body>
 </html>
